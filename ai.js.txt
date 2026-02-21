@@ -1,0 +1,184 @@
+import OpenAI from "openai";
+
+// ===============================
+// In-memory storage
+// ===============================
+if (!globalThis.eliteMemory) globalThis.eliteMemory = {};
+if (!globalThis.leaderboard) globalThis.leaderboard = [];
+
+export async function handler(event) {
+  try {
+    // Only allow POST
+    if (event.httpMethod !== "POST") return { statusCode: 405, body: JSON.stringify({ reply: "Method Not Allowed" }) };
+    if (!process.env.OPENAI_API_KEY) return { statusCode: 200, body: JSON.stringify({ reply: "AI not configured." }) };
+
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const body = JSON.parse(event.body || "{}");
+    const userId = body.name || "anonymous";
+
+    // Initialize memory if new user
+    if (!globalThis.eliteMemory[userId]) {
+      globalThis.eliteMemory[userId] = {
+        tasks: [],
+        conversations: [],
+        achievements: [],
+        streak: 0,
+        lastDay: 0,
+        xp: 0,
+        level: 1,
+        weeklyBossPoints: 0
+      };
+    }
+    const memory = globalThis.eliteMemory[userId];
+
+    let systemPrompt = "", userPrompt = "";
+
+    // ===============================
+    // Daily Task Generation
+    // ===============================
+    if (body.type === "daily") {
+      const prevTasks = memory.tasks.slice(-5).join("\n");
+      systemPrompt = `
+You are the ELITE 100-Day AI Coach (PRO MAX ULTRA).
+
+Rules:
+- Generate 1 main task (max 25 words)
+- Motivational & personalized tone
+- Gradually increase difficulty
+- Weekly Boss Challenge if day divisible by 7
+- Avoid repeating recent tasks
+- Suggest 1-3 optional mini tasks
+- Clear, actionable, concise
+`;
+      userPrompt = `
+User Goal: ${body.goal}
+Personality: ${body.personality}
+Day: ${body.day}
+
+Recent Tasks:
+${prevTasks}
+`;
+    }
+
+    // ===============================
+    // AI Coach / Assistant
+    // ===============================
+    if (body.type === "assistant") {
+      const recentConversation = memory.conversations.slice(-12).map(c => `${c.role}: ${c.content}`).join("\n");
+      systemPrompt = `
+You are the ELITE AI Coach.
+
+Rules:
+- Responses under 120 words
+- Structured, actionable, motivational
+- Include tips, streak motivation, habit guidance
+- Tailor advice to user's goal & personality
+- Use previous conversation context
+`;
+      userPrompt = `
+User Goal: ${body.goal}
+Personality: ${body.personality}
+
+Recent Conversation:
+${recentConversation}
+
+New Question:
+${body.question}
+`;
+    }
+
+    if (!systemPrompt) return { statusCode: 200, body: JSON.stringify({ reply: "Invalid request type." }) };
+
+    // ===============================
+    // Call OpenAI API
+    // ===============================
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 200
+    });
+
+    const reply = completion.choices?.[0]?.message?.content?.trim() || "Stay consistent. 🔥";
+
+    // ===============================
+    // Memory, Achievements & Leaderboard
+    // ===============================
+    const events = [];
+
+    if (body.type === "daily") {
+      const dayGap = body.day - memory.lastDay;
+      memory.streak = (dayGap === 1) ? memory.streak + 1 : 1;
+      memory.lastDay = body.day;
+      memory.tasks.push(reply);
+      memory.xp += 50;
+
+      // Level up
+      if (memory.xp >= memory.level * 200) {
+        memory.level++;
+        memory.xp = 0;
+        events.push("LEVEL_UP");
+      }
+
+      // Weekly Boss Challenge
+      if (body.day % 7 === 0) {
+        memory.achievements.push(`Week ${body.day / 7} Boss`);
+        memory.weeklyBossPoints += 100;
+        events.push("BOSS_UNLOCK");
+      }
+
+      // Milestone Achievements
+      const milestones = {7:"7 Day Warrior",30:"30 Day Beast",100:"100 Day Legend"};
+      if (milestones[body.day] && !memory.achievements.includes(milestones[body.day])) {
+        memory.achievements.push(milestones[body.day]);
+        events.push("ACHIEVEMENT_UNLOCK");
+      }
+
+      // Keep tasks array short
+      if (memory.tasks.length > 10) memory.tasks.shift();
+
+      // Leaderboard
+      const score = memory.streak * 10 + memory.xp;
+      const existing = globalThis.leaderboard.find(u => u.id === userId);
+      if (existing) existing.score = score;
+      else globalThis.leaderboard.push({id:userId, score});
+      globalThis.leaderboard.sort((a,b) => b.score - a.score);
+
+    } else if (body.type === "assistant") {
+      memory.conversations.push(
+        { role: "user", content: body.question },
+        { role: "assistant", content: reply }
+      );
+      if (memory.conversations.length > 12) memory.conversations = memory.conversations.slice(-12);
+    }
+
+    // ===============================
+    // Return response
+    // ===============================
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        reply,
+        achievements: memory.achievements,
+        streak: memory.streak,
+        level: memory.level,
+        xp: memory.xp,
+        weeklyBossPoints: memory.weeklyBossPoints,
+        events,
+        leaderboard: globalThis.leaderboard.map(u => ({id: u.id, score: u.score}))
+      })
+    };
+
+  } catch (error) {
+    console.error("AI ERROR:", error);
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reply: "Temporary AI issue. Stay disciplined. 🔥" })
+    };
+  }
+}
