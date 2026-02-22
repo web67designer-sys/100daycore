@@ -2,42 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="100DayCore Pro - Gamified Productivity Challenge Platform">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="100DayCore Pro - Transform Your Life in 100 Days">
+    <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <title>100DayCore Pro | Transform Your Life</title>
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
-        <div class="loader">
-            <div class="loader-ring"></div>
-            <div class="loader-text">100DayCore Pro</div>
+        <div class="loader-container">
+            <div class="loader-ring">
+                <div class="loader-ring-inner"></div>
+                <div class="loader-ring-outer"></div>
+            </div>
+            <div class="loader-crown">
+                <i class="fas fa-crown"></i>
+            </div>
+            <h1 class="loader-title">100DayCore Pro</h1>
+            <p class="loader-subtitle">Transform Your Life</p>
+            <div class="loader-progress">
+                <div class="loader-progress-bar" id="loader-progress"></div>
+            </div>
         </div>
     </div>
 
     <!-- Auth Screen -->
     <div id="auth-screen" class="auth-screen hidden">
-        <div class="auth-container">
+        <div class="auth-background">
+            <div class="auth-orb auth-orb-1"></div>
+            <div class="auth-orb auth-orb-2"></div>
+            <div class="auth-orb auth-orb-3"></div>
+        </div>
+        
+        <div class="auth-container glass-card">
             <div class="auth-header">
-                <div class="logo">
+                <div class="auth-logo">
                     <i class="fas fa-crown"></i>
                     <span>100DayCore Pro</span>
                 </div>
-                <p class="tagline">Transform Your Life in 100 Days</p>
+                <p class="auth-tagline">Begin Your 100-Day Transformation</p>
             </div>
             
             <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Login</button>
-                <button class="auth-tab" data-tab="register">Register</button>
+                <button class="auth-tab active" data-tab="login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+                <button class="auth-tab" data-tab="register">
+                    <i class="fas fa-user-plus"></i>
+                    Register
+                </button>
             </div>
             
             <form id="auth-form" class="auth-form">
@@ -45,18 +77,28 @@
                     <i class="fas fa-envelope"></i>
                     <input type="email" id="auth-email" placeholder="Email Address" required>
                 </div>
+                
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="auth-password" placeholder="Password" required>
-                    <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                    <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
+                
                 <div class="input-group phone-group hidden">
                     <i class="fas fa-phone"></i>
-                    <input type="tel" id="auth-phone" placeholder="Phone Number">
+                    <input type="tel" id="auth-phone" placeholder="+1 (555) 000-0000">
                 </div>
-                <button type="submit" class="btn-primary">
-                    <span>Continue</span>
-                    <i class="fas fa-arrow-right"></i>
+                
+                <div class="input-group username-group hidden">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="auth-username" placeholder="Choose a username" minlength="3" maxlength="20">
+                </div>
+                
+                <button type="submit" class="btn-primary btn-glow">
+                    <span class="btn-text">Continue</span>
+                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
                 </button>
             </form>
             
@@ -65,106 +107,157 @@
             </div>
             
             <div class="social-auth">
-                <button class="social-btn google" id="google-auth">
+                <button class="social-btn google" id="google-auth" aria-label="Sign in with Google">
                     <i class="fab fa-google"></i>
                     <span>Google</span>
                 </button>
-                <button class="social-btn apple" id="apple-auth">
+                <button class="social-btn apple" id="apple-auth" aria-label="Sign in with Apple">
                     <i class="fab fa-apple"></i>
                     <span>Apple</span>
                 </button>
+                <button class="social-btn phone" id="phone-auth" aria-label="Sign in with Phone">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Phone</span>
+                </button>
             </div>
             
-            <p class="auth-footer">By continuing, you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></p>
+            <p class="auth-footer">
+                By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </p>
         </div>
     </div>
 
-    <!-- Main App -->
+    <!-- Main Application -->
     <div id="app" class="app hidden">
-        <!-- Sidebar Navigation -->
+        <!-- Slide-in Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-crown"></i>
-                    <span>100DayCore Pro</span>
-                </div>
-                <button class="sidebar-close"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="sidebar-overlay"></div>
             
-            <div class="user-profile-mini">
-                <div class="avatar-preview" id="sidebar-avatar">
-                    <img src="" alt="Avatar">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <div class="logo">
+                        <i class="fas fa-crown"></i>
+                        <span>100DayCore Pro</span>
+                    </div>
+                    <button class="sidebar-close" aria-label="Close menu">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div class="user-info">
-                    <h4 id="sidebar-username">User</h4>
-                    <span class="rank-badge" id="sidebar-rank">Bronze</span>
+                
+                <div class="user-profile-mini">
+                    <div class="avatar-preview" id="sidebar-avatar">
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="user-info">
+                        <h4 id="sidebar-username">User</h4>
+                        <div class="rank-badge" id="sidebar-rank">
+                            <i class="fas fa-circle"></i>
+                            <span>Bronze</span>
+                        </div>
+                    </div>
+                    <div class="user-stats-mini">
+                        <span><i class="fas fa-coins"></i> <span id="sidebar-coins">0</span></span>
+                        <span><i class="fas fa-star"></i> <span id="sidebar-xp">0</span></span>
+                    </div>
                 </div>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </li>
-                <li class="nav-item" data-page="tasks">
-                    <i class="fas fa-tasks"></i>
-                    <span>Tasks</span>
-                </li>
-                <li class="nav-item" data-page="habits">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Habits</span>
-                </li>
-                <li class="nav-item" data-page="focus">
-                    <i class="fas fa-clock"></i>
-                    <span>Focus Timer</span>
-                </li>
-                <li class="nav-item" data-page="calendar">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Calendar</span>
-                </li>
-                <li class="nav-item" data-page="store">
-                    <i class="fas fa-store"></i>
-                    <span>Store</span>
-                </li>
-                <li class="nav-item" data-page="avatar">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Avatar</span>
-                </li>
-                <li class="nav-item" data-page="leaderboard">
-                    <i class="fas fa-trophy"></i>
-                    <span>Leaderboard</span>
-                </li>
-                <li class="nav-item" data-page="achievements">
-                    <i class="fas fa-medal"></i>
-                    <span>Achievements</span>
-                </li>
-                <li class="nav-item" data-page="premium">
-                    <i class="fas fa-gem"></i>
-                    <span>Premium</span>
-                </li>
-            </ul>
-            
-            <div class="sidebar-footer">
-                <button class="theme-toggle" id="theme-toggle">
-                    <i class="fas fa-moon"></i>
-                    <span>Dark Mode</span>
-                </button>
-                <button class="logout-btn" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-page="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="tasks">
+                        <i class="fas fa-tasks"></i>
+                        <span>Tasks</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="challenges">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>100-Day Challenge</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="focus">
+                        <i class="fas fa-clock"></i>
+                        <span>Focus Timer</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="habits">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Habits</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendar</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="store">
+                        <i class="fas fa-store"></i>
+                        <span>Store</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="avatar">
+                        <i class="fas fa-user-edit"></i>
+                        <span>Avatar</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="leaderboard">
+                        <i class="fas fa-trophy"></i>
+                        <span>Leaderboard</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="achievements">
+                        <i class="fas fa-medal"></i>
+                        <span>Achievements</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item" data-page="journal">
+                        <i class="fas fa-book"></i>
+                        <span>Journal</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                    <li class="nav-item premium-nav-item" data-page="premium">
+                        <i class="fas fa-gem"></i>
+                        <span>Premium</span>
+                        <span class="premium-badge">PRO</span>
+                        <div class="nav-indicator"></div>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-footer">
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark Mode</span>
+                        <div class="toggle-switch"></div>
+                    </button>
+                    <button class="settings-btn" id="settings-btn">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                    <button class="logout-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main-content">
             <!-- Header -->
             <header class="header">
-                <button class="menu-toggle" id="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
                 <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+                        <div class="hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
+                    
                     <div class="day-progress">
                         <div class="day-circle">
                             <svg viewBox="0 0 100 100">
@@ -182,204 +275,118 @@
                 
                 <div class="header-center">
                     <div class="streak-display">
-                        <i class="fas fa-fire"></i>
-                        <span id="streak-count">0</span>
-                        <span class="streak-label">Day Streak</span>
+                        <div class="streak-fire">
+                            <i class="fas fa-fire"></i>
+                            <div class="streak-sparkles"></div>
+                        </div>
+                        <div class="streak-info">
+                            <span class="streak-count" id="streak-count">0</span>
+                            <span class="streak-label">Day Streak</span>
+                        </div>
+                    </div>
+                    
+                    <div class="boss-day-indicator hidden" id="boss-day-indicator">
+                        <i class="fas fa-crown"></i>
+                        <span>BOSS DAY!</span>
                     </div>
                 </div>
                 
                 <div class="header-right">
                     <div class="currency-display">
-                        <div class="coin-balance">
+                        <div class="currency-item coin-currency" id="coin-display">
                             <i class="fas fa-coins"></i>
-                            <span id="coin-balance">0</span>
+                            <span class="currency-amount" id="coin-balance">0</span>
                         </div>
-                        <div class="xp-display">
+                        <div class="currency-item xp-currency" id="xp-display">
                             <i class="fas fa-star"></i>
-                            <span id="xp-balance">0</span> XP
+                            <span class="currency-amount" id="xp-balance">0</span>
+                            <span class="currency-label">XP</span>
                         </div>
                     </div>
-                    <button class="notification-btn">
+                    
+                    <button class="notification-btn" id="notification-btn">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge hidden" id="notification-badge">0</span>
                     </button>
-                    <div class="user-avatar" id="header-avatar">
-                        <img src="" alt="Avatar">
+                    
+                    <div class="user-avatar header-avatar" id="header-avatar">
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <!-- Page Content -->
-            <div class="page-content">
+            <!-- Page Content Container -->
+            <div class="page-container">
                 <!-- Dashboard Page -->
                 <section class="page active" id="dashboard-page">
                     <div class="dashboard-grid">
                         <!-- Welcome Card -->
                         <div class="welcome-card glass-card">
                             <div class="welcome-content">
-                                <h2>Welcome back, <span id="welcome-name">Champion</span>!</h2>
-                                <p id="welcome-message">Ready to crush today's goals?</p>
+                                <div class="welcome-greeting">
+                                    <span class="greeting-text" id="greeting-text">Good morning</span>
+                                    <span class="greeting-emoji">☀️</span>
+                                </div>
+                                <h2 class="welcome-name" id="welcome-name">Champion</h2>
+                                <p class="welcome-message" id="welcome-message">Ready to crush today's goals?</p>
+                                
                                 <div class="quick-stats">
-                                    <div class="stat">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span id="today-completed">0</span>
-                                        <label>Completed</label>
+                                    <div class="stat-item">
+                                        <div class="stat-icon completed">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-value" id="today-completed">0</span>
+                                            <span class="stat-label">Completed</span>
+                                        </div>
                                     </div>
-                                    <div class="stat">
-                                        <i class="fas fa-clock"></i>
-                                        <span id="today-pending">0</span>
-                                        <label>Pending</label>
+                                    <div class="stat-item">
+                                        <div class="stat-icon pending">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-value" id="today-pending">0</span>
+                                            <span class="stat-label">Pending</span>
+                                        </div>
                                     </div>
-                                    <div class="stat">
-                                        <i class="fas fa-bolt"></i>
-                                        <span id="focus-minutes">0</span>
-                                        <label>Focus Min</label>
+                                    <div class="stat-item">
+                                        <div class="stat-icon focus">
+                                            <i class="fas fa-bolt"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span class="stat-value" id="focus-minutes">0</span>
+                                            <span class="stat-label">Focus Min</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="welcome-avatar">
-                                <div class="avatar-display" id="dashboard-avatar">
-                                    <img src="" alt="Avatar">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Progress Overview -->
-                        <div class="progress-card glass-card">
-                            <h3><i class="fas fa-chart-line"></i> Progress Overview</h3>
-                            <div class="progress-bars">
-                                <div class="progress-item">
-                                    <div class="progress-header">
-                                        <span>Daily Tasks</span>
-                                        <span id="daily-progress-percent">0%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" id="daily-progress-fill" style="width: 0%"></div>
+                            
+                            <div class="welcome-avatar-container">
+                                <div class="avatar-display-large" id="dashboard-avatar">
+                                    <div class="avatar-placeholder-large">
+                                        <i class="fas fa-user"></i>
                                     </div>
                                 </div>
-                                <div class="progress-item">
-                                    <div class="progress-header">
-                                        <span>Weekly Goals</span>
-                                        <span id="weekly-progress-percent">0%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" id="weekly-progress-fill" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-item">
-                                    <div class="progress-header">
-                                        <span>100-Day Challenge</span>
-                                        <span id="challenge-progress-percent">1%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" id="challenge-progress-fill" style="width: 1%"></div>
-                                    </div>
+                                <div class="level-badge-float" id="level-badge-float">
+                                    <span id="current-level-display">Lv.1</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Today's Tasks -->
-                        <div class="today-tasks-card glass-card">
-                            <div class="card-header">
-                                <h3><i class="fas fa-list-check"></i> Today's Tasks</h3>
-                                <button class="add-task-btn" id="add-task-btn">
-                                    <i class="fas fa-plus"></i>
-                                    Add Task
-                                </button>
-                            </div>
-                            <div class="task-list" id="today-task-list">
-                                <!-- Tasks will be dynamically added here -->
-                            </div>
-                        </div>
-
-                        <!-- XP & Level Card -->
+                        <!-- XP & Level Progress Card -->
                         <div class="xp-card glass-card">
-                            <div class="level-display">
-                                <div class="level-badge" id="level-badge">
-                                    <span id="current-level">1</span>
-                                </div>
-                                <div class="level-info">
-                                    <h4>Level <span id="level-number">1</span></h4>
-                                    <p id="xp-to-next-level">0 / 100 XP to Level 2</p>
-                                </div>
+                            <div class="xp-header">
+                                <h3><i class="fas fa-star"></i> Experience & Level</h3>
+                                <span class="level-badge" id="level-badge">
+                                    <i class="fas fa-circle"></i>
+                                    Level <span id="current-level">1</span>
+                                </span>
                             </div>
-                            <div class="xp-bar-container">
-                                <div class="xp-bar">
-                                    <div class="xp-fill" id="xp-fill" style="width: 0%"></div>
-                                </div>
-                                <span class="xp-text" id="xp-text">0 / 100</span>
-                            </div>
-                            <div class="level-rewards-preview">
-                                <h4>Level Rewards</h4>
-                                <div class="rewards-list" id="level-rewards">
-                                    <!-- Rewards will be shown here -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recent Achievements -->
-                        <div class="achievements-preview glass-card">
-                            <h3><i class="fas fa-medal"></i> Recent Achievements</h3>
-                            <div class="achievement-grid" id="recent-achievements">
-                                <!-- Achievements will be dynamically added -->
-                            </div>
-                        </div>
-
-                        <!-- Leaderboard Preview -->
-                        <div class="leaderboard-preview glass-card">
-                            <div class="card-header">
-                                <h3><i class="fas fa-crown"></i> Top Players</h3>
-                                <a href="#" class="view-all" data-page="leaderboard">View All</a>
-                            </div>
-                            <div class="leaderboard-list" id="mini-leaderboard">
-                                <!-- Leaderboard items will be dynamically added -->
-                            </div>
-                        </div>
-
-                        <!-- Daily Quote -->
-                        <div class="quote-card glass-card">
-                            <i class="fas fa-quote-left"></i>
-                            <p id="daily-quote">"The only way to do great work is to love what you do."</p>
-                            <cite id="quote-author">- Steve Jobs</cite>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Tasks Page -->
-                <section class="page" id="tasks-page">
-                    <div class="page-header">
-                        <h2><i class="fas fa-tasks"></i> Task Manager</h2>
-                        <div class="page-actions">
-                            <div class="filter-group">
-                                <select id="task-filter">
-                                    <option value="all">All Tasks</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="overdue">Overdue</option>
-                                </select>
-                            </div>
-                            <div class="view-toggle">
-                                <button class="view-btn active" data-view="list"><i class="fas fa-list"></i></button>
-                                <button class="view-btn" data-view="grid"><i class="fas fa-th-large"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tasks-container glass-card">
-                        <div class="task-input-section">
-                            <div class="task-input-wrapper">
-                                <input type="text" id="new-task-input" placeholder="Add a new task...">
-                                <select id="task-category">
-                                    <option value="personal">Personal</option>
-                                    <option value="work">Work</option>
-                                    <option value="health">Health</option>
-                                    <option value="learning">Learning</option>
-                                    <option value="social">Social</option>
-                                </select>
-                                <select id="task-priority">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                                <select id="task-difficulty">
-                                    <option value="easy">Easy (+10 XP)</option
+                            
+                            <div class="xp-display-main">
+                                <div class="xp-ring-container">
+                                    <svg class="xp-ring" viewBox="0 0 100 100">
+                                        <circle class="xp-ring-bg" cx="50" cy="50" r="45"></circle>
+                                        <circle class="xp-ring-progress" cx="50" cy="50" r="45" id="xp
