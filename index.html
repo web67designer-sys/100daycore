@@ -1,148 +1,638 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>100DayCore Pro</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>100DayCore Pro - GenZ Gold Theme</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#0f172a" />
+  :root {
+    --gold-gradient: linear-gradient(90deg, #d4af37 0%, #f7dc62 100%);
+    --dark-bg: #121318;
+    --card-bg: #1c1c24;
+    --btn-gradient: linear-gradient(90deg, #cc5374, #e94e77);
+    --btn-gradient-alt: linear-gradient(90deg, #f2994a, #f2c94c);
+  }
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  body {
+    margin: 0; 
+    background: var(--dark-bg);
+    font-family: 'Poppins', sans-serif;
+    color: #e6e2d3;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="/css/global.css">
+  header {
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: 600;
+    font-size: 1.3rem;
+    padding: 12px 0;
+    color: #f7d86b;
+  }
+
+  header .icon-fire {
+    margin-right: 0.4em;
+  }
+
+  header .coin {
+    position: absolute;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    background: var(--btn-gradient-alt);
+    border-radius: 12px;
+    padding: 4px 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: default;
+    user-select: none;
+  }
+
+  header .coin::before {
+    content: "🪙";
+    font-size: 1.2rem;
+  }
+
+  main {
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow: 0 0 12px #d4af37aa;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .input-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    background: #2a2b37;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #e6e2d3;
+    font-size: 1rem;
+    outline: none;
+    transition: background 0.3s ease;
+  }
+
+  .input-group input::placeholder {
+    color: #b2a86c;
+  }
+
+  .input-group input:focus,
+  .input-group select:focus {
+    background: #3c3c4e;
+  }
+
+  button.primary-btn {
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    border-radius: 24px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: var(--btn-gradient);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 10px #cc5374;
+    transition: transform 0.15s ease-in-out;
+  }
+
+  button.primary-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #e94e77;
+  }
+
+  button.gold-btn {
+    background: var(--btn-gradient-alt);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #3c2f00;
+    box-shadow: 0 0 10px #fac94d;
+    border: 1.5px solid #bd9f21;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+
+  button.gold-btn:last-child {
+    margin-right: 0;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px 0;
+    background: #23232b;
+    border-radius: 14px;
+    color: #d4af37;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .stats span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .achievements {
+    text-align: center;
+    margin: 16px 0;
+  }
+
+  .achievements h3 {
+    margin-bottom: 12px;
+    color: #fac94d;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .calendar {
+    background: #2b2c39;
+    border-radius: 14px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+
+  .calendar button {
+    background: #191a21;
+    color: #999966;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: background 0.25s ease, color 0.25s ease;
+    font-weight: 600;
+  }
+
+  .calendar button.completed {
+    background: var(--btn-gradient-alt);
+    color: #3c2f00;
+    box-shadow: 0 0 8px #f7db85;
+  }
+
+  .calendar button.selected {
+    background: #cc5374;
+    color: #fff;
+    box-shadow: 0 0 8px #e94e77;
+  }
+
+  /* Avatar styles */
+  .avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 150px;
+    background: #191a21;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px #d4af37aa;
+  }
+
+  .avatar img {
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+  }
+
+  /* Boss challenge list */
+  .challenge-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px 0;
+    font-size: 0.9rem;
+  }
+
+  .challenge-list li {
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .challenge-list li .check {
+    color: #fac94d;
+    font-weight: 700;
+  }
+
+  /* Bottom buttons container */
+  .bottom-btns {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  /* Navigation menu */
+  .menu {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 1rem;
+  }
+
+  .menu button {
+    background: #23232b;
+    border: none;
+    border-radius: 12px;
+    color: #d4af37;
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 0 8px #d4af37a0;
+    transition: background 0.3s ease;
+  }
+
+  .menu button:hover {
+    background: #3c3c4e;
+  }
+
+  /* Leaderboard */
+  .leaderboard {
+    background: #23232b;
+    border-radius: 14px;
+    padding: 12px;
+    font-size: 0.9rem;
+    color: #e6e2d3;
+  }
+
+  .leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background: #191a21;
+    box-shadow: 0 0 8px #d4af37a0;
+  }
+
+  .leaderboard-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .leaderboard-item .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  .leaderboard-item .user-info img {
+    width: 28px;
+    border-radius: 50%;
+  }
+
+  .leaderboard-item .level,
+  .leaderboard-item .coins {
+    font-weight: 700;
+    color: #fac94d;
+  }
+
+  select, input, button {
+    font-family: 'Poppins', sans-serif;
+  }
+</style>
 </head>
 <body>
 
-  <!-- ============================= -->
-  <!-- Slide-in Burger Menu -->
-  <!-- ============================= -->
+<header>
+  <span class="icon-fire">🔥</span> 100DayCore Pro
+  <div class="coin" id="coinDisplay">2350</div>
+</header>
 
-  <aside id="sidebar" class="glass sidebar hidden">
-    <div class="sidebar-header">
-      <h2>100DayCore</h2>
+<main>
+
+  <!-- Start Your New Challenge -->
+  <div class="card" id="startChallengeCard">
+    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin-bottom: 18px; color: #fac94d;">
+      Start Your new here
     </div>
-
-    <nav>
-      <ul>
-        <li data-page="dashboard">Dashboard</li>
-        <li data-page="tasks">Tasks</li>
-        <li data-page="store">Store</li>
-        <li data-page="leaderboard">Leaderboard</li>
-        <li data-page="journal">Journal</li>
-        <li data-page="settings">Settings</li>
-      </ul>
-    </nav>
-  </aside>
-
-  <!-- ============================= -->
-  <!-- Top Navigation -->
-  <!-- ============================= -->
-
-  <header class="glass topbar">
-    <button id="burgerBtn">☰</button>
-
-    <div class="xp-container">
-      <div class="progress-ring">
-        <svg width="120" height="120">
-          <circle class="progress-bg" cx="60" cy="60" r="50"></circle>
-          <circle class="progress-xp" cx="60" cy="60" r="50"
-            stroke-dasharray="314"
-            stroke-dashoffset="314">
-          </circle>
-        </svg>
-        <div class="xp-label">
-          <span id="levelDisplay">Lv 1</span>
-        </div>
-      </div>
+    <div class="input-group">
+      <label for="userName">Your Name</label>
+      <input type="text" id="userName" placeholder="Your Name" />
     </div>
-
-    <div class="currency">
-      <span id="xpDisplay">0 XP</span>
-      <span id="coinDisplay">0 Coins</span>
-    </div>
-  </header>
-
-  <!-- ============================= -->
-  <!-- Main Content -->
-  <!-- ============================= -->
-
-  <main id="app">
-
-    <!-- Dashboard -->
-    <section id="dashboard" class="page active">
-      <div class="glass card-floating">
-        <h2>Day <span id="currentDay">1</span></h2>
-        <button id="completeDayBtn" class="btn btn-success">
-          Complete Day
-        </button>
-      </div>
-
-      <!-- Streak Heatmap -->
-      <div class="glass card-floating">
-        <h3>Streak Heatmap</h3>
-        <div id="heatmap"></div>
-      </div>
-
-      <!-- Pomodoro Timer -->
-      <div class="glass card-floating">
-        <h3>Focus Timer</h3>
-        <div id="timerDisplay">25:00</div>
-        <button id="startTimer" class="btn btn-primary">Start</button>
-      </div>
-    </section>
-
-    <!-- Tasks -->
-    <section id="tasks" class="page hidden">
-      <h2>Your Tasks</h2>
-      <div id="taskList"></div>
-    </section>
-
-    <!-- Store -->
-    <section id="store" class="page hidden">
-      <h2>Avatar Store</h2>
-      <div id="storeGrid"></div>
-    </section>
-
-    <!-- Leaderboard -->
-    <section id="leaderboard" class="page hidden">
-      <h2>Global Top 100</h2>
-      <div id="leaderboardList"></div>
-    </section>
-
-    <!-- Journal -->
-    <section id="journal" class="page hidden">
-      <h2>Daily Reflection</h2>
-      <textarea id="journalEntry" placeholder="Write today's reflection..."></textarea>
-      <button id="saveJournal" class="btn btn-primary">Save</button>
-    </section>
-
-    <!-- Settings -->
-    <section id="settings" class="page hidden">
-      <h2>Difficulty</h2>
-      <select id="difficultySelect">
-        <option>Easy</option>
-        <option selected>Medium</option>
-        <option>Hard</option>
+    <div class="input-group">
+      <label for="challengeType">Select Challenge</label>
+      <select id="challengeType" >
+        <option value="muscle">Muscle Gain</option>
+        <option value="fatloss">Fat Loss</option>
+        <option value="endurance">Endurance</option>
+        <option value="flexibility">Flexibility</option>
       </select>
-    </section>
+    </div>
+    <button class="primary-btn" id="startBtn">Start Challenge</button>
+  </div>
 
-  </main>
+  <!-- Progress and achievements -->
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="stats">
+      <span>🔥 Streak: <strong id="streakCount">0</strong></span>
+      <span>⭐ XP: <strong id="xpCount">0</strong></span>
+    </div>
+    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin: 14px 0; color: #fac94d;">
+      Day <span id="dayCount">1</span> • Level <span id="levelCount">1</span>
+    </div>
 
-  <!-- ============================= -->
-  <!-- Scripts -->
-  <!-- ============================= -->
+    <div class="achievements">
+      <h3>✨ Achievements</h3>
+      <button class="gold-btn" id="btn7Day">7 Day Warrior</button>
+      <button class="gold-btn" id="btn30Day">30 Day Beast</button>
+    </div>
 
-  <script type="module">
-    import { initApp } from "/js/core.js";
+    <!-- Calendar -->
+    <div class="calendar" id="calendar"></div>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      initApp();
+    <!-- Complete Day Button -->
+    <button class="primary-btn" id="completeDayBtn" style="margin-top: 20px;">Complete Day ✅</button>
+  </div>
+
+  <!-- Boss Challenge -->
+  <div class="card" id="bossChallengeCard" style="display:none;">
+    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin-bottom: 10px; color: #fac94d;">
+      Day <span id="bossDay">1</span> • Level <span id="bossLevel">1</span>
+    </div>
+    <div style="margin-bottom: 14px; font-weight: 500; font-size: 1rem;">
+      Boss Challenge 🔥
+    </div>
+    <ul class="challenge-list" id="challengeList">
+      <li><span class="check">✔</span> Train harder today!</li>
+      <li><span class="check">✔</span> Deadlift 4 sets 🏋️‍♂️</li>
+      <li><span class="check">✔</span> Pull-ups 3x10 🔥</li>
+      <li><span class="check">✔</span> Protein-rich meal 🍗</li>
+      <li><span class="check">✔</span> Foam roll 10 mins 🧘🏻‍♂️</li>
+    </ul>
+    <button class="primary-btn" id="closeBossBtn" style="background: var(--btn-gradient-alt);">Close</button>
+  </div>
+
+  <!-- Avatar Section -->
+  <div class="card" id="avatarCard" style="display:none; text-align:center;">
+    <div class="avatar-wrapper">
+      <div class="avatar" id="avatarDisplay">
+        <img src="https://i.pravatar.cc/80" alt="User Avatar" />
+        <div id="avatarName" style="color:#fac94d; font-weight:600; margin-top: 8px;"></div>
+      </div>
+    </div>
+    <button class="gold-btn" id="buyBtn"><span style="margin-right: 6px;">🛒</span> Buy</button>
+  </div>
+
+  <!-- Leaderboard Section -->
+  <div class="card leaderboard" id="leaderboardCard" style="display:none;">
+    <div class="leaderboard-header">
+      <div style="color:#fac94d;">Global</div>
+      <div>Friends</div>
+    </div>
+    <div id="leaderboardList">
+      <!-- Leaderboard items inserted here -->
+    </div>
+  </div>
+  
+</main>
+
+<script>
+  (() => {
+    // App State
+    const state = {
+      userName: "",
+      challengeType: "muscle",
+      streak: 0,
+      xp: 0,
+      day: 1,
+      level: 1,
+      completedDays: new Set(),
+      coin: 2350,
+      achievements: {
+        day7: false,
+        day30: false,
+      },
+      selectedDay: 1,
+      leaderboard: [
+        { name: "Lucas", flag: "🇺🇸", level: 7, coins: 1120, avatar: "https://i.pravatar.cc/28?img=15" },
+        { name: "Emma", flag: "🇨🇦", level: 5, coins: 1100, avatar: "https://i.pravatar.cc/28?img=16" },
+        { name: "Hiro", flag: "🇯🇵", level: 6, coins: 980, avatar: "https://i.pravatar.cc/28?img=12" },
+        { name: "Chloe", flag: "🇬🇧", level: 6, coins: 950, avatar: "https://i.pravatar.cc/28?img=8" },
+      ],
+    };
+
+    const startBtn = document.getElementById('startBtn');
+    const startChallengeCard = document.getElementById('startChallengeCard');
+    const progressCard = document.getElementById('progressCard');
+    const streakCount = document.getElementById('streakCount');
+    const xpCount = document.getElementById('xpCount');
+    const dayCount = document.getElementById('dayCount');
+    const levelCount = document.getElementById('levelCount');
+    const calendar = document.getElementById('calendar');
+    const completeDayBtn = document.getElementById('completeDayBtn');
+    const coinDisplay = document.getElementById('coinDisplay');
+    const btn7Day = document.getElementById('btn7Day');
+    const btn30Day = document.getElementById('btn30Day');
+    const bossChallengeCard = document.getElementById('bossChallengeCard');
+    const headDay = document.getElementById('bossDay');
+    const headLevel = document.getElementById('bossLevel');
+    const closeBossBtn = document.getElementById('closeBossBtn');
+    const avatarCard = document.getElementById('avatarCard');
+    const avatarName = document.getElementById('avatarName');
+    const buyBtn = document.getElementById('buyBtn');
+    const leaderboardCard = document.getElementById('leaderboardCard');
+    const leaderboardList = document.getElementById('leaderboardList');
+    const userNameInput = document.getElementById('userName');
+    const challengeTypeSelect = document.getElementById('challengeType');
+
+    // Utility: Update coin display
+    function updateCoins() {
+      coinDisplay.textContent = state.coin.toLocaleString();
+    }
+
+    // Render calendar days with completed and selected classes
+    function renderCalendar() {
+      calendar.innerHTML = "";
+      for (let i = 1; i <= 42; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (state.completedDays.has(i)) btn.classList.add('completed');
+        if (state.selectedDay === i) btn.classList.add('selected');
+
+        btn.addEventListener('click', () => {
+          state.selectedDay = i;
+          renderCalendar();
+          openBossChallenge(i);
+        });
+        calendar.appendChild(btn);
+      }
+    }
+
+    // Open Boss Challenge card with day info
+    function openBossChallenge(day) {
+      bossChallengeCard.style.display = "block";
+      headDay.textContent = day;
+      headLevel.textContent = state.level;
+    }
+
+    // Close Boss Challenge card
+    closeBossBtn.addEventListener('click', () => {
+      bossChallengeCard.style.display = "none";
     });
-  </script>
+
+    // Update stats UI
+    function updateStats() {
+      streakCount.textContent = state.streak;
+      xpCount.textContent = state.xp;
+      dayCount.textContent = state.day;
+      levelCount.textContent = state.level;
+    }
+
+    // Update achievements
+    function updateAchievements() {
+      btn7Day.style.opacity = state.achievements.day7 ? '1' : '0.5';
+      btn30Day.style.opacity = state.achievements.day30 ? '1' : '0.5';
+    }
+
+    // Render leaderboard list
+    function renderLeaderboard() {
+      leaderboardList.innerHTML = "";
+      state.leaderboard.forEach(user => {
+        const userEl = document.createElement('div');
+        userEl.classList.add('leaderboard-item');
+        userEl.innerHTML = `
+          <div class="user-info">
+            <img src="${user.avatar}" alt="${user.name}" />
+            ${user.flag} ${user.name} ${user.flag}
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div class="level">Lv ${user.level}</div>
+            <div class="coins">🪙 ${user.coins}</div>
+          </div>
+        `;
+        leaderboardList.appendChild(userEl);
+      });
+    }
+
+    // Start challenge click handler
+    startBtn.addEventListener('click', () => {
+      const userNameVal = userNameInput.value.trim();
+      if (!userNameVal) {
+        alert('Please enter your name to start!');
+        return;
+      }
+      state.userName = userNameVal;
+      state.challengeType = challengeTypeSelect.value;
+      state.streak = 7;
+      state.xp = 350;
+      state.day = 7;
+      state.level = 1;
+      state.completedDays = new Set([11, 12, 16, 25, 26]); // example completed days
+      state.achievements.day7 = true;
+      state.achievements.day30 = false;
+
+      startChallengeCard.style.display = "none";
+      progressCard.style.display = "block";
+      avatarCard.style.display = "block";
+      leaderboardCard.style.display = "block";
+
+      updateStats();
+      updateAchievements();
+      renderCalendar();
+      updateCoins();
+
+      // Update avatar name
+      avatarName.textContent = `${state.userName}`;
+    });
+
+    // Complete day button
+    completeDayBtn.addEventListener('click', () => {
+      if (!state.completedDays.has(state.selectedDay)) {
+        state.completedDays.add(state.selectedDay);
+        state.streak++;
+        state.xp += 50;
+        state.coin += 100;
+        
+        // Check if 7 day achievement completed
+        if (state.streak >= 7) {
+          state.achievements.day7 = true;
+        }
+        if (state.streak >= 30) {
+          state.achievements.day30 = true;
+        }
+        // Level up every 7 days
+        if (state.streak % 7 === 0) {
+          state.level++;
+        }
+        updateStats();
+        updateAchievements();
+        renderCalendar();
+        updateCoins();
+        alert(`Day ${state.selectedDay} completed! Keep going!`);
+      } else {
+        alert(`Day ${state.selectedDay} already completed.`);
+      }
+    });
+
+    // Buy button
+    buyBtn.addEventListener('click', () => {
+      if(state.coin >= 500) {
+        state.coin -= 500;
+        alert('Purchased successfully!');
+        updateCoins();
+      } else {
+        alert('Not enough coins.');
+      }
+    });
+
+    // Initialize leaderboard UI
+    renderLeaderboard();
+
+  })();
+</script>
 
 </body>
 </html>
