@@ -1,392 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="100DayCore Pro - Transform Your Life in 100 Days">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    
-    <title>100DayCore Pro | Transform Your Life</title>
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100DayCore Pro</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="loader-container">
-            <div class="loader-ring">
-                <div class="loader-ring-inner"></div>
-                <div class="loader-ring-outer"></div>
-            </div>
-            <div class="loader-crown">
-                <i class="fas fa-crown"></i>
-            </div>
-            <h1 class="loader-title">100DayCore Pro</h1>
-            <p class="loader-subtitle">Transform Your Life</p>
-            <div class="loader-progress">
-                <div class="loader-progress-bar" id="loader-progress"></div>
-            </div>
-        </div>
+
+  <!-- ============================= -->
+  <!-- Slide-in Burger Menu -->
+  <!-- ============================= -->
+
+  <aside id="sidebar" class="glass sidebar hidden">
+    <div class="sidebar-header">
+      <h2>100DayCore</h2>
     </div>
 
-    <!-- Auth Screen -->
-    <div id="auth-screen" class="auth-screen hidden">
-        <div class="auth-background">
-            <div class="auth-orb auth-orb-1"></div>
-            <div class="auth-orb auth-orb-2"></div>
-            <div class="auth-orb auth-orb-3"></div>
+    <nav>
+      <ul>
+        <li data-page="dashboard">Dashboard</li>
+        <li data-page="tasks">Tasks</li>
+        <li data-page="store">Store</li>
+        <li data-page="leaderboard">Leaderboard</li>
+        <li data-page="journal">Journal</li>
+        <li data-page="settings">Settings</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- ============================= -->
+  <!-- Top Navigation -->
+  <!-- ============================= -->
+
+  <header class="glass topbar">
+    <button id="burgerBtn">☰</button>
+
+    <div class="xp-container">
+      <div class="progress-ring">
+        <svg width="120" height="120">
+          <circle class="progress-bg" cx="60" cy="60" r="50"></circle>
+          <circle class="progress-xp" cx="60" cy="60" r="50"
+            stroke-dasharray="314"
+            stroke-dashoffset="314">
+          </circle>
+        </svg>
+        <div class="xp-label">
+          <span id="levelDisplay">Lv 1</span>
         </div>
-        
-        <div class="auth-container glass-card">
-            <div class="auth-header">
-                <div class="auth-logo">
-                    <i class="fas fa-crown"></i>
-                    <span>100DayCore Pro</span>
-                </div>
-                <p class="auth-tagline">Begin Your 100-Day Transformation</p>
-            </div>
-            
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
-                </button>
-                <button class="auth-tab" data-tab="register">
-                    <i class="fas fa-user-plus"></i>
-                    Register
-                </button>
-            </div>
-            
-            <form id="auth-form" class="auth-form">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="auth-email" placeholder="Email Address" required>
-                </div>
-                
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="auth-password" placeholder="Password" required>
-                    <button type="button" class="toggle-password" aria-label="Toggle password visibility">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-                
-                <div class="input-group phone-group hidden">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" id="auth-phone" placeholder="+1 (555) 000-0000">
-                </div>
-                
-                <div class="input-group username-group hidden">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="auth-username" placeholder="Choose a username" minlength="3" maxlength="20">
-                </div>
-                
-                <button type="submit" class="btn-primary btn-glow">
-                    <span class="btn-text">Continue</span>
-                    <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
-                </button>
-            </form>
-            
-            <div class="auth-divider">
-                <span>or continue with</span>
-            </div>
-            
-            <div class="social-auth">
-                <button class="social-btn google" id="google-auth" aria-label="Sign in with Google">
-                    <i class="fab fa-google"></i>
-                    <span>Google</span>
-                </button>
-                <button class="social-btn apple" id="apple-auth" aria-label="Sign in with Apple">
-                    <i class="fab fa-apple"></i>
-                    <span>Apple</span>
-                </button>
-                <button class="social-btn phone" id="phone-auth" aria-label="Sign in with Phone">
-                    <i class="fas fa-mobile-alt"></i>
-                    <span>Phone</span>
-                </button>
-            </div>
-            
-            <p class="auth-footer">
-                By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-            </p>
-        </div>
+      </div>
     </div>
 
-    <!-- Main Application -->
-    <div id="app" class="app hidden">
-        <!-- Slide-in Sidebar Navigation -->
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar-overlay"></div>
-            
-            <div class="sidebar-content">
-                <div class="sidebar-header">
-                    <div class="logo">
-                        <i class="fas fa-crown"></i>
-                        <span>100DayCore Pro</span>
-                    </div>
-                    <button class="sidebar-close" aria-label="Close menu">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="user-profile-mini">
-                    <div class="avatar-preview" id="sidebar-avatar">
-                        <div class="avatar-placeholder">
-                            <i class="fas fa-user"></i>
-                        </div>
-                    </div>
-                    <div class="user-info">
-                        <h4 id="sidebar-username">User</h4>
-                        <div class="rank-badge" id="sidebar-rank">
-                            <i class="fas fa-circle"></i>
-                            <span>Bronze</span>
-                        </div>
-                    </div>
-                    <div class="user-stats-mini">
-                        <span><i class="fas fa-coins"></i> <span id="sidebar-coins">0</span></span>
-                        <span><i class="fas fa-star"></i> <span id="sidebar-xp">0</span></span>
-                    </div>
-                </div>
-                
-                <ul class="nav-menu">
-                    <li class="nav-item active" data-page="dashboard">
-                        <i class="fas fa-home"></i>
-                        <span>Dashboard</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="tasks">
-                        <i class="fas fa-tasks"></i>
-                        <span>Tasks</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="challenges">
-                        <i class="fas fa-calendar-check"></i>
-                        <span>100-Day Challenge</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="focus">
-                        <i class="fas fa-clock"></i>
-                        <span>Focus Timer</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="habits">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Habits</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="calendar">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Calendar</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="store">
-                        <i class="fas fa-store"></i>
-                        <span>Store</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="avatar">
-                        <i class="fas fa-user-edit"></i>
-                        <span>Avatar</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="leaderboard">
-                        <i class="fas fa-trophy"></i>
-                        <span>Leaderboard</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="achievements">
-                        <i class="fas fa-medal"></i>
-                        <span>Achievements</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item" data-page="journal">
-                        <i class="fas fa-book"></i>
-                        <span>Journal</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                    <li class="nav-item premium-nav-item" data-page="premium">
-                        <i class="fas fa-gem"></i>
-                        <span>Premium</span>
-                        <span class="premium-badge">PRO</span>
-                        <div class="nav-indicator"></div>
-                    </li>
-                </ul>
-                
-                <div class="sidebar-footer">
-                    <button class="theme-toggle" id="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                        <span>Dark Mode</span>
-                        <div class="toggle-switch"></div>
-                    </button>
-                    <button class="settings-btn" id="settings-btn">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </button>
-                    <button class="logout-btn" id="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
+    <div class="currency">
+      <span id="xpDisplay">0 XP</span>
+      <span id="coinDisplay">0 Coins</span>
+    </div>
+  </header>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <div class="header-left">
-                    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    
-                    <div class="day-progress">
-                        <div class="day-circle">
-                            <svg viewBox="0 0 100 100">
-                                <circle class="day-circle-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="day-circle-progress" cx="50" cy="50" r="45" id="day-progress-circle"></circle>
-                            </svg>
-                            <span class="day-number" id="current-day">1</span>
-                        </div>
-                        <div class="day-info">
-                            <h3>Day <span id="day-count">1</span> of 100</h3>
-                            <p id="days-remaining">99 days remaining</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="header-center">
-                    <div class="streak-display">
-                        <div class="streak-fire">
-                            <i class="fas fa-fire"></i>
-                            <div class="streak-sparkles"></div>
-                        </div>
-                        <div class="streak-info">
-                            <span class="streak-count" id="streak-count">0</span>
-                            <span class="streak-label">Day Streak</span>
-                        </div>
-                    </div>
-                    
-                    <div class="boss-day-indicator hidden" id="boss-day-indicator">
-                        <i class="fas fa-crown"></i>
-                        <span>BOSS DAY!</span>
-                    </div>
-                </div>
-                
-                <div class="header-right">
-                    <div class="currency-display">
-                        <div class="currency-item coin-currency" id="coin-display">
-                            <i class="fas fa-coins"></i>
-                            <span class="currency-amount" id="coin-balance">0</span>
-                        </div>
-                        <div class="currency-item xp-currency" id="xp-display">
-                            <i class="fas fa-star"></i>
-                            <span class="currency-amount" id="xp-balance">0</span>
-                            <span class="currency-label">XP</span>
-                        </div>
-                    </div>
-                    
-                    <button class="notification-btn" id="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge hidden" id="notification-badge">0</span>
-                    </button>
-                    
-                    <div class="user-avatar header-avatar" id="header-avatar">
-                        <div class="avatar-placeholder">
-                            <i class="fas fa-user"></i>
-                        </div>
-                    </div>
-                </div>
-            </header>
+  <!-- ============================= -->
+  <!-- Main Content -->
+  <!-- ============================= -->
 
-            <!-- Page Content Container -->
-            <div class="page-container">
-                <!-- Dashboard Page -->
-                <section class="page active" id="dashboard-page">
-                    <div class="dashboard-grid">
-                        <!-- Welcome Card -->
-                        <div class="welcome-card glass-card">
-                            <div class="welcome-content">
-                                <div class="welcome-greeting">
-                                    <span class="greeting-text" id="greeting-text">Good morning</span>
-                                    <span class="greeting-emoji">☀️</span>
-                                </div>
-                                <h2 class="welcome-name" id="welcome-name">Champion</h2>
-                                <p class="welcome-message" id="welcome-message">Ready to crush today's goals?</p>
-                                
-                                <div class="quick-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-icon completed">
-                                            <i class="fas fa-check-circle"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-value" id="today-completed">0</span>
-                                            <span class="stat-label">Completed</span>
-                                        </div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-icon pending">
-                                            <i class="fas fa-clock"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-value" id="today-pending">0</span>
-                                            <span class="stat-label">Pending</span>
-                                        </div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-icon focus">
-                                            <i class="fas fa-bolt"></i>
-                                        </div>
-                                        <div class="stat-info">
-                                            <span class="stat-value" id="focus-minutes">0</span>
-                                            <span class="stat-label">Focus Min</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="welcome-avatar-container">
-                                <div class="avatar-display-large" id="dashboard-avatar">
-                                    <div class="avatar-placeholder-large">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                </div>
-                                <div class="level-badge-float" id="level-badge-float">
-                                    <span id="current-level-display">Lv.1</span>
-                                </div>
-                            </div>
-                        </div>
+  <main id="app">
 
-                        <!-- XP & Level Progress Card -->
-                        <div class="xp-card glass-card">
-                            <div class="xp-header">
-                                <h3><i class="fas fa-star"></i> Experience & Level</h3>
-                                <span class="level-badge" id="level-badge">
-                                    <i class="fas fa-circle"></i>
-                                    Level <span id="current-level">1</span>
-                                </span>
-                            </div>
-                            
-                            <div class="xp-display-main">
-                                <div class="xp-ring-container">
-                                    <svg class="xp-ring" viewBox="0 0 100 100">
-                                        <circle class="xp-ring-bg" cx="50" cy="50" r="45"></circle>
-                                        <circle class="xp-ring-progress" cx="50" cy="50" r="45" id="xp
+    <!-- Dashboard -->
+    <section id="dashboard" class="page active">
+      <div class="glass card-floating">
+        <h2>Day <span id="currentDay">1</span></h2>
+        <button id="completeDayBtn" class="btn btn-success">
+          Complete Day
+        </button>
+      </div>
+
+      <!-- Streak Heatmap -->
+      <div class="glass card-floating">
+        <h3>Streak Heatmap</h3>
+        <div id="heatmap"></div>
+      </div>
+
+      <!-- Pomodoro Timer -->
+      <div class="glass card-floating">
+        <h3>Focus Timer</h3>
+        <div id="timerDisplay">25:00</div>
+        <button id="startTimer" class="btn btn-primary">Start</button>
+      </div>
+    </section>
+
+    <!-- Tasks -->
+    <section id="tasks" class="page hidden">
+      <h2>Your Tasks</h2>
+      <div id="taskList"></div>
+    </section>
+
+    <!-- Store -->
+    <section id="store" class="page hidden">
+      <h2>Avatar Store</h2>
+      <div id="storeGrid"></div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section id="leaderboard" class="page hidden">
+      <h2>Global Top 100</h2>
+      <div id="leaderboardList"></div>
+    </section>
+
+    <!-- Journal -->
+    <section id="journal" class="page hidden">
+      <h2>Daily Reflection</h2>
+      <textarea id="journalEntry" placeholder="Write today's reflection..."></textarea>
+      <button id="saveJournal" class="btn btn-primary">Save</button>
+    </section>
+
+    <!-- Settings -->
+    <section id="settings" class="page hidden">
+      <h2>Difficulty</h2>
+      <select id="difficultySelect">
+        <option>Easy</option>
+        <option selected>Medium</option>
+        <option>Hard</option>
+      </select>
+    </section>
+
+  </main>
+
+  <!-- ============================= -->
+  <!-- Scripts -->
+  <!-- ============================= -->
+
+  <script type="module">
+    import { initApp } from "/js/core.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initApp();
+    });
+  </script>
+
+</body>
+</html>
