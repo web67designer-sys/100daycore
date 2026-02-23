@@ -1,252 +1,210 @@
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.util.*;
-import java.time.LocalDate;
-import java.io.*;
-
-// ==================== ENUMS & MODELS (Kept from Pro Version) ====================
-enum GoalType { MUSCLE_GAIN("Muscle Gain"), WEIGHT_LOSS("Weight Loss"), MINDFULNESS("Mindfulness"); private String n; GoalType(String n){this.n=n;} public String getName(){return n;} }
-enum TaskRarity { COMMON(10, 1.0), RARE(25, 1.5), LEGENDARY(100, 3.0); int base; double mult; TaskRarity(int b, double m){this.base=b;this.mult=m;} public int getBase(){return base;} public double getMult(){return mult;} }
-
-abstract class GameTask implements Serializable {
-    String desc; boolean done; TaskRarity rarity;
-    GameTask(String d, TaskRarity r){ this.desc=d; this.rarity=r; this.done=false; }
-    public abstract int getXP();
-    public String toString(){ return (done?"[x] ":"[ ] ") + "["+rarity+"] " + desc + " (+"+getXP()+" XP)"; }
-}
-class PhyTask extends GameTask{ PhyTask(String d, TaskRarity r){super(d,r);} public int getXP(){return (int)(rarity.base*rarity.mult);} }
-class MntTask extends GameTask{ MntTask(String d, TaskRarity r){super(d,r);} public int getXP(){return (int)(rarity.base*rarity.mult*1.2);} }
-
-// ==================== CORE LOGIC ====================
-class User implements Serializable {
-    String name; GoalType goal; int level=1, xp=0, coins=0, streak=0;
-    Set<Integer> doneDays = new HashSet<>();
-    List<String> inventory = new ArrayList<>();
-    transient List<ChangeListener> listeners = new ArrayList<>();
-    LocalDate lastDate = LocalDate.now().minusDays(1);
-
-    User(String n, GoalType g){ this.name=n; this.goal=g; }
-
-    public void addListener(ChangeListener l){ listeners.add(l); }
-    public void notifyListeners(){ for(ChangeListener l: listeners) l.changed(null); }
-
-    public void completeDay(int day, List<GameTask> tasks){
-        if(doneDays.contains(day)) return;
-        int sessionXP = tasks.stream().mapToInt(GameTask::getXP).sum();
-        
-        // Streak Logic
-        LocalDate today = LocalDate.now();
-        if(lastDate.equals(today.minusDays(1))) streak++;
-        else streak = (lastDate.equals(today)) ? streak : 1;
-        lastDate = today;
-
-        // Rewards
-        double mult = 1 + (Math.min(streak,30)*0.05);
-        this.xp += (int)(sessionXP*mult);
-        this.coins += sessionXP + 10; // Flat bonus
-        
-        // Level Up
-        while(xp >= level*150){ xp -= level*150; level++; }
-
-        doneDays.add(day);
-        notifyListeners();
-    }
-}
-
-// ==================== JAVAFX UI ====================
-public class App extends Application {
-    User currentUser = new User("Hero", GoalType.MUSCLE_GAIN);
-    Stage mainStage;
-    Label lblStreak, lblCoins, lblLevel, lblXP;
-    ObservableList<GameTask> taskList = FXCollections.observableArrayList();
-    ObservableList<String> shopItems = FXCollections.observableArrayList();
-
-    public static void main(String[] args) { launch(args); }
-
-    @Override
-    public void start(Stage stage) {
-        this.mainStage = stage;
-        stage.setTitle("100DayCore Pro - Dashboard");
-        
-        // Root Layout
-        BorderPane root = new BorderPane();
-        
-        // Top Bar (Stats)
-        HBox topBar = createHeader();
-        root.setTop(topBar);
-
-        // Center (Tabs)
-        TabPane center = new TabPane();
-        center.getTabs().addAll(createDashTab(), createChallengeTab(), createShopTab(), createLeaderboardTab());
-        root.setCenter(center);
-
-        // Bottom (Footer)
-        Label footer = new Label("100DayCore Pro System v2.0 | Build: " + LocalDate.now());
-        footer.setPadding(new Insets(10));
-        root.setBottom(footer);
-
-        stage.setScene(new Scene(root, 800, 600));
-        stage.show();
-        
-        // Load first day's tasks
-        loadTasks(1);
-    }
-
-    private HBox createHeader() {
-        HBox box = new HBox(20);
-        box.setPadding(new Insets(15));
-        box.setStyle("-fx-background-color: #2c3e50;");
-        
-        lblLevel = new Label("Level: 1");
-        lblXP = new Label("XP: 0");
-        lblCoins = new Label("Coins: 0");
-        lblStreak = new Label("Streak: 0 🔥");
-        
-        for(Label l : new Label[]{lblLevel, lblXP, lblCoins, lblStreak}){
-            l.setFont(Font.font("Arial", 16));
-            l.setTextFill(javafx.scene.paint.Color.WHITE);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100DayCore Pro | Gamified Productivity</title>
+    <meta name="description" content="Master your habits with 100 days of gamified productivity">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-dark: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --bg-light: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --primary: #00d2ff;
+            --accent: #f953c6;
+            --success: #00b09b;
+            --warning: #f7971e;
+            --danger: #ff416c;
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.6);
         }
+        .light-mode {
+            --glass: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text: #1a1a2e;
+            --text-muted: rgba(0,0,0,0.5);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.5s, color 0.3s;
+            overflow-x: hidden;
+        }
+        .app-container { max-width: 1200px; margin: 0 auto; padding: 15px; }
         
-        Button saveBtn = new Button("💾 Save");
-        saveBtn.setOnAction(e -> saveGame());
+        /* =========================================
+           HEADER
+           ========================================= */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: var(--glass); backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            box-shadow: var(--glass-shadow); position: sticky; top: 10px; z-index: 100;
+        }
+        .brand { font-size: 1.3rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-stats { display: flex; gap: 12px; align-items: center; }
+        .stat-pill {
+            background: rgba(0,0,0,0.3); padding: 6px 12px; border-radius: 50px;
+            font-size: 0.85rem; display: flex; align-items: center; gap: 5px;
+            border: 1px solid var(--glass-border); white-space: nowrap;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .stat-pill:hover { transform: scale(1.05); }
+        .btn-icon { background: none; border: none; color: var(--text); font-size: 1.3rem; cursor: pointer; margin-left: 5px; }
         
-        box.getChildren().addAll(lblLevel, lblXP, lblCoins, lblStreak, new Region(), saveBtn);
-        HBox.setHgrow(box.getChildren().get(box.getChildren().size()-2), Priority.ALWAYS);
-        return box;
-    }
-
-    private Tab createDashTab() {
-        VBox v = new VBox(15);
-        v.setPadding(new Insets(20));
+        /* =========================================
+           DASHBOARD GRID
+           ========================================= */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
         
-        Label title = new Label("PLAYER STATS");
-        title.setFont(new Font(24));
+        /* =========================================
+           GLASS CARD
+           ========================================= */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
+            box-shadow: var(--glass-shadow); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+        h2 { font-size: 1.1rem; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
         
-        GridPane stats = new GridPane();
-        stats.setHgap(10); stats.setVgap(10);
-        stats.add(new Label("Name:"), 0, 0); stats.add(new Label(currentUser.name), 1, 0);
-        stats.add(new Label("Goal:"), 0, 1); stats.add(new Label(currentUser.goal.getName()), 1, 1);
+        /* =========================================
+           DAY & PROGRESS
+           ========================================= */
+        .day-center { text-align: center; }
+        .day-number { font-size: 5rem; font-weight: 900; line-height: 1; background: linear-gradient(to bottom, #fff, rgba(255,255,255,0.4)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .day-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem; }
         
-        // Inventory List
-        Label invTitle = new Label("Inventory:");
-        ListView<String> invView = new ListView<>(FXCollections.observableArrayList(currentUser.inventory));
-        invView.setPrefHeight(100);
+        .progress-container { height: 14px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin: 15px 0; position: relative; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 20px var(--primary); }
         
-        v.getChildren().addAll(title, stats, invTitle, invView);
-        return new Tab("Dashboard", v);
-    }
-
-    private Tab createChallengeTab() {
-        VBox v = new VBox(10);
-        v.setPadding(new Insets(20));
+        .rank-badge {
+            display: inline-block; padding: 6px 16px; border-radius: 20px;
+            background: linear-gradient(45deg, #ff00cc, #333399); font-size: 0.8rem;
+            font-weight: bold; margin-top: 10px; box-shadow: 0 0 15px rgba(255,0,204,0.4);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow { from { box-shadow: 0 0 10px rgba(255,0,204,0.4); } to { box-shadow: 0 0 20px rgba(255,0,204,0.8); } }
         
-        Label title = new Label("Daily Challenge");
-        title.setFont(new Font(20));
+        /* =========================================
+           STATS & TASKS
+           ========================================= */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
         
-        ListView<GameTask> list = new ListView<>(taskList);
-        list.setCellFactory(CheckBoxListCell.forListView(GameTask::doneProperty));
+        .task-input-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        input, select {
+            background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);
+            padding: 10px 14px; border-radius: 12px; color: var(--text); font-family: inherit;
+        }
+        input::placeholder { color: var(--text-muted); }
+        .btn-add {
+            background: linear-gradient(135deg, var(--success), #00c6ff); border: none;
+            color: white; padding: 0 18px; border-radius: 12px; cursor: pointer; font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn-add:hover { opacity: 0.9; }
         
-        Button completeBtn = new Button("Complete Day");
-        completeBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
-        completeBtn.setOnAction(e -> {
-            if(taskList.stream().anyMatch(t -> !t.done)){
-                showAlert("Incomplete Tasks", "Finish all tasks before completing the day!");
-                return;
-            }
-            currentUser.completeDay(1, new ArrayList<>(taskList));
-            updateUI();
-            showAlert("Success", "Day Completed! Rewards Claimed.");
-        });
-
-        v.getChildren().addAll(title, list, completeBtn);
-        return new Tab("Challenge", v);
-    }
-
-    private Tab createShopTab() {
-        VBox v = new VBox(10);
-        v.setPadding(new Insets(20));
+        .task-list { list-style: none; max-height: 300px; overflow-y: auto; }
+        .task-item {
+            background: rgba(255,255,255,0.03); margin-bottom: 8px; padding: 12px;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+            border-left: 4px solid var(--text-muted); transition: all 0.3s; animation: slideIn 0.3s;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        .task-item.completed { border-left-color: var(--success); opacity: 0.5; }
+        .task-left { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; }
+        .difficulty-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .diff-easy { background: var(--success); }
+        .diff-med { background: var(--warning); }
+        .diff-hard { background: var(--danger); }
+        .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; opacity: 0.5; font-size: 1.1rem; }
         
-        // Mock Items
-        ObservableList<String> items = FXCollections.observableArrayList(
-            "Titan Badge (500c)", "Golden Theme (1000c)", "XP Booster (300c)", "Mystery Box (200c)"
-        );
+        /* =========================================
+           BADGES & LEADERBOARD
+           ========================================= */
+        .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 10px; }
+        .badge {
+            background: rgba(0,0,0,0.2); border-radius: 12px; padding: 12px 8px; text-align: center;
+            opacity: 0.25; filter: grayscale(100%); transition: all 0.5s; border: 1px solid transparent;
+        }
+        .badge.unlocked { opacity: 1; filter: grayscale(0%); border-color: var(--accent); box-shadow: 0 0 15px var(--accent); transform: scale(1.05); }
+        .badge-icon { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+        .badge-name { font-size: 0.6rem; color: var(--text-muted); font-weight: bold; }
         
-        ListView<String> list = new ListView<>(items);
+        .leader-list { list-style: none; }
+        .leader-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--glass-border); font-size: 0.9rem; }
         
-        Button buyBtn = new Button("Buy Selected");
-        buyBtn.setOnAction(e -> {
-            String sel = list.getSelectionModel().getSelectedItem();
-            if(sel==null) return;
-            
-            int cost = Integer.parseInt(sel.substring(sel.indexOf("(")+1, sel.indexOf("c")));
-            if(currentUser.coins >= cost){
-                currentUser.coins -= cost;
-                currentUser.inventory.add(sel.split("\\$")[0].trim());
-                updateUI();
-                showAlert("Purchased!", "Bought " + sel);
-            } else {
-                showAlert("Error", "Not enough coins!");
-            }
-        });
+        /* =========================================
+           MODALS & POPUPS
+           ========================================= */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            background: #1e1e2e; padding: 28px; border-radius: 24px; width: 90%; max-width: 380px;
+            border: 1px solid var(--glass-border); transform: scale(0.9); transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal { transform: scale(1); }
+        .modal h3 { margin-bottom: 15px; }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-cancel { flex: 1; padding: 12px; border: 1px solid var(--glass-border); background: transparent; color: var(--text); border-radius: 12px; cursor: pointer; }
+        .btn-confirm { flex: 1; padding: 12px; border: none; background: var(--danger); color: white; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .btn-recovery { background: var(--warning); }
         
-        v.getChildren().addAll(new Label("Item Shop"), list, buyBtn);
-        return new Tab("Shop", v);
-    }
-    
-    private Tab createLeaderboardTab() {
-        VBox v = new VBox(10);
-        v.setPadding(new Insets(20));
+        /* Level Up Popup */
+        .levelup-popup {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #1e1e2e, #2d2d44); padding: 40px;
+            border-radius: 30px; text-align: center; z-index: 2000;
+            border: 2px solid var(--accent); box-shadow: 0 0 50px var(--accent);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .levelup-popup.show { transform: translate(-50%, -50%) scale(1); }
+        .levelup-title { font-size: 2.5rem; font-weight: 900; background: linear-gradient(to right, gold, orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        ObservableList<String> ranks = FXCollections.observableArrayList(
-            "1. You (Hero) - Lv " + currentUser.level,
-            "2. NPC: Emma - Lv 5",
-            "3. NPC: Hiro - Lv 3"
-        );
+        /* Confetti */
+        .confetti { position: fixed; width: 10px; height: 10px; top: -10px; animation: fall linear forwards; z-index: 1500; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
         
-        ListView<String> list = new ListView<>(ranks);
-        v.getChildren().addAll(new Label("Global Rankings"), list);
-        return new Tab("Leaderboard", v);
-    }
-
-    // ==================== HELPERS ====================
-    
-    private void loadTasks(int day) {
-        taskList.clear();
-        // Dynamic Task Generation
-        taskList.add(new PhyTask("100 Pushups", TaskRarity.RARE));
-        taskList.add(new PhyTask("5km Run", TaskRarity.COMMON));
-        taskList.add(new MntTask("Meditate 10m", TaskRarity.LEGENDARY));
-        taskList.add(new PhyTask("Deadlifts 3x5", TaskRarity.RARE));
-    }
-
-    private void updateUI() {
-        lblLevel.setText("Level: " + currentUser.level);
-        lblXP.setText("XP: " + currentUser.xp);
-        lblCoins.setText("Coins: " + currentUser.coins);
-        lblStreak.setText("Streak: " + currentUser.streak + " 🔥");
-    }
-    
-    private void showAlert(String title, String msg){
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setHeaderText(title);
-        a.setContentText(msg);
-        a.showAndWait();
-    }
-    
-    private void saveGame(){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save.dat"))){
-            oos.writeObject(currentUser);
-            showAlert("Saved", "Game progress saved.");
-        }catch(Exception e){ e.printStackTrace(); }
-    }
-}
+        /* Settings Toggle */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .toggle-switch { width: 50px; height: 26px; background: rgba(0,0,0,0.3); border-radius: 20px; position: relative; cursor: pointer; }
+        .toggle-switch::after { content: ''; position: absolute; width: 20px; height: 20px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
+        .toggle-switch.active { background: var(--success); }
+        .toggle-switch.active::after { left: 27px; }
+        
+        /* Quote */
+        .quote-card { text-align: center; font-style: italic; color: var(--text-muted); line-height: 1.6; font-size: 0.9rem; }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .dashboard { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 10px; }
+            .header-stats { width: 100%; overflow-x: auto; justify-content: flex-start; }
+            .brand { font-size: 1.1rem; }
+            .day-number { font-size:
