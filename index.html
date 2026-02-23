@@ -1,316 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="description" content="100DayCore Pro - Elite 100-Day Productivity Challenge">
-    <title>100DayCore Pro</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- PRELOADER -->
-    <div id="preloader">
-        <div class="loader-ring"></div>
-        <div class="loader-text">100DAYCORE</div>
-    </div>
+// 100DayCore Pro Script Implementation
 
-    <!-- AUTH SCREEN -->
-    <div id="auth-screen" class="screen active">
-        <div class="auth-container">
-            <div class="logo-section">
-                <div class="logo-icon">💎</div>
-                <h1>100DAYCORE</h1>
-                <p class="tagline">ELITE 100-DAY CHALLENGE</p>
-            </div>
-            
-            <div class="auth-form" id="onboarding-form">
-                <div class="input-group">
-                    <label>FULL NAME</label>
-                    <input type="text" id="user-name" placeholder="Enter your name" maxlength="30">
-                </div>
-                
-                <div class="input-group">
-                    <label>AGE</label>
-                    <input type="number" id="user-age" placeholder="18" min="10" max="99">
-                </div>
-                
-                <div class="input-group">
-                    <label>MOBILE NUMBER</label>
-                    <input type="tel" id="user-phone" placeholder="+1 234 567 8900">
-                </div>
-                
-                <div class="input-group">
-                    <label>PRIMARY GOAL</label>
-                    <input type="text" id="user-goal" placeholder="What do you want to achieve?" maxlength="50">
-                </div>
-                
-                <div class="input-group">
-                    <label>GOAL CATEGORY</label>
-                    <select id="goal-category">
-                        <option value="">Select category</option>
-                        <option value="fitness">Fitness</option>
-                        <option value="coding">Coding</option>
-                        <option value="business">Business</option>
-                        <option value="study">Study</option>
-                        <option value="skill">Skill Development</option>
-                        <option value="discipline">Discipline</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                
-                <div                </div>
- class="input-group">
-                    <label>PERSONALITY TYPE</label>
-                    <select id="personality-type">
-                        <option value="">Select type</option>
-                        <option value="warrior">Warrior (High Intensity)</option>
-                        <option value="builder">Builder (Steady Progress)</option>
-                        <option value="strategist">Strategist (Smart Work)</option>
-                        <option value="beast">Beast (No Limits)</option>
-                    </select>
-                </div>
-                
-                <button class="btn-primary" id="start-btn">BEGIN JOURNEY</button>
-            </div>
-            
-            <div class="auth-divider">
-                <span>OR</span>
-            </div>
-            
-            <button class="btn-secondary" id="phone-login-btn">
-                <span>📱</span> Continue with Phone
-            </button>
-            
-            <p class="auth-footer">By continuing, you agree to the Terms of Service</p>
-        </div>
-    </div>
+class User {
+    constructor(name, goal, level = 1, streak = 0, xp = 0, coins = 0) {
+        this.name = name;
+        this.goal = goal;
+        this.level = level;
+        this.streak = streak;
+        this.xp = xp;
+        this.coins = coins;
+        this.achievements = new Set();
+        this.completedDays = new Set();
+    }
 
-    <!-- MAIN DASHBOARD -->
-    <div id="dashboard-screen" class="screen">
-        <!-- HEADER -->
-        <header class="dashboard-header">
-            <button class="menu-toggle" id="burger-btn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            
-            <div class="user-greeting">
-                <span class="greeting-text">Welcome back,</span>
-                <span class="user-name-display" id="display-name">User</span>
-            </div>
-            
-            <div class="header-right">
-                <button class="icon-btn" id="premium-badge-btn">
-                    <span class="crown-icon">👑</span>
-                </button>
-                <div class="coin-display" id="coin-display">
-                    <span class="coin-icon">🪙</span>
-                    <span class="coin-value">0</span>
-                </div>
-            </div>
-        </header>
+    completeDay(dayNumber) {
+        if (!this.completedDays.has(dayNumber)) {
+            this.completedDays.add(dayNumber);
+            this.streak++;
+            this.xp += 50;
+            this.coins += 100;
 
-        <!-- PROGRESS HERO -->
-        <section class="progress-hero">
-            <div class="day-counter">
-                <span class="day-label">DAY</span>
-                <span class="day-number" id="current-day">1</span>
-                <span class="day-total">/ 100</span>
-            </div>
-            
-            <div class="xp-ring-container">
-                <svg class="xp-ring" viewBox="0 0 120 120">
-                    <circle class="xp-ring-bg" cx="60" cy="60" r="52"/>
-                    <circle class="xp-ring-progress" cx="60" cy="60" r="52" id="xp-ring"/>
-                </svg>
-                <div class="xp-center">
-                    <span class="xp-value" id="xp-value">0</span>
-                    <span class="xp-label">XP</span>
-                </div>
-            </div>
-            
-            <div class="level-display">
-                <span class="level-title" id="level-title">Beginner</span>
-                <span class="level-number">LVL <span id="current-level">1</span></span>
-            </div>
-        </section>
+            // Level up logic: Every 100 XP = next level
+            if (this.xp >= this.level * 100) {
+                this.levelUp();
+            }
 
-        <!-- STREAK SECTION -->
-        <section class="streak-section">
-            <div class="streak-flame">
-                <span class="flame-emoji">🔥</span>
-                <span class="streak-count" id="streak-count">0</span>
-            </div>
-            <div class="streak-label">DAY STREAK</div>
-            <div class="streak-bar">
-                <div class="streak-fill" id="streak-fill"></div>
-            </div>
-        </section>
+            // Achievements check
+            if (this.streak >= 7) this.achievements.add("7 Day Warrior");
+            if (this.streak >= 30) this.achievements.add("30 Day Beast");
+        }
+    }
 
-        <!-- TASK PANEL -->
-        <section class="task-panel" id="task-panel">
-            <div class="task-header">
-                <h2>TODAY'S MISSION</h2>
-                <span class="difficulty-badge" id="difficulty-badge">NORMAL</span>
-            </div>
-            
-            <div class="boss-indicator" id="boss-indicator" style="display: none;">
-                <span class="boss-icon">👹</span>
-                <span>WEEKLY BOSS</span>
-            </div>
-            
-            <div class="main-task">
-                <p id="main-task-text">Loading task...</p>
-            </div>
-            
-            <div class="optional-tasks" id="optional-tasks">
-                <h4>OPTIONAL</h4>
-                <ul id="optional-list"></ul>
-            </div>
-            
-            <div class="task-why">
-                <h4>WHY</h4>
-                <p id="task-why-text"></p>
-            </div>
-            
-            <button class="btn-complete" id="complete-btn">
-                <span>✓</span> COMPLETE DAY
-            </button>
-        </section>
+    levelUp() {
+        this.level++;
+        console.log(`Level up! ${this.name} reached Level ${this.level}`);
+        // Additional level-up rewards or logic can be added here
+    }
 
-        <!-- QUICK STATS -->
-        <section class="quick-stats">
-            <div class="stat-card">
-                <span class="stat-icon">📅</span>
-                <span class="stat-value" id="completed-days">0</span>
-                <span class="stat-label">Completed</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon">🏆</span>
-                <span class="stat-value" id="boss-points">0</span>
-                <span class="stat-label">Boss Points</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-icon">⭐</span>
-                <span class="stat-value" id="achievements-count">0</span>
-                <span class="stat-label">Badges</span>
-            </div>
-        </section>
+    getStats() {
+        return {
+            name: this.name,
+            goal: this.goal,
+            level: this.level,
+            streak: this.streak,
+            xp: this.xp,
+            coins: this.coins,
+            achievements: Array.from(this.achievements),
+            completedDays: Array.from(this.completedDays),
+        };
+    }
+}
 
-        <!-- PRODUCTIVITY TOOLS -->
-        <section class="tools-section">
-            <h3>TOOLS</h3>
-            <div class="tools-grid">
-                <button class="tool-btn" id="pomodoro-btn">
-                    <span>🍅</span>
-                    <span>Pomodoro</span>
-                </button>
-                <button class="tool-btn" id="calendar-btn">
-                    <span>📆</span>
-                    <span>Calendar</span>
-                </button>
-                <button class="tool-btn" id="journal-btn">
-                    <span>📝</span>
-                    <span>Journal</span>
-                </button>
-                <button class="tool-btn" id="analytics-btn">
-                    <span>📊</span>
-                    <span>Analytics</span>
-                </button>
-            </div>
-        </section>
-    </div>
+class Task {
+    constructor(description, icon = '', completed = false) {
+        this.description = description;
+        this.icon = icon;
+        this.completed = completed;
+    }
 
-    <!-- BURGER MENU OVERLAY -->
-    <div class="menu-overlay" id="menu-overlay"></div>
-    
-    <!-- BURGER MENU -->
-    <nav class="burger-menu" id="burger-menu">
-        <div class="menu-header">
-            <div class="avatar-preview" id="menu-avatar">
-                <div class="avatar-mini"></div>
-            </div>
-            <div class="menu-user-info">
-                <span class="menu-username" id="menu-username">User</span>
-                <span class="menu-userlevel" id="menu-userlevel">LVL 1</span>
-            </div>
-        </div>
-        
-        <ul class="menu-items">
-            <li><a href="#" data-page="leaderboard">
-                <span>🏆</span> Leaderboard
-            </a></li>
-            <li><a href="#" data-page="store">
-                <span>🛍️</span> Store
-            </a></li>
-            <li><a href="#" data-page="avatar">
-                <span>😎</span> Avatar
-            </a></li>
-            <li><a href="#" data-page="achievements">
-                <span>🏅</span> Achievements
-            </a></li>
-            <li><a href="#" data-page="premium">
-                <span>👑</span> Premium
-            </a></li>
-            <li><a href="#" data-page="settings">
-                <span>⚙️</span> Settings
-            </a></li>
-        </ul>
-        
-        <div class="menu-footer">
-            <button class="btn-logout" id="logout-btn">LOGOUT</button>
-        </div>
-    </nav>
+    toggleComplete() {
+        this.completed = !this.completed;
+    }
 
-    <!-- MODAL CONTAINERS -->
-    <div class="modal" id="modal-container">
-        <div class="modal-content" id="modal-content">
-            <!-- Dynamic content -->
-        </div>
-    </div>
+    display() {
+        return `${this.completed ? '✔' : '✖'} ${this.description} ${this.icon}`;
+    }
+}
 
-    <!-- LEVEL UP ANIMATION -->
-    <div class="levelup-overlay" id="levelup-overlay">
-        <div class="levelup-content">
-            <div class="levelup-icon">⬆️</div>
-            <h2>LEVEL UP!</h2>
-            <p>You reached Level <span id="new-level">2</span></p>
-            <div class="levelup-reward">
-                <span>🪙</span> +<span id="levelup-coins">100</span> Coins
-            </div>
-        </div>
-    </div>
+class Challenge {
+    constructor(day, level) {
+        this.day = day;
+        this.level = level;
+        this.bossChallenge = [
+            new Task('Train harder today!', '🔥'),
+            new Task('Deadlift 4 sets', '🏋️‍♂️'),
+            new Task('Pull-ups 3x10', '🔥'),
+            new Task('Protein-rich meal', '🥚'),
+            new Task('Foam roll 10 mins', '🧘‍♂️')
+        ];
+    }
 
-    <!-- ACHIEVEMENT POPUP -->
-    <div class="achievement-popup" id="achievement-popup">
-        <div class="achievement-icon">🏆</div>
-        <h3>Achievement Unlocked!</h3>
-        <p id="achievement-name">7 Day Warrior</p>
-    </div>
+    displayTasks() {
+        return this.bossChallenge.map(task => task.display()).join('\n');
+    }
+}
 
-    <!-- STREAK MILESTONE -->
-    <div class="streak-milestone" id="streak-milestone">
-        <div class="confetti-container" id="confetti"></div>
-        <h2>🔥 <span id="streak-number">7</span> DAY STREAK!</h2>
-        <p>You're building unstoppable momentum</p>
-    </div>
+class Leaderboard {
+    constructor() {
+        this.users = [];
+    }
 
-    <!-- FIREBASE CONTAINER -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- APP MODULES -->
-    <script src="js/core.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/economy.js"></script>
-    <script src="js/tasks.js"></script>
-    <script src="js/store.js"></script>
-    <script src="js/avatar.js"></script>
-    <script src="js/ui.js"></script>
-</body>
-  </html>
+    addUser(user) {
+        this.users.push(user);
+    }
+
+    rankByCoins() {
+        return this.users.sort((a, b) => b.coins - a.coins);
+    }
+
+    displayGlobal() {
+        const rankedUsers = this.rankByCoins();
+        return rankedUsers.map(user => 
+            `${user.name} - Lv ${user.level} - Coins: ${user.coins}`
+        ).join('\n');
+    }
+}
+
+// Simulated app usage:
+
+// Step 1: New User Setup
+function startChallenge(name, goal) {
+    if (!name || !goal) {
+        console.log("Please enter your name and select a goal.");
+        return null;
+    }
+    let user = new User(name, goal, 1, 0, 0, 0);
+    console.log(`Welcome ${user.name}, your challenge to: ${user.goal} starts now!`);
+    return user;
+}
+
+// Step 2: Progressing Through Days and Challenges
+function completeDayForUser(user, day) {
+    if (!user) return;
+
+    console.log(`Day ${day} - Level ${user.level}`);
+    const challenge = new Challenge(day, user.level);
+    console.log('Boss Challenge Tasks:');
+    console.log(challenge.displayTasks());
+
+    user.completeDay(day);
+    console.log('Day completed!');
+    console.log(`Current Streak: ${user.streak}`);
+    console.log(`XP: ${user.xp}, Coins: ${user.coins}`);
+
+    if(user.achievements.size > 0){
+        console.log("Achievements Unlocked:");
+        user.achievements.forEach(a => console.log(`- ${a}`));
+    }
+}
+
+// Step 3: Leaderboard Management
+const leaderboard = new Leaderboard();
+
+// Testing the script:
+
+// Creating users
+const user1 = startChallenge('Lucas', 'Muscle Gain');
+const user2 = new User('Emma', 'Muscle Gain', 5, 6, 500, 1100);
+const user3 = new User('Hiro', 'Muscle Gain', 6, 10, 600, 980);
+const user4 = new User('Chloe', 'Muscle Gain', 6, 8, 550, 950);
+
+// Simulate day completion for Lucas
+completeDayForUser(user1, 7);
+
+// Adding users to leaderboard
+leaderboard.addUser(user1);
+leaderboard.addUser(user2);
+leaderboard.addUser(user3);
+leaderboard.addUser(user4);
+
+// Display leaderboard
+console.log("\n--- Global Leaderboard ---");
+console.log(leaderboard.displayGlobal());
+
+// Exporting classes for possible future UI integration
+export { User, Challenge, Leaderboard, Task, startChallenge, completeDayForUser };
