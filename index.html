@@ -1,638 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>100DayCore Pro - GenZ Gold Theme</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-  :root {
-    --gold-gradient: linear-gradient(90deg, #d4af37 0%, #f7dc62 100%);
-    --dark-bg: #121318;
-    --card-bg: #1c1c24;
-    --btn-gradient: linear-gradient(90deg, #cc5374, #e94e77);
-    --btn-gradient-alt: linear-gradient(90deg, #f2994a, #f2c94c);
-  }
-
-  body {
-    margin: 0; 
-    background: var(--dark-bg);
-    font-family: 'Poppins', sans-serif;
-    color: #e6e2d3;
-    -webkit-font-smoothing: antialiased;
-    user-select: none;
-  }
-
-  header {
-    background: var(--card-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-weight: 600;
-    font-size: 1.3rem;
-    padding: 12px 0;
-    color: #f7d86b;
-  }
-
-  header .icon-fire {
-    margin-right: 0.4em;
-  }
-
-  header .coin {
-    position: absolute;
-    right: 16px;
-    display: flex;
-    align-items: center;
-    gap: 0.3em;
-    background: var(--btn-gradient-alt);
-    border-radius: 12px;
-    padding: 4px 12px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: default;
-    user-select: none;
-  }
-
-  header .coin::before {
-    content: "🪙";
-    font-size: 1.2rem;
-  }
-
-  main {
-    padding: 20px;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 20px;
-    margin: 12px 0;
-    box-shadow: 0 0 12px #d4af37aa;
-  }
-
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
-  .input-group label {
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-
-  .input-group input,
-  .input-group select {
-    background: #2a2b37;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: #e6e2d3;
-    font-size: 1rem;
-    outline: none;
-    transition: background 0.3s ease;
-  }
-
-  .input-group input::placeholder {
-    color: #b2a86c;
-  }
-
-  .input-group input:focus,
-  .input-group select:focus {
-    background: #3c3c4e;
-  }
-
-  button.primary-btn {
-    width: 100%;
-    padding: 14px 0;
-    border: none;
-    border-radius: 24px;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    background: var(--btn-gradient);
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    box-shadow: 0 0 10px #cc5374;
-    transition: transform 0.15s ease-in-out;
-  }
-
-  button.primary-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #e94e77;
-  }
-
-  button.gold-btn {
-    background: var(--btn-gradient-alt);
-    border-radius: 20px;
-    padding: 6px 16px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #3c2f00;
-    box-shadow: 0 0 10px #fac94d;
-    border: 1.5px solid #bd9f21;
-    cursor: pointer;
-    margin-right: 8px;
-  }
-
-  button.gold-btn:last-child {
-    margin-right: 0;
-  }
-
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 12px 0;
-    background: #23232b;
-    border-radius: 14px;
-    color: #d4af37;
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  .stats span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .achievements {
-    text-align: center;
-    margin: 16px 0;
-  }
-
-  .achievements h3 {
-    margin-bottom: 12px;
-    color: #fac94d;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-  }
-
-  .calendar {
-    background: #2b2c39;
-    border-radius: 14px;
-    padding: 12px;
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 6px;
-    font-size: 0.85rem;
-  }
-
-  .calendar button {
-    background: #191a21;
-    color: #999966;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    padding: 8px 0;
-    transition: background 0.25s ease, color 0.25s ease;
-    font-weight: 600;
-  }
-
-  .calendar button.completed {
-    background: var(--btn-gradient-alt);
-    color: #3c2f00;
-    box-shadow: 0 0 8px #f7db85;
-  }
-
-  .calendar button.selected {
-    background: #cc5374;
-    color: #fff;
-    box-shadow: 0 0 8px #e94e77;
-  }
-
-  /* Avatar styles */
-  .avatar-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 14px 0;
-  }
-
-  .avatar {
-    width: 120px;
-    height: 150px;
-    background: #191a21;
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 15px #d4af37aa;
-  }
-
-  .avatar img {
-    width: 80px;
-    border-radius: 50%;
-    margin-bottom: 12px;
-  }
-
-  /* Boss challenge list */
-  .challenge-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 14px 0;
-    font-size: 0.9rem;
-  }
-
-  .challenge-list li {
-    margin: 6px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .challenge-list li .check {
-    color: #fac94d;
-    font-weight: 700;
-  }
-
-  /* Bottom buttons container */
-  .bottom-btns {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  /* Navigation menu */
-  .menu {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 14px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    font-size: 1rem;
-  }
-
-  .menu button {
-    background: #23232b;
-    border: none;
-    border-radius: 12px;
-    color: #d4af37;
-    padding: 12px;
-    text-align: left;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 0 8px #d4af37a0;
-    transition: background 0.3s ease;
-  }
-
-  .menu button:hover {
-    background: #3c3c4e;
-  }
-
-  /* Leaderboard */
-  .leaderboard {
-    background: #23232b;
-    border-radius: 14px;
-    padding: 12px;
-    font-size: 0.9rem;
-    color: #e6e2d3;
-  }
-
-  .leaderboard-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-
-  .leaderboard-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 8px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-    background: #191a21;
-    box-shadow: 0 0 8px #d4af37a0;
-  }
-
-  .leaderboard-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .leaderboard-item .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-  }
-
-  .leaderboard-item .user-info img {
-    width: 28px;
-    border-radius: 50%;
-  }
-
-  .leaderboard-item .level,
-  .leaderboard-item .coins {
-    font-weight: 700;
-    color: #fac94d;
-  }
-
-  select, input, button {
-    font-family: 'Poppins', sans-serif;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="100DayCore Pro - Elite 100-Day Productivity Challenge">
+    <title>100DayCore Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<header>
-  <span class="icon-fire">🔥</span> 100DayCore Pro
-  <div class="coin" id="coinDisplay">2350</div>
-</header>
-
-<main>
-
-  <!-- Start Your New Challenge -->
-  <div class="card" id="startChallengeCard">
-    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin-bottom: 18px; color: #fac94d;">
-      Start Your new here
-    </div>
-    <div class="input-group">
-      <label for="userName">Your Name</label>
-      <input type="text" id="userName" placeholder="Your Name" />
-    </div>
-    <div class="input-group">
-      <label for="challengeType">Select Challenge</label>
-      <select id="challengeType" >
-        <option value="muscle">Muscle Gain</option>
-        <option value="fatloss">Fat Loss</option>
-        <option value="endurance">Endurance</option>
-        <option value="flexibility">Flexibility</option>
-      </select>
-    </div>
-    <button class="primary-btn" id="startBtn">Start Challenge</button>
-  </div>
-
-  <!-- Progress and achievements -->
-  <div class="card" id="progressCard" style="display:none;">
-    <div class="stats">
-      <span>🔥 Streak: <strong id="streakCount">0</strong></span>
-      <span>⭐ XP: <strong id="xpCount">0</strong></span>
-    </div>
-    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin: 14px 0; color: #fac94d;">
-      Day <span id="dayCount">1</span> • Level <span id="levelCount">1</span>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">100DAYCORE</div>
     </div>
 
-    <div class="achievements">
-      <h3>✨ Achievements</h3>
-      <button class="gold-btn" id="btn7Day">7 Day Warrior</button>
-      <button class="gold-btn" id="btn30Day">30 Day Beast</button>
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container">
+            <div class="logo-section">
+                <div class="logo-icon">💎</div>
+                <h1>100DAYCORE</h1>
+                <p class="tagline">ELITE 100-DAY CHALLENGE</p>
+            </div>
+            
+            <div class="auth-form" id="onboarding-form">
+                <div class="input-group">
+                    <label>FULL NAME</label>
+                    <input type="text" id="user-name" placeholder="Enter your name" maxlength="30">
+                </div>
+                
+                <div class="input-group">
+                    <label>AGE</label>
+                    <input type="number" id="user-age" placeholder="18" min="10" max="99">
+                </div>
+                
+                <div class="input-group">
+                    <label>MOBILE NUMBER</label>
+                    <input type="tel" id="user-phone" placeholder="+1 234 567 8900">
+                </div>
+                
+                <div class="input-group">
+                    <label>PRIMARY GOAL</label>
+                    <input type="text" id="user-goal" placeholder="What do you want to achieve?" maxlength="50">
+                </div>
+                
+                <div class="input-group">
+                    <label>GOAL CATEGORY</label>
+                    <select id="goal-category">
+                        <option value="">Select category</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="coding">Coding</option>
+                        <option value="business">Business</option>
+                        <option value="study">Study</option>
+                        <option value="skill">Skill Development</option>
+                        <option value="discipline">Discipline</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                
+                <div                </div>
+ class="input-group">
+                    <label>PERSONALITY TYPE</label>
+                    <select id="personality-type">
+                        <option value="">Select type</option>
+                        <option value="warrior">Warrior (High Intensity)</option>
+                        <option value="builder">Builder (Steady Progress)</option>
+                        <option value="strategist">Strategist (Smart Work)</option>
+                        <option value="beast">Beast (No Limits)</option>
+                    </select>
+                </div>
+                
+                <button class="btn-primary" id="start-btn">BEGIN JOURNEY</button>
+            </div>
+            
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+            
+            <button class="btn-secondary" id="phone-login-btn">
+                <span>📱</span> Continue with Phone
+            </button>
+            
+            <p class="auth-footer">By continuing, you agree to the Terms of Service</p>
+        </div>
     </div>
 
-    <!-- Calendar -->
-    <div class="calendar" id="calendar"></div>
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-screen" class="screen">
+        <!-- HEADER -->
+        <header class="dashboard-header">
+            <button class="menu-toggle" id="burger-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="user-greeting">
+                <span class="greeting-text">Welcome back,</span>
+                <span class="user-name-display" id="display-name">User</span>
+            </div>
+            
+            <div class="header-right">
+                <button class="icon-btn" id="premium-badge-btn">
+                    <span class="crown-icon">👑</span>
+                </button>
+                <div class="coin-display" id="coin-display">
+                    <span class="coin-icon">🪙</span>
+                    <span class="coin-value">0</span>
+                </div>
+            </div>
+        </header>
 
-    <!-- Complete Day Button -->
-    <button class="primary-btn" id="completeDayBtn" style="margin-top: 20px;">Complete Day ✅</button>
-  </div>
+        <!-- PROGRESS HERO -->
+        <section class="progress-hero">
+            <div class="day-counter">
+                <span class="day-label">DAY</span>
+                <span class="day-number" id="current-day">1</span>
+                <span class="day-total">/ 100</span>
+            </div>
+            
+            <div class="xp-ring-container">
+                <svg class="xp-ring" viewBox="0 0 120 120">
+                    <circle class="xp-ring-bg" cx="60" cy="60" r="52"/>
+                    <circle class="xp-ring-progress" cx="60" cy="60" r="52" id="xp-ring"/>
+                </svg>
+                <div class="xp-center">
+                    <span class="xp-value" id="xp-value">0</span>
+                    <span class="xp-label">XP</span>
+                </div>
+            </div>
+            
+            <div class="level-display">
+                <span class="level-title" id="level-title">Beginner</span>
+                <span class="level-number">LVL <span id="current-level">1</span></span>
+            </div>
+        </section>
 
-  <!-- Boss Challenge -->
-  <div class="card" id="bossChallengeCard" style="display:none;">
-    <div style="text-align:center; font-weight:600; font-size:1.1rem; margin-bottom: 10px; color: #fac94d;">
-      Day <span id="bossDay">1</span> • Level <span id="bossLevel">1</span>
+        <!-- STREAK SECTION -->
+        <section class="streak-section">
+            <div class="streak-flame">
+                <span class="flame-emoji">🔥</span>
+                <span class="streak-count" id="streak-count">0</span>
+            </div>
+            <div class="streak-label">DAY STREAK</div>
+            <div class="streak-bar">
+                <div class="streak-fill" id="streak-fill"></div>
+            </div>
+        </section>
+
+        <!-- TASK PANEL -->
+        <section class="task-panel" id="task-panel">
+            <div class="task-header">
+                <h2>TODAY'S MISSION</h2>
+                <span class="difficulty-badge" id="difficulty-badge">NORMAL</span>
+            </div>
+            
+            <div class="boss-indicator" id="boss-indicator" style="display: none;">
+                <span class="boss-icon">👹</span>
+                <span>WEEKLY BOSS</span>
+            </div>
+            
+            <div class="main-task">
+                <p id="main-task-text">Loading task...</p>
+            </div>
+            
+            <div class="optional-tasks" id="optional-tasks">
+                <h4>OPTIONAL</h4>
+                <ul id="optional-list"></ul>
+            </div>
+            
+            <div class="task-why">
+                <h4>WHY</h4>
+                <p id="task-why-text"></p>
+            </div>
+            
+            <button class="btn-complete" id="complete-btn">
+                <span>✓</span> COMPLETE DAY
+            </button>
+        </section>
+
+        <!-- QUICK STATS -->
+        <section class="quick-stats">
+            <div class="stat-card">
+                <span class="stat-icon">📅</span>
+                <span class="stat-value" id="completed-days">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🏆</span>
+                <span class="stat-value" id="boss-points">0</span>
+                <span class="stat-label">Boss Points</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <span class="stat-value" id="achievements-count">0</span>
+                <span class="stat-label">Badges</span>
+            </div>
+        </section>
+
+        <!-- PRODUCTIVITY TOOLS -->
+        <section class="tools-section">
+            <h3>TOOLS</h3>
+            <div class="tools-grid">
+                <button class="tool-btn" id="pomodoro-btn">
+                    <span>🍅</span>
+                    <span>Pomodoro</span>
+                </button>
+                <button class="tool-btn" id="calendar-btn">
+                    <span>📆</span>
+                    <span>Calendar</span>
+                </button>
+                <button class="tool-btn" id="journal-btn">
+                    <span>📝</span>
+                    <span>Journal</span>
+                </button>
+                <button class="tool-btn" id="analytics-btn">
+                    <span>📊</span>
+                    <span>Analytics</span>
+                </button>
+            </div>
+        </section>
     </div>
-    <div style="margin-bottom: 14px; font-weight: 500; font-size: 1rem;">
-      Boss Challenge 🔥
-    </div>
-    <ul class="challenge-list" id="challengeList">
-      <li><span class="check">✔</span> Train harder today!</li>
-      <li><span class="check">✔</span> Deadlift 4 sets 🏋️‍♂️</li>
-      <li><span class="check">✔</span> Pull-ups 3x10 🔥</li>
-      <li><span class="check">✔</span> Protein-rich meal 🍗</li>
-      <li><span class="check">✔</span> Foam roll 10 mins 🧘🏻‍♂️</li>
-    </ul>
-    <button class="primary-btn" id="closeBossBtn" style="background: var(--btn-gradient-alt);">Close</button>
-  </div>
 
-  <!-- Avatar Section -->
-  <div class="card" id="avatarCard" style="display:none; text-align:center;">
-    <div class="avatar-wrapper">
-      <div class="avatar" id="avatarDisplay">
-        <img src="https://i.pravatar.cc/80" alt="User Avatar" />
-        <div id="avatarName" style="color:#fac94d; font-weight:600; margin-top: 8px;"></div>
-      </div>
-    </div>
-    <button class="gold-btn" id="buyBtn"><span style="margin-right: 6px;">🛒</span> Buy</button>
-  </div>
-
-  <!-- Leaderboard Section -->
-  <div class="card leaderboard" id="leaderboardCard" style="display:none;">
-    <div class="leaderboard-header">
-      <div style="color:#fac94d;">Global</div>
-      <div>Friends</div>
-    </div>
-    <div id="leaderboardList">
-      <!-- Leaderboard items inserted here -->
-    </div>
-  </div>
-  
-</main>
-
-<script>
-  (() => {
-    // App State
-    const state = {
-      userName: "",
-      challengeType: "muscle",
-      streak: 0,
-      xp: 0,
-      day: 1,
-      level: 1,
-      completedDays: new Set(),
-      coin: 2350,
-      achievements: {
-        day7: false,
-        day30: false,
-      },
-      selectedDay: 1,
-      leaderboard: [
-        { name: "Lucas", flag: "🇺🇸", level: 7, coins: 1120, avatar: "https://i.pravatar.cc/28?img=15" },
-        { name: "Emma", flag: "🇨🇦", level: 5, coins: 1100, avatar: "https://i.pravatar.cc/28?img=16" },
-        { name: "Hiro", flag: "🇯🇵", level: 6, coins: 980, avatar: "https://i.pravatar.cc/28?img=12" },
-        { name: "Chloe", flag: "🇬🇧", level: 6, coins: 950, avatar: "https://i.pravatar.cc/28?img=8" },
-      ],
-    };
-
-    const startBtn = document.getElementById('startBtn');
-    const startChallengeCard = document.getElementById('startChallengeCard');
-    const progressCard = document.getElementById('progressCard');
-    const streakCount = document.getElementById('streakCount');
-    const xpCount = document.getElementById('xpCount');
-    const dayCount = document.getElementById('dayCount');
-    const levelCount = document.getElementById('levelCount');
-    const calendar = document.getElementById('calendar');
-    const completeDayBtn = document.getElementById('completeDayBtn');
-    const coinDisplay = document.getElementById('coinDisplay');
-    const btn7Day = document.getElementById('btn7Day');
-    const btn30Day = document.getElementById('btn30Day');
-    const bossChallengeCard = document.getElementById('bossChallengeCard');
-    const headDay = document.getElementById('bossDay');
-    const headLevel = document.getElementById('bossLevel');
-    const closeBossBtn = document.getElementById('closeBossBtn');
-    const avatarCard = document.getElementById('avatarCard');
-    const avatarName = document.getElementById('avatarName');
-    const buyBtn = document.getElementById('buyBtn');
-    const leaderboardCard = document.getElementById('leaderboardCard');
-    const leaderboardList = document.getElementById('leaderboardList');
-    const userNameInput = document.getElementById('userName');
-    const challengeTypeSelect = document.getElementById('challengeType');
-
-    // Utility: Update coin display
-    function updateCoins() {
-      coinDisplay.textContent = state.coin.toLocaleString();
-    }
-
-    // Render calendar days with completed and selected classes
-    function renderCalendar() {
-      calendar.innerHTML = "";
-      for (let i = 1; i <= 42; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        if (state.completedDays.has(i)) btn.classList.add('completed');
-        if (state.selectedDay === i) btn.classList.add('selected');
-
-        btn.addEventListener('click', () => {
-          state.selectedDay = i;
-          renderCalendar();
-          openBossChallenge(i);
-        });
-        calendar.appendChild(btn);
-      }
-    }
-
-    // Open Boss Challenge card with day info
-    function openBossChallenge(day) {
-      bossChallengeCard.style.display = "block";
-      headDay.textContent = day;
-      headLevel.textContent = state.level;
-    }
-
-    // Close Boss Challenge card
-    closeBossBtn.addEventListener('click', () => {
-      bossChallengeCard.style.display = "none";
-    });
-
-    // Update stats UI
-    function updateStats() {
-      streakCount.textContent = state.streak;
-      xpCount.textContent = state.xp;
-      dayCount.textContent = state.day;
-      levelCount.textContent = state.level;
-    }
-
-    // Update achievements
-    function updateAchievements() {
-      btn7Day.style.opacity = state.achievements.day7 ? '1' : '0.5';
-      btn30Day.style.opacity = state.achievements.day30 ? '1' : '0.5';
-    }
-
-    // Render leaderboard list
-    function renderLeaderboard() {
-      leaderboardList.innerHTML = "";
-      state.leaderboard.forEach(user => {
-        const userEl = document.createElement('div');
-        userEl.classList.add('leaderboard-item');
-        userEl.innerHTML = `
-          <div class="user-info">
-            <img src="${user.avatar}" alt="${user.name}" />
-            ${user.flag} ${user.name} ${user.flag}
-          </div>
-          <div style="display:flex; gap:10px; align-items:center;">
-            <div class="level">Lv ${user.level}</div>
-            <div class="coins">🪙 ${user.coins}</div>
-          </div>
-        `;
-        leaderboardList.appendChild(userEl);
-      });
-    }
-
-    // Start challenge click handler
-    startBtn.addEventListener('click', () => {
-      const userNameVal = userNameInput.value.trim();
-      if (!userNameVal) {
-        alert('Please enter your name to start!');
-        return;
-      }
-      state.userName = userNameVal;
-      state.challengeType = challengeTypeSelect.value;
-      state.streak = 7;
-      state.xp = 350;
-      state.day = 7;
-      state.level = 1;
-      state.completedDays = new Set([11, 12, 16, 25, 26]); // example completed days
-      state.achievements.day7 = true;
-      state.achievements.day30 = false;
-
-      startChallengeCard.style.display = "none";
-      progressCard.style.display = "block";
-      avatarCard.style.display = "block";
-      leaderboardCard.style.display = "block";
-
-      updateStats();
-      updateAchievements();
-      renderCalendar();
-      updateCoins();
-
-      // Update avatar name
-      avatarName.textContent = `${state.userName}`;
-    });
-
-    // Complete day button
-    completeDayBtn.addEventListener('click', () => {
-      if (!state.completedDays.has(state.selectedDay)) {
-        state.completedDays.add(state.selectedDay);
-        state.streak++;
-        state.xp += 50;
-        state.coin += 100;
+    <!-- BURGER MENU OVERLAY -->
+    <div class="menu-overlay" id="menu-overlay"></div>
+    
+    <!-- BURGER MENU -->
+    <nav class="burger-menu" id="burger-menu">
+        <div class="menu-header">
+            <div class="avatar-preview" id="menu-avatar">
+                <div class="avatar-mini"></div>
+            </div>
+            <div class="menu-user-info">
+                <span class="menu-username" id="menu-username">User</span>
+                <span class="menu-userlevel" id="menu-userlevel">LVL 1</span>
+            </div>
+        </div>
         
-        // Check if 7 day achievement completed
-        if (state.streak >= 7) {
-          state.achievements.day7 = true;
-        }
-        if (state.streak >= 30) {
-          state.achievements.day30 = true;
-        }
-        // Level up every 7 days
-        if (state.streak % 7 === 0) {
-          state.level++;
-        }
-        updateStats();
-        updateAchievements();
-        renderCalendar();
-        updateCoins();
-        alert(`Day ${state.selectedDay} completed! Keep going!`);
-      } else {
-        alert(`Day ${state.selectedDay} already completed.`);
-      }
-    });
+        <ul class="menu-items">
+            <li><a href="#" data-page="leaderboard">
+                <span>🏆</span> Leaderboard
+            </a></li>
+            <li><a href="#" data-page="store">
+                <span>🛍️</span> Store
+            </a></li>
+            <li><a href="#" data-page="avatar">
+                <span>😎</span> Avatar
+            </a></li>
+            <li><a href="#" data-page="achievements">
+                <span>🏅</span> Achievements
+            </a></li>
+            <li><a href="#" data-page="premium">
+                <span>👑</span> Premium
+            </a></li>
+            <li><a href="#" data-page="settings">
+                <span>⚙️</span> Settings
+            </a></li>
+        </ul>
+        
+        <div class="menu-footer">
+            <button class="btn-logout" id="logout-btn">LOGOUT</button>
+        </div>
+    </nav>
 
-    // Buy button
-    buyBtn.addEventListener('click', () => {
-      if(state.coin >= 500) {
-        state.coin -= 500;
-        alert('Purchased successfully!');
-        updateCoins();
-      } else {
-        alert('Not enough coins.');
-      }
-    });
+    <!-- MODAL CONTAINERS -->
+    <div class="modal" id="modal-container">
+        <div class="modal-content" id="modal-content">
+            <!-- Dynamic content -->
+        </div>
+    </div>
 
-    // Initialize leaderboard UI
-    renderLeaderboard();
+    <!-- LEVEL UP ANIMATION -->
+    <div class="levelup-overlay" id="levelup-overlay">
+        <div class="levelup-content">
+            <div class="levelup-icon">⬆️</div>
+            <h2>LEVEL UP!</h2>
+            <p>You reached Level <span id="new-level">2</span></p>
+            <div class="levelup-reward">
+                <span>🪙</span> +<span id="levelup-coins">100</span> Coins
+            </div>
+        </div>
+    </div>
 
-  })();
-</script>
+    <!-- ACHIEVEMENT POPUP -->
+    <div class="achievement-popup" id="achievement-popup">
+        <div class="achievement-icon">🏆</div>
+        <h3>Achievement Unlocked!</h3>
+        <p id="achievement-name">7 Day Warrior</p>
+    </div>
 
+    <!-- STREAK MILESTONE -->
+    <div class="streak-milestone" id="streak-milestone">
+        <div class="confetti-container" id="confetti"></div>
+        <h2>🔥 <span id="streak-number">7</span> DAY STREAK!</h2>
+        <p>You're building unstoppable momentum</p>
+    </div>
+
+    <!-- FIREBASE CONTAINER -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- APP MODULES -->
+    <script src="js/core.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/economy.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/avatar.js"></script>
+    <script src="js/ui.js"></script>
 </body>
-</html>
+  </html>
