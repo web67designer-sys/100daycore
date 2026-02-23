@@ -1,0 +1,45 @@
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+margin:0;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.1);
+padding:20px;
+margin:20px;
+border-radius:20px;
+}
+
+button{
+background:gold;
+border:none;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+}body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+margin:0;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.1);
+padding:20px;
+margin:20px;
+border-radius:20px;
+}
+
+button{
+background:gold;
+border:none;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+}
