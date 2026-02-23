@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+<h2>Level {{current_user.level}}</h2>
+<p>XP: {{current_user.xp}}</p>
+<p>Coins: {{current_user.coins}}</p>
+<p>Streak: {{current_user.streak}}</p>
+</div>
+
+<div class="card">
+<h3>Today's Tasks</h3>
+{% for t in tasks %}
+<p>
+{{t.task_text}}
+{% if not t.completed %}
+<a href="/complete_task/{{t.id}}"><button>Complete</button></a>
+{% else %}
+✅
+{% endif %}
+</p>
+{% endfor %}
+<a href="/complete_day"><button>Complete Day</button></a>
+</div>
+
+<div class="card">
+<h3>AI Coach</h3>
+<input id="question">
+<button onclick="askAI()">Ask</button>
+<p id="ai_answer"></p>
+</div>
+
+{% endblock %}
