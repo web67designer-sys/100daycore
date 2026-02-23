@@ -1,166 +1,252 @@
-// 100DayCore Pro Script Implementation
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-class User {
-    constructor(name, goal, level = 1, streak = 0, xp = 0, coins = 0) {
-        this.name = name;
-        this.goal = goal;
-        this.level = level;
-        this.streak = streak;
-        this.xp = xp;
-        this.coins = coins;
-        this.achievements = new Set();
-        this.completedDays = new Set();
+import java.util.*;
+import java.time.LocalDate;
+import java.io.*;
+
+// ==================== ENUMS & MODELS (Kept from Pro Version) ====================
+enum GoalType { MUSCLE_GAIN("Muscle Gain"), WEIGHT_LOSS("Weight Loss"), MINDFULNESS("Mindfulness"); private String n; GoalType(String n){this.n=n;} public String getName(){return n;} }
+enum TaskRarity { COMMON(10, 1.0), RARE(25, 1.5), LEGENDARY(100, 3.0); int base; double mult; TaskRarity(int b, double m){this.base=b;this.mult=m;} public int getBase(){return base;} public double getMult(){return mult;} }
+
+abstract class GameTask implements Serializable {
+    String desc; boolean done; TaskRarity rarity;
+    GameTask(String d, TaskRarity r){ this.desc=d; this.rarity=r; this.done=false; }
+    public abstract int getXP();
+    public String toString(){ return (done?"[x] ":"[ ] ") + "["+rarity+"] " + desc + " (+"+getXP()+" XP)"; }
+}
+class PhyTask extends GameTask{ PhyTask(String d, TaskRarity r){super(d,r);} public int getXP(){return (int)(rarity.base*rarity.mult);} }
+class MntTask extends GameTask{ MntTask(String d, TaskRarity r){super(d,r);} public int getXP(){return (int)(rarity.base*rarity.mult*1.2);} }
+
+// ==================== CORE LOGIC ====================
+class User implements Serializable {
+    String name; GoalType goal; int level=1, xp=0, coins=0, streak=0;
+    Set<Integer> doneDays = new HashSet<>();
+    List<String> inventory = new ArrayList<>();
+    transient List<ChangeListener> listeners = new ArrayList<>();
+    LocalDate lastDate = LocalDate.now().minusDays(1);
+
+    User(String n, GoalType g){ this.name=n; this.goal=g; }
+
+    public void addListener(ChangeListener l){ listeners.add(l); }
+    public void notifyListeners(){ for(ChangeListener l: listeners) l.changed(null); }
+
+    public void completeDay(int day, List<GameTask> tasks){
+        if(doneDays.contains(day)) return;
+        int sessionXP = tasks.stream().mapToInt(GameTask::getXP).sum();
+        
+        // Streak Logic
+        LocalDate today = LocalDate.now();
+        if(lastDate.equals(today.minusDays(1))) streak++;
+        else streak = (lastDate.equals(today)) ? streak : 1;
+        lastDate = today;
+
+        // Rewards
+        double mult = 1 + (Math.min(streak,30)*0.05);
+        this.xp += (int)(sessionXP*mult);
+        this.coins += sessionXP + 10; // Flat bonus
+        
+        // Level Up
+        while(xp >= level*150){ xp -= level*150; level++; }
+
+        doneDays.add(day);
+        notifyListeners();
+    }
+}
+
+// ==================== JAVAFX UI ====================
+public class App extends Application {
+    User currentUser = new User("Hero", GoalType.MUSCLE_GAIN);
+    Stage mainStage;
+    Label lblStreak, lblCoins, lblLevel, lblXP;
+    ObservableList<GameTask> taskList = FXCollections.observableArrayList();
+    ObservableList<String> shopItems = FXCollections.observableArrayList();
+
+    public static void main(String[] args) { launch(args); }
+
+    @Override
+    public void start(Stage stage) {
+        this.mainStage = stage;
+        stage.setTitle("100DayCore Pro - Dashboard");
+        
+        // Root Layout
+        BorderPane root = new BorderPane();
+        
+        // Top Bar (Stats)
+        HBox topBar = createHeader();
+        root.setTop(topBar);
+
+        // Center (Tabs)
+        TabPane center = new TabPane();
+        center.getTabs().addAll(createDashTab(), createChallengeTab(), createShopTab(), createLeaderboardTab());
+        root.setCenter(center);
+
+        // Bottom (Footer)
+        Label footer = new Label("100DayCore Pro System v2.0 | Build: " + LocalDate.now());
+        footer.setPadding(new Insets(10));
+        root.setBottom(footer);
+
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
+        
+        // Load first day's tasks
+        loadTasks(1);
     }
 
-    completeDay(dayNumber) {
-        if (!this.completedDays.has(dayNumber)) {
-            this.completedDays.add(dayNumber);
-            this.streak++;
-            this.xp += 50;
-            this.coins += 100;
-
-            // Level up logic: Every 100 XP = next level
-            if (this.xp >= this.level * 100) {
-                this.levelUp();
-            }
-
-            // Achievements check
-            if (this.streak >= 7) this.achievements.add("7 Day Warrior");
-            if (this.streak >= 30) this.achievements.add("30 Day Beast");
+    private HBox createHeader() {
+        HBox box = new HBox(20);
+        box.setPadding(new Insets(15));
+        box.setStyle("-fx-background-color: #2c3e50;");
+        
+        lblLevel = new Label("Level: 1");
+        lblXP = new Label("XP: 0");
+        lblCoins = new Label("Coins: 0");
+        lblStreak = new Label("Streak: 0 🔥");
+        
+        for(Label l : new Label[]{lblLevel, lblXP, lblCoins, lblStreak}){
+            l.setFont(Font.font("Arial", 16));
+            l.setTextFill(javafx.scene.paint.Color.WHITE);
         }
+        
+        Button saveBtn = new Button("💾 Save");
+        saveBtn.setOnAction(e -> saveGame());
+        
+        box.getChildren().addAll(lblLevel, lblXP, lblCoins, lblStreak, new Region(), saveBtn);
+        HBox.setHgrow(box.getChildren().get(box.getChildren().size()-2), Priority.ALWAYS);
+        return box;
     }
 
-    levelUp() {
-        this.level++;
-        console.log(`Level up! ${this.name} reached Level ${this.level}`);
-        // Additional level-up rewards or logic can be added here
+    private Tab createDashTab() {
+        VBox v = new VBox(15);
+        v.setPadding(new Insets(20));
+        
+        Label title = new Label("PLAYER STATS");
+        title.setFont(new Font(24));
+        
+        GridPane stats = new GridPane();
+        stats.setHgap(10); stats.setVgap(10);
+        stats.add(new Label("Name:"), 0, 0); stats.add(new Label(currentUser.name), 1, 0);
+        stats.add(new Label("Goal:"), 0, 1); stats.add(new Label(currentUser.goal.getName()), 1, 1);
+        
+        // Inventory List
+        Label invTitle = new Label("Inventory:");
+        ListView<String> invView = new ListView<>(FXCollections.observableArrayList(currentUser.inventory));
+        invView.setPrefHeight(100);
+        
+        v.getChildren().addAll(title, stats, invTitle, invView);
+        return new Tab("Dashboard", v);
     }
 
-    getStats() {
-        return {
-            name: this.name,
-            goal: this.goal,
-            level: this.level,
-            streak: this.streak,
-            xp: this.xp,
-            coins: this.coins,
-            achievements: Array.from(this.achievements),
-            completedDays: Array.from(this.completedDays),
-        };
+    private Tab createChallengeTab() {
+        VBox v = new VBox(10);
+        v.setPadding(new Insets(20));
+        
+        Label title = new Label("Daily Challenge");
+        title.setFont(new Font(20));
+        
+        ListView<GameTask> list = new ListView<>(taskList);
+        list.setCellFactory(CheckBoxListCell.forListView(GameTask::doneProperty));
+        
+        Button completeBtn = new Button("Complete Day");
+        completeBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
+        completeBtn.setOnAction(e -> {
+            if(taskList.stream().anyMatch(t -> !t.done)){
+                showAlert("Incomplete Tasks", "Finish all tasks before completing the day!");
+                return;
+            }
+            currentUser.completeDay(1, new ArrayList<>(taskList));
+            updateUI();
+            showAlert("Success", "Day Completed! Rewards Claimed.");
+        });
+
+        v.getChildren().addAll(title, list, completeBtn);
+        return new Tab("Challenge", v);
+    }
+
+    private Tab createShopTab() {
+        VBox v = new VBox(10);
+        v.setPadding(new Insets(20));
+        
+        // Mock Items
+        ObservableList<String> items = FXCollections.observableArrayList(
+            "Titan Badge (500c)", "Golden Theme (1000c)", "XP Booster (300c)", "Mystery Box (200c)"
+        );
+        
+        ListView<String> list = new ListView<>(items);
+        
+        Button buyBtn = new Button("Buy Selected");
+        buyBtn.setOnAction(e -> {
+            String sel = list.getSelectionModel().getSelectedItem();
+            if(sel==null) return;
+            
+            int cost = Integer.parseInt(sel.substring(sel.indexOf("(")+1, sel.indexOf("c")));
+            if(currentUser.coins >= cost){
+                currentUser.coins -= cost;
+                currentUser.inventory.add(sel.split("\\$")[0].trim());
+                updateUI();
+                showAlert("Purchased!", "Bought " + sel);
+            } else {
+                showAlert("Error", "Not enough coins!");
+            }
+        });
+        
+        v.getChildren().addAll(new Label("Item Shop"), list, buyBtn);
+        return new Tab("Shop", v);
+    }
+    
+    private Tab createLeaderboardTab() {
+        VBox v = new VBox(10);
+        v.setPadding(new Insets(20));
+        
+        ObservableList<String> ranks = FXCollections.observableArrayList(
+            "1. You (Hero) - Lv " + currentUser.level,
+            "2. NPC: Emma - Lv 5",
+            "3. NPC: Hiro - Lv 3"
+        );
+        
+        ListView<String> list = new ListView<>(ranks);
+        v.getChildren().addAll(new Label("Global Rankings"), list);
+        return new Tab("Leaderboard", v);
+    }
+
+    // ==================== HELPERS ====================
+    
+    private void loadTasks(int day) {
+        taskList.clear();
+        // Dynamic Task Generation
+        taskList.add(new PhyTask("100 Pushups", TaskRarity.RARE));
+        taskList.add(new PhyTask("5km Run", TaskRarity.COMMON));
+        taskList.add(new MntTask("Meditate 10m", TaskRarity.LEGENDARY));
+        taskList.add(new PhyTask("Deadlifts 3x5", TaskRarity.RARE));
+    }
+
+    private void updateUI() {
+        lblLevel.setText("Level: " + currentUser.level);
+        lblXP.setText("XP: " + currentUser.xp);
+        lblCoins.setText("Coins: " + currentUser.coins);
+        lblStreak.setText("Streak: " + currentUser.streak + " 🔥");
+    }
+    
+    private void showAlert(String title, String msg){
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setHeaderText(title);
+        a.setContentText(msg);
+        a.showAndWait();
+    }
+    
+    private void saveGame(){
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save.dat"))){
+            oos.writeObject(currentUser);
+            showAlert("Saved", "Game progress saved.");
+        }catch(Exception e){ e.printStackTrace(); }
     }
 }
-
-class Task {
-    constructor(description, icon = '', completed = false) {
-        this.description = description;
-        this.icon = icon;
-        this.completed = completed;
-    }
-
-    toggleComplete() {
-        this.completed = !this.completed;
-    }
-
-    display() {
-        return `${this.completed ? '✔' : '✖'} ${this.description} ${this.icon}`;
-    }
-}
-
-class Challenge {
-    constructor(day, level) {
-        this.day = day;
-        this.level = level;
-        this.bossChallenge = [
-            new Task('Train harder today!', '🔥'),
-            new Task('Deadlift 4 sets', '🏋️‍♂️'),
-            new Task('Pull-ups 3x10', '🔥'),
-            new Task('Protein-rich meal', '🥚'),
-            new Task('Foam roll 10 mins', '🧘‍♂️')
-        ];
-    }
-
-    displayTasks() {
-        return this.bossChallenge.map(task => task.display()).join('\n');
-    }
-}
-
-class Leaderboard {
-    constructor() {
-        this.users = [];
-    }
-
-    addUser(user) {
-        this.users.push(user);
-    }
-
-    rankByCoins() {
-        return this.users.sort((a, b) => b.coins - a.coins);
-    }
-
-    displayGlobal() {
-        const rankedUsers = this.rankByCoins();
-        return rankedUsers.map(user => 
-            `${user.name} - Lv ${user.level} - Coins: ${user.coins}`
-        ).join('\n');
-    }
-}
-
-// Simulated app usage:
-
-// Step 1: New User Setup
-function startChallenge(name, goal) {
-    if (!name || !goal) {
-        console.log("Please enter your name and select a goal.");
-        return null;
-    }
-    let user = new User(name, goal, 1, 0, 0, 0);
-    console.log(`Welcome ${user.name}, your challenge to: ${user.goal} starts now!`);
-    return user;
-}
-
-// Step 2: Progressing Through Days and Challenges
-function completeDayForUser(user, day) {
-    if (!user) return;
-
-    console.log(`Day ${day} - Level ${user.level}`);
-    const challenge = new Challenge(day, user.level);
-    console.log('Boss Challenge Tasks:');
-    console.log(challenge.displayTasks());
-
-    user.completeDay(day);
-    console.log('Day completed!');
-    console.log(`Current Streak: ${user.streak}`);
-    console.log(`XP: ${user.xp}, Coins: ${user.coins}`);
-
-    if(user.achievements.size > 0){
-        console.log("Achievements Unlocked:");
-        user.achievements.forEach(a => console.log(`- ${a}`));
-    }
-}
-
-// Step 3: Leaderboard Management
-const leaderboard = new Leaderboard();
-
-// Testing the script:
-
-// Creating users
-const user1 = startChallenge('Lucas', 'Muscle Gain');
-const user2 = new User('Emma', 'Muscle Gain', 5, 6, 500, 1100);
-const user3 = new User('Hiro', 'Muscle Gain', 6, 10, 600, 980);
-const user4 = new User('Chloe', 'Muscle Gain', 6, 8, 550, 950);
-
-// Simulate day completion for Lucas
-completeDayForUser(user1, 7);
-
-// Adding users to leaderboard
-leaderboard.addUser(user1);
-leaderboard.addUser(user2);
-leaderboard.addUser(user3);
-leaderboard.addUser(user4);
-
-// Display leaderboard
-console.log("\n--- Global Leaderboard ---");
-console.log(leaderboard.displayGlobal());
-
-// Exporting classes for possible future UI integration
-export { User, Challenge, Leaderboard, Task, startChallenge, completeDayForUser };
