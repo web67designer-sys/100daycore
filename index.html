@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LevelUp - Gen Z Productivity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0f13;
+            --card-bg: #1e1e24;
+            --primary: #8A2BE2; /* BlueViolet */
+            --accent: #00FF7F; /* SpringGreen */
+            --gold: #FFD700;
+            --danger: #FF4500;
+            --text: #ffffff;
+            --text-sec: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* --- Utility Classes --- */
+        .hidden { display: none !important; }
+        .btn {
+            background: linear-gradient(45deg, var(--primary), #ff00ff);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+        .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
+        .btn-accent { background: var(--accent); color: #000; }
+
+        /* --- Onboarding Screen --- */
+        #onboarding {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top right, #2a0a4a, var(--bg));
+            padding: 20px;
+        }
+        .onboarding-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border);
+        }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
+        input, select {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        /* --- Main App Layout --- */
+        #app-container {
+            position: relative;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .burger-menu {
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--accent);
+        }
+        .calendar-btn {
+            background: var(--glass);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Stats Block */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .level-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+        }
+        .level-badge {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .streak-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+        }
+        .streak-count { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
+        
+        /* XP Bar */
+        .xp-container { margin-bottom: 30px; }
+        .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .progress-bar {
+            height: 12px;
+            background: var(--bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Daily Action */
+        .daily-action {
+            background: linear-gradient(135deg, #2a2a35, #1a1a20);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .daily-action:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); }
+        .daily-title { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
+
+        /* AI Coach */
+        .ai-section {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass-border);
+        }
+        .ai-input-area { display: flex; gap: 10px; margin-top: 15px; }
+        .ai-response {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 15px;
+            font-style: italic;
+            color: var(--text-sec);
+            min-height: 50px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: #15151a;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: 0.3s ease;
+            padding: 30px;
+            border-right: 1px solid var(--glass-border);
+            overflow-y: auto;
+        }
+        .sidebar.active { left: 0; }
+        .close-sidebar { font-size: 2rem; cursor: pointer; margin-bottom: 30px; display: block; }
+        .menu-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .menu-item:hover { color: var(--primary); }
+
+        /* --- Modals (Calendar, Profile, etc) --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 30px;
+            padding: 30px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .day-completed { background: var(--accent); color: #000; }
+        .day-locked { background: var(--danger); opacity: 0.5; }
+        .day-today { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold); }
+        .day-future { background: var(--glass); }
+
+        /* Task List */
+        .task-item {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-check {
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--text-sec);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .task-check.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Bitmoji & Store */
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            background: var(--glass);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            border: 2px solid var(--primary);
+        }
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .store-item {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+        .store-item.locked { opacity: 0.5; filter: grayscale(1); }
+        .price-tag { color: var(--gold); font-weight: bold; margin-top: 5px; }
+
+        /* Leaderboard */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg);
+            margin-bottom: 10px;
+            border-radius: 15px;
+        }
+        .rank-1 { border: 2px solid var(--gold); }
+        .rank-2 { border: 2px solid silver; }
+        .rank-3 { border: 2px solid #cd7f32; }
+
+        /* Premium */
+        .plan-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .plan-price { font-size: 2rem; font-weight: 900; color: var(--accent); }
+        .features-list { text-align: left; margin: 15px 0; padding-left: 20px; color: var(--text-sec); }
+
+    </style>
+</head>
+<body>
+
+    <!-- ONBOARDING SCREEN -->
+    <div id="onboarding">
+        <div class="onboarding-card">
+            <h2 style="text-align:center; margin-bottom:20px; background: linear-gradient(to right, #fff, #a0a0a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Create Profile</h2>
+            <div class="input-group">
+                <label>Name</label>
+                <input type="text" id="inp-name" placeholder="Enter your name">
+            </div>
+            <div class="input-group">
+                <label>Email (Can't change)</label>
+                <input type="email" id="inp-email" placeholder="Enter email" disabled style="opacity: 0.6">
+            </div>
+            <div class="input-group">
+                <label>Age</label>
+                <input type="number" id="inp-age" placeholder="Age">
+            </div>
+            <div class="input-group">
+                <label>Goal</label>
+                <select id="inp-goal">
+                    <option value="Fitness">Fitness & Health</option>
+                    <option value="Study">Study & Focus</option>
+                    <option value="Coding">Coding & Dev</option>
+                    <option value="Mindfulness">Mindfulness</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Gender (Can't change)</label>
+                <select id="inp-gender" disabled style="opacity: 0.6">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button class="btn" style="width:100%" onclick="saveProfile()">Start Journey</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app-container" class="hidden">
+        
+        <!-- Header -->
+        <header>
+            <div class="burger-menu" onclick="toggleSidebar()">☰</div>
+            <div class="calendar-btn" onclick="openCalendar()">
+                <span>📅</span> <span id="header-date">Today</span>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-container">
+            <div class="level-box">
+                <div style="font-size:0.8rem; color:var(--text-sec)">CURRENT LEVEL</div>
+                <div class="level-badge" id="display-level">1</div>
+                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;">Rookie</div>
+            </div>
+            <div class="streak-box">
+                <div style="font-size:0.8rem; color:var(--text-sec)">STREAK</div>
+                <div class="streak-count" id="display-streak">0 🔥</div>
+            </div>
+        </div>
+
+        <!-- XP Bar -->
+        <div class="xp-container">
+            <div class="xp-text">
+                <span>XP</span>
+                <span id="xp-text">0 / 100</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="xp-fill"></div>
+            </div>
+        </div>
+
+        <!-- Daily Action -->
+        <div class="daily-action" onclick="openTasks()">
+            <div class="daily-title">Complete Today's Tasks</div>
+            <div style="color:var(--text-sec); font-size:0.9rem;">Click to view and finish tasks</div>
+        </div>
+
+        <!-- AI Coach -->
+        <div class="ai-section">
+            <h3 style="color:var(--primary)">🤖 AI Coach</h3>
+            <div class="ai-response" id="ai-output">
+                Hello! I am your AI Coach. Ask me anything related to your goal: <span id="ai-goal-display" style="color:white"></span>.
+            </div>
+            <div class="ai-input-area">
+                <input type="text" id="ai-input" placeholder="Ask for advice...">
+                <button class="btn" onclick="askAI()">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar" id="sidebar">
+        <span class="close-sidebar" onclick="toggleSidebar()">×</span>
+        <div class="menu-item" onclick="showProfile()">👤 Profile</div>
+        <div class="menu-item" onclick="showLeaderboard()">🏆 Leaderboard</div>
+        <div class="menu-item" onclick="showBitmoji()">😎 Bitmoji</div>
+        <div class="menu-item" onclick="showStore()">🛒 Store</div>
+        <div class="menu-item" onclick="showPremium()">⚜️ Premium</div>
+        <div class="menu-item" style="margin-top:50px; color:var(--danger)" onclick="resetData()">❌ Reset Data</div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Profile Modal -->
+    <div id="modal-profile" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Edit Profile</h2>
+            <div class="input-group" style="margin-top:20px">
+                <label>Name</label>
+                <input type="text" id="edit-name">
+            </div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="text" id="edit-email" disabled>
+            </div>
+            <div class="input-group">
+                <label>Age</label>
+                <input type="number" id="edit-age">
+            </div>
+            <div class="input-group">
+                <label>Goal</label>
+                <select id="edit-goal">
+                    <option value="Fitness">Fitness</option>
+                    <option value="Study">Study</option>
+                    <option value="Coding">Coding</option>
+                    <option value="Mindfulness">Mindfulness</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Gender</label>
+                <select id="edit-gender" disabled></select>
+            </div>
+            <button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div id="modal-calendar" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Monthly Progress</h2>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- JS Generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Modal -->
+    <div id="modal-tasks" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Today's Tasks</h2>
+            <p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p>
+            <div id="task-list-container">
+                <!-- JS Generated -->
+            </div>
+            <button class="btn btn-accent" style="width:100%; margin-top:20px;" onclick="finishDay()">Finish Day & Claim Rewards</button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="modal-leaderboard" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Leaderboard</h2>
+            <div id="leaderboard-list" style="margin-top:20px"></div>
+        </div>
+    </div>
+
+    <!-- Bitmoji Modal -->
+    <div id="modal-bitmoji" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Your Bitmoji</h2>
+            <div class="avatar-preview" id="bitmoji-preview">😐</div>
+            <div style="text-align:center; margin-bottom:20px;">
+                <span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span>
+            </div>
+            <h3>Customize</h3>
+            <div id="bitmoji-inventory" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                <!-- Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Modal -->
+    <div id="modal-store" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Store</h2>
+            <div style="margin: 10px 0; color:var(--gold)">Your Coins: <span id="store-coins">0</span></div>
+            <div class="store-grid" id="store-items">
+                <!-- Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Modal -->
+    <div id="modal-premium" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Premium Plans</h2>
+            
+            <div class="plan-card">
+                <div style="font-size:1.5rem">🥈 Monthly</div>
+                <div class="plan-price">$9.99</div>
+                <ul class="features-list">
+                    <li>Unlimited AI Access</li>
+                    <li>Exclusive Themes</li>
+                    <li>Double XP Days</li>
+                </ul>
+                <button class="btn btn-sec">Subscribe</button>
+            </div>
+
+            <div class="plan-card" style="border-color:var(--gold)">
+                <div style="font-size:1.5rem">🏅 Yearly</div>
+                <div class="plan-price">$29.90</div>
+                <ul class="features-list">
+                    <li>All Monthly Features</li>
+                    <li>VIP Avatar Frame</li>
+                    <li>Early Access to New Features</li>
+                    <li>Priority Support</li>
+                </ul>
+                <button class="btn btn-accent">Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- STATE MANAGEMENT ---
+        const defaultState = {
+            name: "",
+            email: "",
+            age: 0,
+            goal: "Fitness",
+            gender: "Male",
+            xp: 0,
+            level: 1,
+            coins: 100, // Start with some coins
+            streak: 0,
+            completedDays: [], // Array of date strings "YYYY-MM-DD"
+            inventory: ['base_male', 'base_female'], // Item IDs
+            equippedItems: [],
+            tasks: [] // Current day's tasks
+        };
+
+        let user = JSON.parse(localStorage.getItem('levelUpUser')) || defaultState;
+
+        // --- INITIALIZATION ---
+        function init() {
+            if (!user.name) {
+                document.getElementById('onboarding').classList.remove('hidden');
+                document.getElementById('app-container').classList.add('hidden');
+            } else {
+                document.getElementById('onboarding').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('hidden');
+                updateUI();
+            }
+        }
+
+        // --- ONBOARDING & PROFILE ---
+        function saveProfile() {
+            const name = document.getElementById('inp-name').value;
+            const email = document.getElementById('inp-email').value;
+            const age = document.getElementById('inp-age').value;
+            const goal = document.getElementById('inp-goal').value;
+            const gender = document.getElementById('inp-gender').value;
+
+            if (!name || !email) return alert("Please fill in required fields");
+
+            user.name = name;
+            user.email = email;
+            user.age = age;
+            user.goal = goal;
+            user.gender = gender;
+            
+            saveState();
+            init();
+        }
+
+        function updateProfile() {
+            user.name = document.getElementById('edit-name').value;
+            user.age = document.getElementById('edit-age').value;
+            user.goal = document.getElementById('edit-goal').value;
+            // Gender/Email locked
+            saveState();
+            updateUI();
+            closeAllModals();
+        }
+
+        function showProfile() {
+            toggleSidebar();
+            document.getElementById('modal-profile').classList.remove('hidden');
+            document.getElementById('edit-name').value = user.name;
+            document.getElementById('edit-email').value = user.email;
+            document.getElementById('edit-age').value = user.age;
+            document.getElementById('edit-goal').value = user.goal;
+            document.getElementById('edit-gender').value = user.gender;
+        }
+
+        // --- UI UPDATES ---
+        function updateUI() {
+            // Header
+            document.getElementById('ai-goal-display').innerText = user.goal;
+
+            // Stats
+            document.getElementById('display-level').innerText = user.level;
+            document.getElementById('display-streak').innerText = user.streak + " 🔥";
+            
+            // XP Bar
+            const xpForNext = user.level * 100;
+            const percentage = Math.min((user.xp / xpForNext) * 100, 100);
+            document.getElementById('xp-fill').style.width = percentage + "%";
+            document.getElementById('xp-text').innerText = `${user.xp} / ${xpForNext} XP`;
+        }
+
+        function saveState() {
+            localStorage.setItem('levelUpUser', JSON.stringify(user));
+        }
+
+        function resetData() {
+            if(confirm("Reset all progress?")) {
+                localStorage.removeItem('levelUpUser');
+                location.reload();
+            }
+        }
+
+        // --- NAVIGATION ---
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
+        }
+
+        // --- CALENDAR & TASKS ---
+        function openCalendar() {
+            closeAllModals();
+            document.getElementById('modal-calendar').classList.remove('hidden');
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            const today = new Date().getDate();
+            const currentMonth = new Date().getMonth(); // Simplified for demo (assumes current month)
+
+            for (let i = 1; i <= 30; i++) {
+                const div = document.createElement('div');
+                div.classList.add('day-cell');
+                div.innerText = i;
+
+                const dateStr = `2023-${currentMonth+1}-${i}`; // Simplified date key
+                
+                if (user.completedDays.includes(dateStr)) {
+                    div.classList.add('day-completed');
+                } else if (i > today) {
+                    div.classList.add('day-locked');
+                } else if (i === today) {
+                    div.classList.add('day-today');
+                    div.onclick = () => {
+                        closeAllModals();
+                        openTasks();
+                    };
+                } else {
+                    div.classList.add('day-future');
+                }
+                grid.appendChild(div);
+            }
+        }
+
+        // --- TASK LOGIC ---
+        const taskDatabase = {
+            "Fitness": ["Run 5km", "50 Pushups", "Drink 3L Water", "10min Yoga", "No Sugar Day"],
+            "Study": ["Read 20 pages", "Solve 5 Math problems", "Watch 1 educational video", "Review notes", "Flashcards session"],
+            "Coding": ["Fix 1 bug", "Write 50 lines of code", "Learn 1 new syntax", "Read documentation", "Deploy project"],
+            "Mindfulness": ["10min Meditation", "Journaling", "Deep breathing", "Digital Detox 1hr", "Gratitude list"]
+        };
+
+        function openTasks() {
+            closeAllModals();
+            document.getElementById('modal-tasks').classList.remove('hidden');
+            
+            const today = new Date().toDateString();
+            document.getElementById('task-date-display').innerText = today;
+
+            // Check if tasks already generated for today
+            // In a real app, we'd check date. Here we just regenerate if empty for demo
+            if (user.tasks.length === 0) {
+                const goalTasks = taskDatabase[user.goal];
+                user.tasks = goalTasks.map(t => ({ task: t, done: false }));
+            }
+
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('task-list-container');
+            container.innerHTML = '';
+            user.tasks.forEach((t, index) => {
+                const div = document.createElement('div');
+                div.classList.add('task-item');
+                div.innerHTML = `
+                    <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.task}</span>
+                    <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${index})"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleTask(index) {
+            user.tasks[index].done = !user.tasks[index].done;
+            renderTasks();
+        }
+
+        function finishDay() {
+            const allDone = user.tasks.every(t => t.done);
+            if (!allDone) return alert("Complete all tasks first!");
+
+            // Rewards
+            const xpGain = 50 + (user.level * 5);
+            const coinGain = 20;
+            
+            user.xp += xpGain;
+            user.coins += coinGain;
+            user.streak += 1;
+            
+            // Level Up Logic
+            if (user.xp >= user.level * 100) {
+                user.level++;
+                user.xp = 0; // Reset bar for next level (simplified)
+                alert(`🎉 LEVEL UP! You are now Level ${user.level}!`);
+            }
+
+            // Mark day complete
+            const today = new Date().toISOString().split('T')[0];
+            if (!user.completedDays.includes(today)) {
+                user.completedDays.push(today);
+            }
+
+            user.tasks = []; // Reset tasks
+            saveState();
+            updateUI();
+            closeAllModals();
+            alert(`Day Completed! +${xpGain} XP, +${coinGain} Coins`);
+        }
+
+        // --- AI COACH ---
+        function askAI() {
+            const input = document.getElementById('ai-input');
+            const output = document.getElementById('ai-output');
+            const question = input.value;
+
+            if (!question) return;
+
+            output.innerHTML = "Thinking...";
+            
+            // Simulate AI delay
+            setTimeout(() => {
+                const responses = [
+                    `That's a great question about ${user.goal}. Consistency is key!`,
+                    `Remember, progress is progress, no matter how small.`,
+                    `Focus on your goal: ${user.goal}. You got this!`,
+                    `Take a break if you need to, but never give up.`
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                output.innerHTML = `<strong>You:</strong> ${question}<br><br><strong>AI:</strong> ${randomResponse}`;
+                input.value = '';
+            }, 1000);
+        }
+
+        // --- LEADERBOARD ---
+        function showLeaderboard() {
+            toggleSidebar();
+            document.getElementById('modal-leaderboard').classList.remove('hidden');
+            
+            // Mock Data + Current User
+            const mockUsers = [
+                {name: "Alex", xp: 2500, level: 5},
+                {name: "Sarah", xp: 1800, level: 4},
+                {name: "You", xp: user.xp + (user.level*100), level: user.level}, // Approx total XP
+                {name: "Mike", xp: 500, level: 2}
+            ].sort((a,b) => b.xp - a.xp);
+
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '';
+
+            mockUsers.forEach((u, i) => {
+                let rankClass = '';
+                if (i===0) rankClass = 'rank-1';
+                if (i===1) rankClass = 'rank-2';
+                if (i===2) rankClass = 'rank-3';
+
+                let reward = "";
+                if (i < 3) reward = `<span style="color:var(--gold); font-size:0.8rem">+100 Coins 🏆</span>`;
+
+                const div = document.createElement('div');
+                div.classList.add('leaderboard-item');
+                if(u.name === "You") div.style.borderColor = "var(--primary)";
+                
+                div.innerHTML = `
+                    <div style="font-weight:900; font-size:1.2rem; width:30px">#${i+1}</div>
+                    <div style="flex:1">
+                        <div style="font-weight:bold">${u.name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-sec)">Lvl ${u.level}</div>
+                    </div>
+                    <div>${u.xp} XP</div>
+                    <div>${reward}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // --- BITMOJI & STORE ---
+        function showBitmoji() {
+            toggleSidebar();
+            document.getElementById('modal-bitmoji').classList.remove('hidden');
+            renderBitmoji();
+        }
+
+        function renderBitmoji() {
+            const preview = document.getElementById('bitmoji-preview');
+            const coins = document.getElementById('bitmoji-coins');
+            const inv = document.getElementById('bitmoji-inventory');
+            
+            coins.innerText = user.coins;
+            
+            // Simple visual representation
+            let base = user.gender === 'Male' ? '👦' : '👧';
+            preview.innerText = base;
+
+            // Render Inventory items (simplified as buttons)
+            inv.innerHTML = '';
+            user.inventory.forEach(item => {
+                const btn = document.createElement('div');
+                btn.style.width = '40px';
+                btn.style.height = '40px';
+                btn.style.background = 'var(--glass)';
+                btn.style.borderRadius = '50%';
+                btn.style.display = 'flex';
+                btn.style.justifyContent = 'center';
+                btn.style.alignItems = 'center';
+                btn.innerText = '🎩'; // Example item
+                btn.onclick = () => { preview.innerText = '🤠'; }; // Equip logic
+                inv.appendChild(btn);
+            });
+        }
+
+        function showStore() {
+            toggleSidebar();
+            document.getElementById('modal-store').classList.remove('hidden');
+            renderStore();
+        }
+
+        const storeItems = [
+            {id: 'hat1', name: 'Cool Hat', price: 50, type: 'accessory', levelReq: 1},
+            {id: 'glass1', name: 'Sunglasses', price: 100, type: 'accessory', levelReq: 2},
+            {id: 'frame1', name: 'Gold Frame', price: 500, type: 'frame', levelReq: 5},
+            {id: 'skin1', name: 'Neon Skin', price: 1000, type: 'skin', levelReq: 10}
+        ];
+
+        function renderStore() {
+            document.getElementById('store-coins').innerText = user.coins;
+            const grid = document.getElementById('store-items');
+            grid.innerHTML = '';
+
+            storeItems.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('store-item');
+                if (user.level < item.levelReq) div.classList.add('locked');
+                
+                const btnText = user.inventory.includes(item.id) ? "Owned" : "Buy";
+                const action = user.inventory.includes(item.id) ? "" : `onclick="buyItem('${item.id}', ${item.price})"`;
+
+                div.innerHTML = `
+                    <div style="font-size:2rem">🎁</div>
+                    <div style="font-weight:bold">${item.name}</div>
+                    <div style="font-size:0.8rem; color:var(--text-sec)">Unlocks at Lvl ${item.levelReq}</div>
+                    <div class="price-tag">${user.inventory.includes(item.id) ? '✅' : item.price + ' 🪙'}</div>
+                    <button class="btn btn-sec" style="margin-top:10px; font-size:0.8rem; padding:5px 10px" ${action} ${user.level < item.levelReq ? 'disabled' : ''}>${btnText}</button>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function buyItem(id, price) {
+            if (user.coins >= price) {
+                user.coins -= price;
+                user.inventory.push(id);
+                saveState();
+                renderStore();
+                alert("Item Purchased!");
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        // --- PREMIUM ---
+        function showPremium() {
+            toggleSidebar();
+            document.getElementById('modal-premium').classList.remove('hidden');
+        }
+
+        // Start App
+        init();
+
+    </script>
+</body>
+</html>
