@@ -1,45 +1,210 @@
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-margin:0;
+let userData = {
+name:"",
+email:"",
+age:null,
+goal:"",
+gender:"",
+level:1,
+xp:0,
+xpNeeded:100,
+coins:0,
+streak:0,
+completedDays:[],
+todayCompleted:false,
+currentTaskIndex:0,
+inventory:[],
+isPremium:false
+};
+
+const tasksDatabase = {
+fitness:["Do 20 pushups","Run for 15 minutes","Do 30 squats","Plank for 1 minute","Jump rope 100 times","Do 50 lunges","Stretch for 10 mins","Morning jog","Evening walk","Drink 8 glasses of water","Do 20 burpees","Yoga session","Core workout","HIIT workout","Wall sit"],
+study:["Read 10 pages","Solve 5 math problems","Write a summary","Review notes","Watch 1 educational video","Practice vocabulary","Do a quiz","Read an article","Write in journal","Study flashcards","Complete assignment","Review chapter","Mind map creation","Practice test","Teach someone"],
+coding:["Code for 30 minutes","Fix 2 bugs","Complete 1 challenge","Read documentation","Watch tutorial","Push to GitHub","Write comments","Refactor code","Build a small project","Debug errors","Learn new syntax","Review code","Code review","Read blog post","Build API"],
+reading:["Read 20 pages","Chapter summary","Character analysis","Read aloud","Book review","Reading comprehension","Note taking","Vocabulary builder","Plot mapping","Theme finding","Read genre book","Discuss with friend","Book recommendation","Quote collection","Author research"],
+language:["Learn 10 new words","Practice speaking","Watch foreign show","Write sentences","Grammar exercise","Listen to podcast","Translation practice","Flashcard drill","Record speaking","Read article","Language exchange","Watch news","Song lyrics","Movie with subtitles","Write diary"]
+};
+
+let leaderboard = [
+{name:"Alex",xp:3500,avatar:"👨",coins:500},
+{name:"Sarah",xp:2800,avatar:"👩",coins:400},
+{name:"Mike",xp:2200,avatar:"👨",coins:300},
+{name:"Emma",xp:1800,avatar:"👩",coins:200},
+{name:"You",xp:0,avatar:"😎",coins:0}
+];
+
+let storeItems = [
+{id:1,name:"Cool Shades",price:100,type:"accessory",icon:"🕶️",level:1},
+{id:2,name:"Cap",price:150,type:"accessory",icon:"🧢",level:1},
+{id:3,name:"Crown",price:500,type:"accessory",icon:"👑",level:5},
+{id:4,name:"Gold Frame",price:300,type:"frame",icon:"🖼️",level:3},
+{id:5,name:"Diamond Frame",price:1000,type:"frame",icon:"💎",level:10},
+{id:6,name:"Fire Aura",price:750,type:"aura",icon:"🔥",level:7},
+{id:7,name:"Angel Wings",price:800,type:"aura",icon:"😇",level:8},
+{id:8,name:"Cool Hat",price:200,type:"accessory",icon:"🎩",level:2},
+{id:9,name:"Headphones",price:250,type:"accessory",icon:"🎧",level:2}
+];
+
+const onboardingScreen=document.getElementById('onboarding-screen');
+const appContainer=document.getElementById('app-container');
+const sidebar=document.getElementById('sidebar');
+const burgerMenu=document.querySelector('.burger-menu');
+const menuItems=document.querySelectorAll('.menu-item');
+const screens=document.querySelectorAll('.screen');
+
+document.addEventListener('DOMContentLoaded',function(){
+loadData();
+setupEventListeners();
+checkOnboarding();
+});
+
+function checkOnboarding(){
+if(userData.name===""){
+onboardingScreen.classList.remove('hidden');
+}else{
+onboardingScreen.classList.add('hidden');
+updateUI();
+}
 }
 
-.card{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(15px);
-border:1px solid rgba(255,255,255,0.1);
-padding:20px;
-margin:20px;
-border-radius:20px;
+function loadData(){
+const saved=localStorage.getItem('genZGoalUser');
+if(saved){
+userData=JSON.parse(saved);
+leaderboard[4].xp=userData.xp;
+leaderboard[4].coins=userData.coins;
+}
 }
 
-button{
-background:gold;
-border:none;
-padding:10px 20px;
-border-radius:10px;
-cursor:pointer;
-}body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-margin:0;
+function saveData(){
+localStorage.setItem('genZGoalUser',JSON.stringify(userData));
+leaderboard[4].xp=userData.xp;
+leaderboard[4].coins=userData.coins;
 }
 
-.card{
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(15px);
-border:1px solid rgba(255,255,255,0.1);
-padding:20px;
-margin:20px;
-border-radius:20px;
+function setupEventListeners(){
+
+if(burgerMenu){
+burgerMenu.addEventListener('click',function(){
+sidebar.classList.toggle('active');
+});
 }
 
-button{
-background:gold;
-border:none;
-padding:10px 20px;
-border-radius:10px;
-cursor:pointer;
+menuItems.forEach(function(item){
+item.addEventListener('click',function(){
+var screen=item.getAttribute('data-screen');
+showScreen(screen);
+menuItems.forEach(function(i){i.classList.remove('active')});
+item.classList.add('active');
+sidebar.classList.remove('active');
+});
+});
+
+if(document.getElementById('onboarding-form'))
+document.getElementById('onboarding-form').addEventListener('submit',handleOnboarding);
+
+if(document.getElementById('open-calendar'))
+document.getElementById('open-calendar').addEventListener('click',openCalendar);
+
+if(document.getElementById('close-calendar'))
+document.getElementById('close-calendar').addEventListener('click',closeCalendar);
+
+if(document.getElementById('complete-day-btn'))
+document.getElementById('complete-day-btn').addEventListener('click',completeDay);
+
+if(document.getElementById('ai-ask-btn'))
+document.getElementById('ai-ask-btn').addEventListener('click',askAI);
+
+if(document.getElementById('ai-input'))
+document.getElementById('ai-input').addEventListener('keypress',function(e){
+if(e.key==='Enter')askAI();
+});
+
+if(document.getElementById('save-profile-btn'))
+document.getElementById('save-profile-btn').addEventListener('click',saveProfile);
+
+if(document.getElementById('crate-box'))
+document.getElementById('crate-box').addEventListener('click',openCrate);
+
+if(document.getElementById('monthly-plan-btn'))
+document.getElementById('monthly-plan-btn').addEventListener('click',function(){buyPremium('monthly')});
+
+if(document.getElementById('yearly-plan-btn'))
+document.getElementById('yearly-plan-btn').addEventListener('click',function(){buyPremium('yearly')});
+}
+
+function showScreen(screenName){
+screens.forEach(function(screen){screen.classList.remove('active')});
+let target=document.getElementById(screenName+'-screen');
+if(target) target.classList.add('active');
+if(screenName==='leaderboard') updateLeaderboard();
+if(screenName==='store') updateStore();
+if(screenName==='bitmoji') updateBitmoji();
+}
+
+function updateUI(){
+document.getElementById('level-display').textContent=userData.level;
+document.getElementById('streak-display').textContent=userData.streak;
+document.getElementById('coins-amount').textContent=userData.coins;
+document.getElementById('xp-current').textContent=userData.xp;
+document.getElementById('xp-needed').textContent=userData.xpNeeded;
+
+var xpPercent=(userData.xp/userData.xpNeeded)*100;
+document.getElementById('xp-fill').style.width=xpPercent+'%';
+
+var badge=getBadge(userData.level);
+document.getElementById('badge-display').textContent=badge.name;
+document.getElementById('badge-badge').textContent=badge.name.toUpperCase();
+
+var btn=document.getElementById('complete-day-btn');
+if(userData.todayCompleted){
+btn.disabled=true;
+btn.textContent='✓ Completed!';
+}
+}
+
+function getBadge(level){
+if(level>=20){return{name:"Legend",icon:"🏆"}}
+if(level>=15){return{name:"Master",icon:"⭐"}}
+if(level>=10){return{name:"Pro",icon:"🔥"}}
+if(level>=5){return{name:"Intermediate",icon:"💪"}}
+return{name:"Rookie",icon:"🌱"}
+}
+
+function completeDay(){
+var completedTasks=document.querySelectorAll('.task-check.checked');
+if(completedTasks.length<3){
+alert('Complete at least 3 tasks to complete the day!');
+return;
+}
+var today=new Date().getDate();
+if(!userData.completedDays.includes(today)){
+userData.completedDays.push(today);
+}
+userData.xp+=50;
+userData.coins+=25;
+userData.streak+=1;
+userData.todayCompleted=true;
+
+if(userData.xp>=userData.xpNeeded){
+userData.level++;
+userData.xp=userData.xp-userData.xpNeeded;
+userData.xpNeeded=Math.floor(userData.xpNeeded*1.5);
+alert('🎉 Level Up! You are now Level '+userData.level);
+}
+
+saveData();
+updateUI();
+alert('🎊 Day Completed! +50 XP, +25 Coins');
+}
+
+function buyPremium(plan){
+if(plan==='monthly'){
+userData.isPremium=true;
+alert('✅ Premium Activated! Welcome to the club 🥈');
+}else{
+userData.isPremium=true;
+alert('✅ Premium Activated! Welcome to VIP 🏅');
+}
+saveData();
+updateUI();
 }
