@@ -308,14 +308,6 @@ const app = {
         else display.innerText = "🧑‍💻";
     },
 
-    loadStore: function() {
-        const items = [
-            { id: 1, name: "Cool Glasses", price: 50, icon: "🕶️" },
-            { id: 2, name: "Gold Hat", price: 100, icon: "🧢" },
-            { id: 3, name: "Super Jacket", price: 150, icon: "🧥" },
-            { id: 4, name: "Speed Shoes", price: 80, icon: "👟" },
-            { id: 5, name: "Magic Wand", price: 200, icon: "🪄" },
-            { id: 6, name: "Diamond Ring", price: 500, icon: "💍" }
         ];
 
         const grid = document.getElementById("store-items");
