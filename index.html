@@ -909,7 +909,10 @@
         }
 
         function showStore() {
-            toggleSidebar();
+       closeallmodals(); // close other modals 
+            first
+            toggleSidebar(); //close sidebar
+            
             document.getElementById('modal-store').classList.remove('hidden');
             renderStore();
         }
@@ -971,3 +974,4 @@
     </script>
 </body>
 </html>
+
