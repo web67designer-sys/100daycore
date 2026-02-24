@@ -364,8 +364,8 @@
                 <input type="text" id="inp-name" placeholder="Enter your name">
             </div>
             <div class="input-group">
-                <label>Email (Can change)</label>
-                <input type="email" id="inp-email" >
+                <label>Email (Can't change)</label>
+                <input type="email" id="inp-email">
             </div>
             <div class="input-group">
                 <label>Age</label>
@@ -381,7 +381,7 @@
                 </select>
             </div>
             <div class="input-group">
-                <label>Gender (Can change)</label>
+                <label>Gender (Can't change)</label>
                 <select id="inp-gender">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -543,6 +543,18 @@
         </div>
     </div>
 
+    <!-- Store Modal -->
+    <div id="modal-store" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>Store</h2>
+            <div style="margin: 10px 0; color:var(--gold)">Your Coins: <span id="store-coins">0</span></div>
+            <div class="store-grid" id="store-items">
+                <!-- Items -->
+            </div>
+        </div>
+    </div>
+
     <!-- Premium Modal -->
     <div id="modal-premium" class="modal hidden">
         <div class="modal-content">
@@ -551,7 +563,7 @@
             
             <div class="plan-card">
                 <div style="font-size:1.5rem">🥈 Monthly</div>
-                <div class="plan-price">$99</div>
+                <div class="plan-price">$9.99</div>
                 <ul class="features-list">
                     <li>Unlimited AI Access</li>
                     <li>Exclusive Themes</li>
@@ -952,17 +964,10 @@
         }
 
         // Start App
-<script src="store.js"><script>
-  <script>      
+    <script src="store.js"></script>
+    <script>
         init();
 
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
