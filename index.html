@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LevelUp - Gen Z Productivity</title>
+    <title>100DayCore - Gen Z Productivity</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
+        /* ========== STYLES (same as before) ========== */
         :root {
             --bg: #0f0f13;
             --card-bg: #1e1e24;
-            --primary: #8A2BE2; /* BlueViolet */
-            --accent: #00FF7F; /* SpringGreen */
+            --primary: #8A2BE2;
+            --accent: #00FF7F;
             --gold: #FFD700;
             --danger: #FF4500;
             --text: #ffffff;
@@ -32,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* --- Utility Classes --- */
         .hidden { display: none !important; }
         .btn {
             background: linear-gradient(45deg, var(--primary), #ff00ff);
@@ -50,7 +52,6 @@
         .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
         .btn-accent { background: var(--accent); color: #000; }
 
-        /* --- Onboarding Screen --- */
         #onboarding {
             height: 100vh;
             display: flex;
@@ -83,14 +84,12 @@
         }
         input:focus { border-color: var(--primary); }
 
-        /* --- Main App Layout --- */
         #app-container {
             position: relative;
             min-height: 100vh;
             padding: 20px;
         }
 
-        /* Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -113,7 +112,6 @@
             gap: 10px;
         }
 
-        /* Stats Block */
         .stats-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -144,7 +142,6 @@
         }
         .streak-count { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
         
-        /* XP Bar */
         .xp-container { margin-bottom: 30px; }
         .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
         .progress-bar {
@@ -160,7 +157,6 @@
             transition: width 0.5s ease;
         }
 
-        /* Daily Action */
         .daily-action {
             background: linear-gradient(135deg, #2a2a35, #1a1a20);
             padding: 30px;
@@ -174,7 +170,6 @@
         .daily-action:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); }
         .daily-title { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
 
-        /* AI Coach */
         .ai-section {
             background: var(--card-bg);
             border-radius: 25px;
@@ -193,7 +188,6 @@
             min-height: 50px;
         }
 
-        /* --- Sidebar --- */
         .sidebar {
             position: fixed;
             top: 0;
@@ -222,7 +216,6 @@
         }
         .menu-item:hover { color: var(--primary); }
 
-        /* --- Modals (Calendar, Profile, etc) --- */
         .modal {
             position: fixed;
             top: 0;
@@ -254,11 +247,11 @@
             cursor: pointer;
         }
 
-        /* Calendar Grid */
+        /* 100-day calendar grid (20 rows x 5 columns) */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin-top: 20px;
         }
         .day-cell {
@@ -266,16 +259,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 0.8rem;
             cursor: pointer;
         }
         .day-completed { background: var(--accent); color: #000; }
-        .day-locked { background: var(--danger); opacity: 0.5; }
-        .day-today { background: var(--gold); color: #000; box-shadow: 0 0 10px var(--gold); }
+        .day-locked { background: var(--danger); opacity: 0.4; }
+        .day-today { background: var(--gold); color: #000; box-shadow: 0 0 8px var(--gold); }
         .day-future { background: var(--glass); }
 
-        /* Task List */
         .task-item {
             background: var(--bg);
             padding: 15px;
@@ -296,8 +289,15 @@
             background: var(--accent);
             border-color: var(--accent);
         }
+        .task-points {
+            background: var(--primary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
 
-        /* Bitmoji & Store */
+        /* Store & Bitmoji */
         .avatar-preview {
             width: 100px;
             height: 100px;
@@ -307,25 +307,79 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 3rem;
+            font-size: 2rem;
             border: 2px solid var(--primary);
+            flex-direction: column;
+            line-height: 1.2;
         }
         .store-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            margin-top: 20px;
         }
-        .store-item {
+        .store-card {
             background: var(--bg);
             padding: 15px;
             border-radius: 15px;
             text-align: center;
             border: 1px solid var(--glass-border);
         }
-        .store-item.locked { opacity: 0.5; filter: grayscale(1); }
-        .price-tag { color: var(--gold); font-weight: bold; margin-top: 5px; }
+        .store-card .price { color: var(--gold); font-weight: bold; margin: 5px 0; }
+        .store-card .locked { color: var(--danger); font-size: 0.8rem; }
+        .store-card .owned { color: var(--accent); font-size: 0.8rem; }
+        .store-card button {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        .store-card button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+        .category-tab {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .category-tab:hover, .category-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .bitmoji-inventory {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .inventory-item {
+            width: 50px;
+            height: 50px;
+            background: var(--glass);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .inventory-item.equipped { border-color: var(--accent); }
 
-        /* Leaderboard */
         .leaderboard-item {
             display: flex;
             align-items: center;
@@ -339,7 +393,6 @@
         .rank-2 { border: 2px solid silver; }
         .rank-3 { border: 2px solid #cd7f32; }
 
-        /* Premium */
         .plan-card {
             background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
             border: 1px solid var(--glass-border);
@@ -350,7 +403,6 @@
         }
         .plan-price { font-size: 2rem; font-weight: 900; color: var(--accent); }
         .features-list { text-align: left; margin: 15px 0; padding-left: 20px; color: var(--text-sec); }
-
     </style>
 </head>
 <body>
@@ -358,14 +410,14 @@
     <!-- ONBOARDING SCREEN -->
     <div id="onboarding">
         <div class="onboarding-card">
-            <h2 style="text-align:center; margin-bottom:20px; background: linear-gradient(to right, #fff, #a0a0a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Create Profile</h2>
+            <h2 style="text-align:center; margin-bottom:20px;">Create Profile</h2>
             <div class="input-group">
                 <label>Name</label>
                 <input type="text" id="inp-name" placeholder="Enter your name">
             </div>
             <div class="input-group">
-                <label>Email (Can't change)</label>
-                <input type="email" id="inp-email">
+                <label>Email</label>
+                <input type="email" id="inp-email" placeholder="Enter email">
             </div>
             <div class="input-group">
                 <label>Age</label>
@@ -374,15 +426,15 @@
             <div class="input-group">
                 <label>Goal</label>
                 <select id="inp-goal">
-                    <option value="Fitness">Fitness & Health</option>
-                    <option value="Study">Study & Focus</option>
-                    <option value="Coding">Coding & Dev</option>
-                    <option value="Mindfulness">Mindfulness</option>
+                    <option value="weightLoss">Weight Loss</option>
+                    <option value="muscleGain">Muscle Gain</option>
+                    <option value="healthyLifestyle">Healthy Lifestyle</option>
+                    <option value="productivity">Productivity</option>
                 </select>
             </div>
             <div class="input-group">
-                <label>Gender (Can't change)</label>
-                <select id="inp-gender" disabled style="opacity: 0.6">
+                <label>Gender</label>
+                <select id="inp-gender">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -394,21 +446,19 @@
 
     <!-- MAIN APP -->
     <div id="app-container" class="hidden">
-        
-        <!-- Header -->
         <header>
             <div class="burger-menu" onclick="toggleSidebar()">☰</div>
+            <div style="font-size:1.5rem; font-weight:900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100DayCore</div>
             <div class="calendar-btn" onclick="openCalendar()">
                 <span>📅</span> <span id="header-date">Today</span>
             </div>
         </header>
 
-        <!-- Stats -->
         <div class="stats-container">
             <div class="level-box">
                 <div style="font-size:0.8rem; color:var(--text-sec)">CURRENT LEVEL</div>
                 <div class="level-badge" id="display-level">1</div>
-                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;">Rookie</div>
+                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;" id="day-counter">Day 1 / 100</div>
             </div>
             <div class="streak-box">
                 <div style="font-size:0.8rem; color:var(--text-sec)">STREAK</div>
@@ -416,7 +466,6 @@
             </div>
         </div>
 
-        <!-- XP Bar -->
         <div class="xp-container">
             <div class="xp-text">
                 <span>XP</span>
@@ -427,13 +476,11 @@
             </div>
         </div>
 
-        <!-- Daily Action -->
         <div class="daily-action" onclick="openTasks()">
             <div class="daily-title">Complete Today's Tasks</div>
             <div style="color:var(--text-sec); font-size:0.9rem;">Click to view and finish tasks</div>
         </div>
 
-        <!-- AI Coach -->
         <div class="ai-section">
             <h3 style="color:var(--primary)">🤖 AI Coach</h3>
             <div class="ai-response" id="ai-output">
@@ -444,10 +491,9 @@
                 <button class="btn" onclick="askAI()">Send</button>
             </div>
         </div>
-
     </div>
 
-    <!-- SIDEBAR MENU -->
+    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <span class="close-sidebar" onclick="toggleSidebar()">×</span>
         <div class="menu-item" onclick="showProfile()">👤 Profile</div>
@@ -471,7 +517,7 @@
             </div>
             <div class="input-group">
                 <label>Email</label>
-                <input type="text" id="edit-email" enable>
+                <input type="email" id="edit-email">
             </div>
             <div class="input-group">
                 <label>Age</label>
@@ -480,28 +526,30 @@
             <div class="input-group">
                 <label>Goal</label>
                 <select id="edit-goal">
-                    <option value="weightloss">weightloss</option>
-                    <option value="musclegain">muslegain</option>
-                    <option value="healthylifestyle">heathylifestyle</option>
-                    <option value="productivity">productivity</option>
+                    <option value="weightLoss">Weight Loss</option>
+                    <option value="muscleGain">Muscle Gain</option>
+                    <option value="healthyLifestyle">Healthy Lifestyle</option>
+                    <option value="productivity">Productivity</option>
                 </select>
             </div>
             <div class="input-group">
                 <label>Gender</label>
-                <select id="edit-gender" enable></select>
+                <select id="edit-gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
             </div>
             <button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button>
         </div>
     </div>
 
-    <!-- Calendar Modal -->
+    <!-- Calendar Modal (100-day grid) -->
     <div id="modal-calendar" class="modal hidden">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Monthly Progress</h2>
-            <div class="calendar-grid" id="calendar-grid">
-                <!-- JS Generated -->
-            </div>
+            <h2>100-Day Challenge</h2>
+            <div class="calendar-grid" id="calendar-grid"></div>
         </div>
     </div>
 
@@ -511,9 +559,7 @@
             <span class="close-modal" onclick="closeAllModals()">×</span>
             <h2>Today's Tasks</h2>
             <p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p>
-            <div id="task-list-container">
-                <!-- JS Generated -->
-            </div>
+            <div id="task-list-container"></div>
             <button class="btn btn-accent" style="width:100%; margin-top:20px;" onclick="finishDay()">Finish Day & Claim Rewards</button>
         </div>
     </div>
@@ -535,11 +581,11 @@
             <div class="avatar-preview" id="bitmoji-preview">😐</div>
             <div style="text-align:center; margin-bottom:20px;">
                 <span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span>
+                <span style="margin-left:20px;">📦 Crates: <span id="bitmoji-crates">0</span></span>
             </div>
-            <h3>Customize</h3>
-            <div id="bitmoji-inventory" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-                <!-- Items -->
-            </div>
+            <h3>Inventory</h3>
+            <div class="bitmoji-inventory" id="bitmoji-inventory"></div>
+            <button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="claimFreeReward()">🎁 Claim Daily Reward</button>
         </div>
     </div>
 
@@ -548,10 +594,13 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeAllModals()">×</span>
             <h2>Store</h2>
-            <div style="margin: 10px 0; color:var(--gold)">Your Coins: <span id="store-coins">0</span></div>
-            <div class="store-grid" id="store-items">
-                <!-- Items -->
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;">
+                <span style="color:var(--gold)">🪙 Coins: <span id="store-coins">0</span></span>
+                <span>📦 Crates: <span id="store-crates">0</span></span>
             </div>
+            <div class="category-tabs" id="category-tabs"></div>
+            <div class="store-grid" id="store-items"></div>
+            <button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="openCrate()">📦 Open Crate (Cost: 1 Crate)</button>
         </div>
     </div>
 
@@ -560,7 +609,6 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeAllModals()">×</span>
             <h2>Premium Plans</h2>
-            
             <div class="plan-card">
                 <div style="font-size:1.5rem">🥈 Monthly</div>
                 <div class="plan-price">$9.99</div>
@@ -569,9 +617,8 @@
                     <li>Exclusive Themes</li>
                     <li>Double XP Days</li>
                 </ul>
-                <button class="btn btn-sec">Subscribe</button>
+                <button class="btn btn-sec" onclick="initPayment('monthly')">Subscribe</button>
             </div>
-
             <div class="plan-card" style="border-color:var(--gold)">
                 <div style="font-size:1.5rem">🏅 Yearly</div>
                 <div class="plan-price">$29.90</div>
@@ -581,32 +628,323 @@
                     <li>Early Access to New Features</li>
                     <li>Priority Support</li>
                 </ul>
-                <button class="btn btn-accent">Subscribe</button>
+                <button class="btn btn-accent" onclick="initPayment('elite')">Subscribe</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- STATE MANAGEMENT ---
+        // ===============================
+        // GOAL TASKS (50 each) - FULLY POPULATED
+        // ===============================
+        const goalTasks = {
+            weightLoss: [
+                { task: "Morning 20-min walk", points: 50 },
+                { task: "Drink 3L water", points: 50 },
+                { task: "No sugar today", points: 50 },
+                { task: "30-min cardio", points: 50 },
+                { task: "Eat salad with lunch", points: 50 },
+                { task: "10k steps", points: 50 },
+                { task: "No junk food", points: 50 },
+                { task: "Intermittent fasting 16:8", points: 50 },
+                { task: "Green tea instead of soda", points: 50 },
+                { task: "Home HIIT workout", points: 50 },
+                { task: "Track calories", points: 50 },
+                { task: "Avoid late night snacks", points: 50 },
+                { task: "Stretch 15 mins", points: 50 },
+                { task: "Eat high protein meal", points: 50 },
+                { task: "Replace rice with veggies", points: 50 },
+                { task: "Cycling 30 mins", points: 50 },
+                { task: "Swimming session", points: 50 },
+                { task: "Leg day workout", points: 50 },
+                { task: "Core workout", points: 50 },
+                { task: "Reduce carbs today", points: 50 },
+                { task: "No fried food", points: 50 },
+                { task: "Meal prep healthy food", points: 50 },
+                { task: "Morning lemon water", points: 50 },
+                { task: "Jogging 25 mins", points: 50 },
+                { task: "Jump rope 10 mins", points: 50 },
+                { task: "Burpees 3 sets", points: 50 },
+                { task: "Wall sits challenge", points: 50 },
+                { task: "Plank 3 mins total", points: 50 },
+                { task: "Pushups 30 reps", points: 50 },
+                { task: "Squats 50 reps", points: 50 },
+                { task: "Healthy breakfast", points: 50 },
+                { task: "Avoid processed food", points: 50 },
+                { task: "Evening walk", points: 50 },
+                { task: "Yoga session", points: 50 },
+                { task: "Sleep 8 hours", points: 50 },
+                { task: "No soft drinks", points: 50 },
+                { task: "Eat fruits today", points: 50 },
+                { task: "Protein shake instead dessert", points: 50 },
+                { task: "Track weight progress", points: 50 },
+                { task: "Reduce portion size", points: 50 },
+                { task: "Outdoor activity 1hr", points: 50 },
+                { task: "Dance workout", points: 50 },
+                { task: "Climb stairs instead lift", points: 50 },
+                { task: "Drink detox water", points: 50 },
+                { task: "Low calorie dinner", points: 50 },
+                { task: "Meal without oil", points: 50 },
+                { task: "Healthy snack choice", points: 50 },
+                { task: "Consistency check", points: 50 },
+                { task: "Track body measurements", points: 50 },
+                { task: "Weekly progress review", points: 50 }
+            ],
+            muscleGain: [
+                { task: "Chest workout", points: 50 },
+                { task: "Back workout", points: 50 },
+                { task: "Shoulder workout", points: 50 },
+                { task: "Leg workout", points: 50 },
+                { task: "Biceps workout", points: 50 },
+                { task: "Triceps workout", points: 50 },
+                { task: "Deadlift session", points: 50 },
+                { task: "Bench press session", points: 50 },
+                { task: "Squat session", points: 50 },
+                { task: "Pull-ups 3 sets", points: 50 },
+                { task: "Pushups 4 sets", points: 50 },
+                { task: "Increase protein intake", points: 50 },
+                { task: "Protein shake", points: 50 },
+                { task: "Progressive overload", points: 50 },
+                { task: "Warm up properly", points: 50 },
+                { task: "Stretch after workout", points: 50 },
+                { task: "Track reps", points: 50 },
+                { task: "Track weight lifted", points: 50 },
+                { task: "Calorie surplus day", points: 50 },
+                { task: "Eggs in breakfast", points: 50 },
+                { task: "Chicken meal", points: 50 },
+                { task: "Peanut butter snack", points: 50 },
+                { task: "Core strength workout", points: 50 },
+                { task: "Upper body session", points: 50 },
+                { task: "Lower body session", points: 50 },
+                { task: "Rest and recovery day", points: 50 },
+                { task: "Foam rolling", points: 50 },
+                { task: "Hydration check", points: 50 },
+                { task: "Good posture practice", points: 50 },
+                { task: "Increase dumbbell weight", points: 50 },
+                { task: "Barbell training", points: 50 },
+                { task: "Resistance band training", points: 50 },
+                { task: "Incline pushups", points: 50 },
+                { task: "Chin-ups", points: 50 },
+                { task: "Farmer carry", points: 50 },
+                { task: "Muscle mind connection focus", points: 50 },
+                { task: "Healthy carbs meal", points: 50 },
+                { task: "Oats breakfast", points: 50 },
+                { task: "Milk intake", points: 50 },
+                { task: "Track body weight", points: 50 },
+                { task: "Check muscle progress pics", points: 50 },
+                { task: "Heavy lifting day", points: 50 },
+                { task: "Light recovery workout", points: 50 },
+                { task: "Abs workout", points: 50 },
+                { task: "Glutes workout", points: 50 },
+                { task: "Hamstring workout", points: 50 },
+                { task: "Calf raises", points: 50 },
+                { task: "Forearm workout", points: 50 },
+                { task: "Sleep 8 hours", points: 50 },
+                { task: "Weekly strength test", points: 50 }
+            ],
+            healthyLifestyle: [
+                { task: "Wake up early", points: 50 },
+                { task: "Meditation 10 mins", points: 50 },
+                { task: "Deep breathing", points: 50 },
+                { task: "Drink water on wake", points: 50 },
+                { task: "Healthy breakfast", points: 50 },
+                { task: "Read 20 mins", points: 50 },
+                { task: "Journal thoughts", points: 50 },
+                { task: "Digital detox 1hr", points: 50 },
+                { task: "Call family member", points: 50 },
+                { task: "Clean your room", points: 50 },
+                { task: "Gratitude list", points: 50 },
+                { task: "Nature walk", points: 50 },
+                { task: "Limit screen time", points: 50 },
+                { task: "Plan next day", points: 50 },
+                { task: "Sleep before 11pm", points: 50 },
+                { task: "Healthy lunch", points: 50 },
+                { task: "Healthy dinner", points: 50 },
+                { task: "Positive affirmation", points: 50 },
+                { task: "Smile more", points: 50 },
+                { task: "Avoid negativity", points: 50 },
+                { task: "Stretching routine", points: 50 },
+                { task: "Sunlight exposure", points: 50 },
+                { task: "Organize workspace", points: 50 },
+                { task: "Declutter space", points: 50 },
+                { task: "Hydration goal met", points: 50 },
+                { task: "Practice kindness", points: 50 },
+                { task: "No gossip day", points: 50 },
+                { task: "Cook healthy meal", points: 50 },
+                { task: "No junk day", points: 50 },
+                { task: "Self reflection", points: 50 },
+                { task: "Goal review", points: 50 },
+                { task: "Weekly reset", points: 50 },
+                { task: "Track habits", points: 50 },
+                { task: "Morning routine complete", points: 50 },
+                { task: "Evening routine complete", points: 50 },
+                { task: "Drink herbal tea", points: 50 },
+                { task: "Limit caffeine", points: 50 },
+                { task: "Avoid sugar", points: 50 },
+                { task: "Good posture", points: 50 },
+                { task: "Help someone", points: 50 },
+                { task: "Practice patience", points: 50 },
+                { task: "No complaining day", points: 50 },
+                { task: "Focus on self growth", points: 50 },
+                { task: "Creative activity", points: 50 },
+                { task: "Mindful eating", points: 50 },
+                { task: "Deep cleaning task", points: 50 },
+                { task: "Personal hygiene care", points: 50 },
+                { task: "Mental health check", points: 50 },
+                { task: "Weekly reflection", points: 50 },
+                { task: "Celebrate small win", points: 50 }
+            ],
+            productivity: [
+                { task: "Wake up 6AM", points: 50 },
+                { task: "Make to-do list", points: 50 },
+                { task: "Complete hardest task first", points: 50 },
+                { task: "Study 1 hour", points: 50 },
+                { task: "Read 10 pages", points: 50 },
+                { task: "No phone 2 hrs", points: 50 },
+                { task: "Finish pending work", points: 50 },
+                { task: "Organize files", points: 50 },
+                { task: "Plan weekly goals", points: 50 },
+                { task: "Focus 45-min session", points: 50 },
+                { task: "Learn new skill", points: 50 },
+                { task: "Watch educational video", points: 50 },
+                { task: "Write 500 words", points: 50 },
+                { task: "Code 30 mins", points: 50 },
+                { task: "Practice typing speed", points: 50 },
+                { task: "Update resume", points: 50 },
+                { task: "Research topic", points: 50 },
+                { task: "Clean inbox", points: 50 },
+                { task: "Review finances", points: 50 },
+                { task: "Budget planning", points: 50 },
+                { task: "Pomodoro x4", points: 50 },
+                { task: "Brainstorm ideas", points: 50 },
+                { task: "Skill practice", points: 50 },
+                { task: "Online course lesson", points: 50 },
+                { task: "Networking message", points: 50 },
+                { task: "Public speaking practice", points: 50 },
+                { task: "Create project plan", points: 50 },
+                { task: "Update portfolio", points: 50 },
+                { task: "Morning deep work", points: 50 },
+                { task: "Evening review", points: 50 },
+                { task: "Limit distractions", points: 50 },
+                { task: "Organize schedule", points: 50 },
+                { task: "Goal visualization", points: 50 },
+                { task: "Skill improvement", points: 50 },
+                { task: "Daily reflection", points: 50 },
+                { task: "Time tracking", points: 50 },
+                { task: "Set deadlines", points: 50 },
+                { task: "Finish book chapter", points: 50 },
+                { task: "Improve handwriting", points: 50 },
+                { task: "Declutter desk", points: 50 },
+                { task: "Create habit tracker", points: 50 },
+                { task: "Mind mapping", points: 50 },
+                { task: "Update calendar", points: 50 },
+                { task: "Plan tomorrow", points: 50 },
+                { task: "Avoid procrastination", points: 50 },
+                { task: "Skill revision", points: 50 },
+                { task: "Practice consistency", points: 50 },
+                { task: "Read industry news", points: 50 },
+                { task: "Track progress", points: 50 },
+                { task: "Weekly productivity review", points: 50 }
+            ]
+        };
+
+        // ===============================
+        // STORE ELITE ENGINE (FULL)
+        // ===============================
+        const STORE_CATEGORIES = [
+            "shirts", "tshirts", "shorts", "pants", "shoes",
+            "glasses", "accessories", "frames", "rewards"
+        ];
+
+        const STORE_ITEMS = {};
+
+        STORE_CATEGORIES.forEach(cat => {
+            STORE_ITEMS[cat] = generateCategory(cat);
+        });
+
+        function generateCategory(category) {
+            let items = [];
+            for (let i = 1; i <= 5; i++) {
+                items.push({
+                    id: `${category}_normal_${i}`,
+                    name: `${category} Basic ${i}`,
+                    price: 50 * i,
+                    premium: false,
+                    levelRequired: i * 2,
+                    type: category,
+                    icon: getIconForCategory(category)
+                });
+            }
+            for (let i = 1; i <= 5; i++) {
+                items.push({
+                    id: `${category}_premium_${i}`,
+                    name: `${category} Elite ${i}`,
+                    price: 100 * i,
+                    premium: true,
+                    levelRequired: i * 3,
+                    type: category,
+                    icon: getIconForCategory(category, true)
+                });
+            }
+            return items;
+        }
+
+        function getIconForCategory(cat, premium = false) {
+            const icons = {
+                shirts: '👕',
+                tshirts: '👕',
+                shorts: '🩳',
+                pants: '👖',
+                shoes: '👟',
+                glasses: '👓',
+                accessories: '🧢',
+                frames: '🖼️',
+                rewards: '🎁'
+            };
+            return icons[cat] || '📦';
+        }
+
+        function findItemById(id) {
+            for (let cat in STORE_ITEMS) {
+                let found = STORE_ITEMS[cat].find(i => i.id === id);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        // ===============================
+        // STATE MANAGEMENT
+        // ===============================
         const defaultState = {
             name: "",
             email: "",
             age: 0,
-            goal: "Fitness",
+            goal: "weightLoss",
             gender: "Male",
             xp: 0,
             level: 1,
-            coins: 100, // Start with some coins
+            coins: 100,
             streak: 0,
-            completedDays: [], // Array of date strings "YYYY-MM-DD"
-            inventory: ['base_male', 'base_female'], // Item IDs
-            equippedItems: [],
-            tasks: [] // Current day's tasks
+            completedDays: [],
+            tasks: [],
+            inventory: [],
+            crates: 0,
+            isPremium: false,
+            premiumPlan: null,
+            equippedItems: []
         };
 
         let user = JSON.parse(localStorage.getItem('levelUpUser')) || defaultState;
+        // ensure all properties exist
+        if (!user.inventory) user.inventory = [];
+        if (!user.crates) user.crates = 0;
+        if (!user.isPremium) user.isPremium = false;
+        if (!user.premiumPlan) user.premiumPlan = null;
+        if (!user.equippedItems) user.equippedItems = [];
 
-        // --- INITIALIZATION ---
+        // ===============================
+        // INITIALIZATION
+        // ===============================
         function init() {
             if (!user.name) {
                 document.getElementById('onboarding').classList.remove('hidden');
@@ -618,7 +956,9 @@
             }
         }
 
-        // --- ONBOARDING & PROFILE ---
+        // ===============================
+        // ONBOARDING & PROFILE
+        // ===============================
         function saveProfile() {
             const name = document.getElementById('inp-name').value;
             const email = document.getElementById('inp-email').value;
@@ -640,9 +980,11 @@
 
         function updateProfile() {
             user.name = document.getElementById('edit-name').value;
+            user.email = document.getElementById('edit-email').value;
             user.age = document.getElementById('edit-age').value;
             user.goal = document.getElementById('edit-goal').value;
-            // Gender/Email locked
+            user.gender = document.getElementById('edit-gender').value;
+            
             saveState();
             updateUI();
             closeAllModals();
@@ -658,20 +1000,25 @@
             document.getElementById('edit-gender').value = user.gender;
         }
 
-        // --- UI UPDATES ---
+        // ===============================
+        // UI UPDATES
+        // ===============================
         function updateUI() {
-            // Header
-            document.getElementById('ai-goal-display').innerText = user.goal;
-
-            // Stats
+            document.getElementById('ai-goal-display').innerText = user.goal.replace(/([A-Z])/g, ' $1').trim();
             document.getElementById('display-level').innerText = user.level;
             document.getElementById('display-streak').innerText = user.streak + " 🔥";
             
-            // XP Bar
             const xpForNext = user.level * 100;
             const percentage = Math.min((user.xp / xpForNext) * 100, 100);
             document.getElementById('xp-fill').style.width = percentage + "%";
             document.getElementById('xp-text').innerText = `${user.xp} / ${xpForNext} XP`;
+
+            // Update day counter in level box
+            const todayStr = new Date().toISOString().split('T')[0];
+            const daysDone = user.completedDays.length;
+            const isTodayDone = user.completedDays.includes(todayStr);
+            const currentDay = isTodayDone ? daysDone : daysDone + 1;
+            document.getElementById('day-counter').innerText = `Day ${currentDay} / 100`;
         }
 
         function saveState() {
@@ -685,7 +1032,9 @@
             }
         }
 
-        // --- NAVIGATION ---
+        // ===============================
+        // NAVIGATION
+        // ===============================
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
@@ -694,7 +1043,9 @@
             document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
         }
 
-        // --- CALENDAR & TASKS ---
+        // ===============================
+        // CALENDAR (100 days)
+        // ===============================
         function openCalendar() {
             closeAllModals();
             document.getElementById('modal-calendar').classList.remove('hidden');
@@ -704,21 +1055,25 @@
         function renderCalendar() {
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
-            const today = new Date().getDate();
-            const currentMonth = new Date().getMonth(); // Simplified for demo (assumes current month)
+            const today = new Date().toISOString().split('T')[0];
+            const [year, month, day] = today.split('-').map(Number);
 
-            for (let i = 1; i <= 30; i++) {
+            // Assume challenge starts on the 1st of current month
+            const challengeStart = new Date(year, month-1, 1);
+            for (let d = 1; d <= 100; d++) {
                 const div = document.createElement('div');
                 div.classList.add('day-cell');
-                div.innerText = i;
+                div.innerText = d;
 
-                const dateStr = `2023-${currentMonth+1}-${i}`; // Simplified date key
-                
+                const currentDate = new Date(challengeStart);
+                currentDate.setDate(challengeStart.getDate() + (d - 1));
+                const dateStr = currentDate.toISOString().split('T')[0];
+
                 if (user.completedDays.includes(dateStr)) {
                     div.classList.add('day-completed');
-                } else if (i > today) {
+                } else if (currentDate > new Date()) {
                     div.classList.add('day-locked');
-                } else if (i === today) {
+                } else if (dateStr === today) {
                     div.classList.add('day-today');
                     div.onclick = () => {
                         closeAllModals();
@@ -731,221 +1086,9 @@
             }
         }
 
-        // --- TASK LOGIC ---
-       const goalTasks = {
-  weightLoss: [
-    { task: "Morning 20-min walk", points: 50 },
-    { task: "Drink 3L water", points: 50 },
-    { task: "No sugar today", points: 50 },
-    { task: "30-min cardio", points: 50 },
-    { task: "Eat salad with lunch", points: 50 },
-    { task: "10k steps", points: 50 },
-    { task: "No junk food", points: 50 },
-    { task: "Intermittent fasting 16:8", points: 50 },
-    { task: "Green tea instead of soda", points: 50 },
-    { task: "Home HIIT workout", points: 50 },
-    { task: "Track calories", points: 50 },
-    { task: "Avoid late night snacks", points: 50 },
-    { task: "Stretch 15 mins", points: 50 },
-    { task: "Eat high protein meal", points: 50 },
-    { task: "Replace rice with veggies", points: 50 },
-    { task: "Cycling 30 mins", points: 50 },
-    { task: "Swimming session", points: 50 },
-    { task: "Leg day workout", points: 50 },
-    { task: "Core workout", points: 50 },
-    { task: "Reduce carbs today", points: 50 },
-    { task: "No fried food", points: 50 },
-    { task: "Meal prep healthy food", points: 50 },
-    { task: "Morning lemon water", points: 50 },
-    { task: "Jogging 25 mins", points: 50 },
-    { task: "Jump rope 10 mins", points: 50 },
-    { task: "Burpees 3 sets", points: 50 },
-    { task: "Wall sits challenge", points: 50 },
-    { task: "Plank 3 mins total", points: 50 },
-    { task: "Pushups 30 reps", points: 50 },
-    { task: "Squats 50 reps", points: 50 },
-    { task: "Healthy breakfast", points: 50 },
-    { task: "Avoid processed food", points: 50 },
-    { task: "Evening walk", points: 50 },
-    { task: "Yoga session", points: 50 },
-    { task: "Sleep 8 hours", points: 50 },
-    { task: "No soft drinks", points: 50 },
-    { task: "Eat fruits today", points: 50 },
-    { task: "Protein shake instead dessert", points: 50 },
-    { task: "Track weight progress", points: 50 },
-    { task: "Reduce portion size", points: 50 },
-    { task: "Outdoor activity 1hr", points: 50 },
-    { task: "Dance workout", points: 50 },
-    { task: "Climb stairs instead lift", points: 50 },
-    { task: "Drink detox water", points: 50 },
-    { task: "Low calorie dinner", points: 50 },
-    { task: "Meal without oil", points: 50 },
-    { task: "Healthy snack choice", points: 50 },
-    { task: "Consistency check", points: 50 },
-    { task: "Track body measurements", points: 50 },
-    { task: "Weekly progress review", points: 50 }
-  ],
-
-  muscleGain: [
-    { task: "Chest workout", points: 50 },
-    { task: "Back workout", points: 50 },
-    { task: "Shoulder workout", points: 50 },
-    { task: "Leg workout", points: 50 },
-    { task: "Biceps workout", points: 50 },
-    { task: "Triceps workout", points: 50 },
-    { task: "Deadlift session", points: 50 },
-    { task: "Bench press session", points: 50 },
-    { task: "Squat session", points: 50 },
-    { task: "Pull-ups 3 sets", points: 50 },
-    { task: "Pushups 4 sets", points: 50 },
-    { task: "Increase protein intake", points: 50 },
-    { task: "Protein shake", points: 50 },
-    { task: "Progressive overload", points: 50 },
-    { task: "Warm up properly", points: 50 },
-    { task: "Stretch after workout", points: 50 },
-    { task: "Track reps", points: 50 },
-    { task: "Track weight lifted", points: 50 },
-    { task: "Calorie surplus day", points: 50 },
-    { task: "Eggs in breakfast", points: 50 },
-    { task: "Chicken meal", points: 50 },
-    { task: "Peanut butter snack", points: 50 },
-    { task: "Core strength workout", points: 50 },
-    { task: "Upper body session", points: 50 },
-    { task: "Lower body session", points: 50 },
-    { task: "Rest and recovery day", points: 50 },
-    { task: "Foam rolling", points: 50 },
-    { task: "Hydration check", points: 50 },
-    { task: "Good posture practice", points: 50 },
-    { task: "Increase dumbbell weight", points: 50 },
-    { task: "Barbell training", points: 50 },
-    { task: "Resistance band training", points: 50 },
-    { task: "Incline pushups", points: 50 },
-    { task: "Chin-ups", points: 50 },
-    { task: "Farmer carry", points: 50 },
-    { task: "Muscle mind connection focus", points: 50 },
-    { task: "Healthy carbs meal", points: 50 },
-    { task: "Oats breakfast", points: 50 },
-    { task: "Milk intake", points: 50 },
-    { task: "Track body weight", points: 50 },
-    { task: "Check muscle progress pics", points: 50 },
-    { task: "Heavy lifting day", points: 50 },
-    { task: "Light recovery workout", points: 50 },
-    { task: "Abs workout", points: 50 },
-    { task: "Glutes workout", points: 50 },
-    { task: "Hamstring workout", points: 50 },
-    { task: "Calf raises", points: 50 },
-    { task: "Forearm workout", points: 50 },
-    { task: "Sleep 8 hours", points: 50 },
-    { task: "Weekly strength test", points: 50 }
-  ],
-
-  healthyLifestyle: [
-    { task: "Wake up early", points: 50 },
-    { task: "Meditation 10 mins", points: 50 },
-    { task: "Deep breathing", points: 50 },
-    { task: "Drink water on wake", points: 50 },
-    { task: "Healthy breakfast", points: 50 },
-    { task: "Read 20 mins", points: 50 },
-    { task: "Journal thoughts", points: 50 },
-    { task: "Digital detox 1hr", points: 50 },
-    { task: "Call family member", points: 50 },
-    { task: "Clean your room", points: 50 },
-    { task: "Gratitude list", points: 50 },
-    { task: "Nature walk", points: 50 },
-    { task: "Limit screen time", points: 50 },
-    { task: "Plan next day", points: 50 },
-    { task: "Sleep before 11pm", points: 50 },
-    { task: "Healthy lunch", points: 50 },
-    { task: "Healthy dinner", points: 50 },
-    { task: "Positive affirmation", points: 50 },
-    { task: "Smile more", points: 50 },
-    { task: "Avoid negativity", points: 50 },
-    { task: "Stretching routine", points: 50 },
-    { task: "Sunlight exposure", points: 50 },
-    { task: "Organize workspace", points: 50 },
-    { task: "Declutter space", points: 50 },
-    { task: "Hydration goal met", points: 50 },
-    { task: "Practice kindness", points: 50 },
-    { task: "No gossip day", points: 50 },
-    { task: "Cook healthy meal", points: 50 },
-    { task: "No junk day", points: 50 },
-    { task: "Self reflection", points: 50 },
-    { task: "Goal review", points: 50 },
-    { task: "Weekly reset", points: 50 },
-    { task: "Track habits", points: 50 },
-    { task: "Morning routine complete", points: 50 },
-    { task: "Evening routine complete", points: 50 },
-    { task: "Drink herbal tea", points: 50 },
-    { task: "Limit caffeine", points: 50 },
-    { task: "Avoid sugar", points: 50 },
-    { task: "Good posture", points: 50 },
-    { task: "Help someone", points: 50 },
-    { task: "Practice patience", points: 50 },
-    { task: "No complaining day", points: 50 },
-    { task: "Focus on self growth", points: 50 },
-    { task: "Creative activity", points: 50 },
-    { task: "Mindful eating", points: 50 },
-    { task: "Deep cleaning task", points: 50 },
-    { task: "Personal hygiene care", points: 50 },
-    { task: "Mental health check", points: 50 },
-    { task: "Weekly reflection", points: 50 },
-    { task: "Celebrate small win", points: 50 }
-  ],
-
-  productivity: [
-    { task: "Wake up 6AM", points: 50 },
-    { task: "Make to-do list", points: 50 },
-    { task: "Complete hardest task first", points: 50 },
-    { task: "Study 1 hour", points: 50 },
-    { task: "Read 10 pages", points: 50 },
-    { task: "No phone 2 hrs", points: 50 },
-    { task: "Finish pending work", points: 50 },
-    { task: "Organize files", points: 50 },
-    { task: "Plan weekly goals", points: 50 },
-    { task: "Focus 45-min session", points: 50 },
-    { task: "Learn new skill", points: 50 },
-    { task: "Watch educational video", points: 50 },
-    { task: "Write 500 words", points: 50 },
-    { task: "Code 30 mins", points: 50 },
-    { task: "Practice typing speed", points: 50 },
-    { task: "Update resume", points: 50 },
-    { task: "Research topic", points: 50 },
-    { task: "Clean inbox", points: 50 },
-    { task: "Review finances", points: 50 },
-    { task: "Budget planning", points: 50 },
-    { task: "Pomodoro x4", points: 50 },
-    { task: "Brainstorm ideas", points: 50 },
-    { task: "Skill practice", points: 50 },
-    { task: "Online course lesson", points: 50 },
-    { task: "Networking message", points: 50 },
-    { task: "Public speaking practice", points: 50 },
-    { task: "Create project plan", points: 50 },
-    { task: "Update portfolio", points: 50 },
-    { task: "Morning deep work", points: 50 },
-    { task: "Evening review", points: 50 },
-    { task: "Limit distractions", points: 50 },
-    { task: "Organize schedule", points: 50 },
-    { task: "Goal visualization", points: 50 },
-    { task: "Skill improvement", points: 50 },
-    { task: "Daily reflection", points: 50 },
-    { task: "Time tracking", points: 50 },
-    { task: "Set deadlines", points: 50 },
-    { task: "Finish book chapter", points: 50 },
-    { task: "Improve handwriting", points: 50 },
-    { task: "Declutter desk", points: 50 },
-    { task: "Create habit tracker", points: 50 },
-    { task: "Mind mapping", points: 50 },
-    { task: "Update calendar", points: 50 },
-    { task: "Plan tomorrow", points: 50 },
-    { task: "Avoid procrastination", points: 50 },
-    { task: "Skill revision", points: 50 },
-    { task: "Practice consistency", points: 50 },
-    { task: "Read industry news", points: 50 },
-    { task: "Track progress", points: 50 },
-    { task: "Weekly productivity review", points: 50 }
-  ]
-};
-
+        // ===============================
+        // TASKS
+        // ===============================
         function openTasks() {
             closeAllModals();
             document.getElementById('modal-tasks').classList.remove('hidden');
@@ -953,11 +1096,11 @@
             const today = new Date().toDateString();
             document.getElementById('task-date-display').innerText = today;
 
-            // Check if tasks already generated for today
-            // In a real app, we'd check date. Here we just regenerate if empty for demo
             if (user.tasks.length === 0) {
-                const goalTasks = taskDatabase[user.goal];
-                user.tasks = goalTasks.map(t => ({ task: t, done: false }));
+                const allTasks = goalTasks[user.goal];
+                const shuffled = [...allTasks].sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, 5);
+                user.tasks = selected.map(t => ({ ...t, done: false }));
             }
 
             renderTasks();
@@ -970,7 +1113,10 @@
                 const div = document.createElement('div');
                 div.classList.add('task-item');
                 div.innerHTML = `
-                    <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.task}</span>
+                    <div style="display: flex; align-items: center; gap: 10px; flex:1;">
+                        <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.task}</span>
+                        <span class="task-points">+${t.points}</span>
+                    </div>
                     <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${index})"></div>
                 `;
                 container.appendChild(div);
@@ -986,35 +1132,40 @@
             const allDone = user.tasks.every(t => t.done);
             if (!allDone) return alert("Complete all tasks first!");
 
-            // Rewards
-            const xpGain = 50 + (user.level * 5);
-            const coinGain = 20;
+            const totalPoints = user.tasks.reduce((sum, t) => sum + t.points, 0);
             
+            // Apply premium XP multiplier if active
+            let xpGain = totalPoints;
+            if (user.isPremium && user.xpMultiplier) {
+                xpGain = Math.floor(xpGain * user.xpMultiplier);
+            }
+
             user.xp += xpGain;
-            user.coins += coinGain;
+            user.coins += 20;
             user.streak += 1;
             
-            // Level Up Logic
-            if (user.xp >= user.level * 100) {
+            // Level up logic
+            while (user.xp >= user.level * 100) {
                 user.level++;
-                user.xp = 0; // Reset bar for next level (simplified)
+                user.coins += 50;
                 alert(`🎉 LEVEL UP! You are now Level ${user.level}!`);
             }
 
-            // Mark day complete
             const today = new Date().toISOString().split('T')[0];
             if (!user.completedDays.includes(today)) {
                 user.completedDays.push(today);
             }
 
-            user.tasks = []; // Reset tasks
+            user.tasks = [];
             saveState();
             updateUI();
             closeAllModals();
-            alert(`Day Completed! +${xpGain} XP, +${coinGain} Coins`);
+            alert(`Day Completed! +${xpGain} XP, +20 Coins`);
         }
 
-        // --- AI COACH ---
+        // ===============================
+        // AI COACH
+        // ===============================
         function askAI() {
             const input = document.getElementById('ai-input');
             const output = document.getElementById('ai-output');
@@ -1024,12 +1175,11 @@
 
             output.innerHTML = "Thinking...";
             
-            // Simulate AI delay
             setTimeout(() => {
                 const responses = [
-                    `That's a great question about ${user.goal}. Consistency is key!`,
+                    `That's a great question about ${user.goal.replace(/([A-Z])/g, ' $1').trim()}. Consistency is key!`,
                     `Remember, progress is progress, no matter how small.`,
-                    `Focus on your goal: ${user.goal}. You got this!`,
+                    `Focus on your goal: ${user.goal.replace(/([A-Z])/g, ' $1').trim()}. You got this!`,
                     `Take a break if you need to, but never give up.`
                 ];
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
@@ -1038,16 +1188,17 @@
             }, 1000);
         }
 
-        // --- LEADERBOARD ---
+        // ===============================
+        // LEADERBOARD
+        // ===============================
         function showLeaderboard() {
             toggleSidebar();
             document.getElementById('modal-leaderboard').classList.remove('hidden');
             
-            // Mock Data + Current User
             const mockUsers = [
                 {name: "Alex", xp: 2500, level: 5},
                 {name: "Sarah", xp: 1800, level: 4},
-                {name: "You", xp: user.xp + (user.level*100), level: user.level}, // Approx total XP
+                {name: "You", xp: user.xp + (user.level*100), level: user.level},
                 {name: "Mike", xp: 500, level: 2}
             ].sort((a,b) => b.xp - a.xp);
 
@@ -1055,16 +1206,14 @@
             list.innerHTML = '';
 
             mockUsers.forEach((u, i) => {
-                let rankClass = '';
-                if (i===0) rankClass = 'rank-1';
-                if (i===1) rankClass = 'rank-2';
-                if (i===2) rankClass = 'rank-3';
-
                 let reward = "";
                 if (i < 3) reward = `<span style="color:var(--gold); font-size:0.8rem">+100 Coins 🏆</span>`;
 
                 const div = document.createElement('div');
                 div.classList.add('leaderboard-item');
+                if (i === 0) div.classList.add('rank-1');
+                if (i === 1) div.classList.add('rank-2');
+                if (i === 2) div.classList.add('rank-3');
                 if(u.name === "You") div.style.borderColor = "var(--primary)";
                 
                 div.innerHTML = `
@@ -1080,7 +1229,74 @@
             });
         }
 
-        // --- BITMOJI & STORE ---
+        function rewardTopPlayers(position) {
+            if (position === 1) {
+                user.coins += 200;
+                user.xp += 100;
+                user.crates += 1;
+            } else if (position === 2) {
+                user.coins += 150;
+                user.xp += 70;
+                user.crates += 1;
+            } else if (position === 3) {
+                user.coins += 100;
+                user.xp += 50;
+                user.crates += 1;
+            }
+            saveState();
+        }
+
+        // ===============================
+        // PREMIUM & RAZORPAY
+        // ===============================
+        function initPayment(plan) {
+            const planPrices = {
+                monthly: 999,   // ₹9.99 → 999 paise
+                elite: 2990     // ₹29.90 → 2990 paise
+            };
+
+            const options = {
+                key: "YOUR_KEY_ID", // 🔴 REPLACE WITH YOUR ACTUAL RAZORPAY KEY ID
+                amount: planPrices[plan],
+                currency: "INR",
+                name: "100DayCore",
+                description: `${plan} Premium Subscription`,
+                image: "https://your-logo-url.com/logo.png", // optional
+                handler: function (response) {
+                    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+                    activatePremium(plan);
+                },
+                prefill: {
+                    name: user.name,
+                    email: user.email
+                },
+                theme: {
+                    color: "#8A2BE2"
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        function activatePremium(plan) {
+            user.isPremium = true;
+            user.premiumPlan = plan;
+            if (plan === "elite") {
+                user.xpMultiplier = 1.5;
+                user.dailyBonusCoins = 20;
+            } else {
+                user.xpMultiplier = 1.2;
+                user.dailyBonusCoins = 10;
+            }
+            saveState();
+            alert(`Premium (${plan}) activated! ⚜️`);
+            closeAllModals();
+        }
+
+        // ===============================
+        // BITMOJI
+        // ===============================
         function showBitmoji() {
             toggleSidebar();
             document.getElementById('modal-bitmoji').classList.remove('hidden');
@@ -1088,93 +1304,184 @@
         }
 
         function renderBitmoji() {
+            document.getElementById('bitmoji-coins').innerText = user.coins;
+            document.getElementById('bitmoji-crates').innerText = user.crates;
+            
             const preview = document.getElementById('bitmoji-preview');
-            const coins = document.getElementById('bitmoji-coins');
-            const inv = document.getElementById('bitmoji-inventory');
-            
-            coins.innerText = user.coins;
-            
-            // Simple visual representation
-            let base = user.gender === 'Male' ? '👦' : '👧';
-            preview.innerText = base;
+            let avatarHTML = '';
+            if (user.equippedItems.length > 0) {
+                const equippedIcons = user.equippedItems.map(id => {
+                    const item = findItemById(id);
+                    return item ? item.icon : '📦';
+                }).join(' ');
+                avatarHTML = equippedIcons;
+            } else {
+                avatarHTML = user.gender === 'Male' ? '👦' : '👧';
+            }
+            preview.innerText = avatarHTML;
 
-            // Render Inventory items (simplified as buttons)
-            inv.innerHTML = '';
-            user.inventory.forEach(item => {
-                const btn = document.createElement('div');
-                btn.style.width = '40px';
-                btn.style.height = '40px';
-                btn.style.background = 'var(--glass)';
-                btn.style.borderRadius = '50%';
-                btn.style.display = 'flex';
-                btn.style.justifyContent = 'center';
-                btn.style.alignItems = 'center';
-                btn.innerText = '🎩'; // Example item
-                btn.onclick = () => { preview.innerText = '🤠'; }; // Equip logic
-                inv.appendChild(btn);
+            const invDiv = document.getElementById('bitmoji-inventory');
+            invDiv.innerHTML = '';
+            user.inventory.forEach(itemId => {
+                const item = findItemById(itemId);
+                if (!item) return;
+                const div = document.createElement('div');
+                div.className = 'inventory-item';
+                if (user.equippedItems.includes(itemId)) div.classList.add('equipped');
+                div.innerText = item.icon;
+                div.title = item.name;
+                div.onclick = () => equipItem(itemId);
+                invDiv.appendChild(div);
             });
         }
 
+        function equipItem(itemId) {
+            if (user.equippedItems.includes(itemId)) {
+                user.equippedItems = user.equippedItems.filter(id => id !== itemId);
+            } else {
+                user.equippedItems.push(itemId);
+            }
+            saveState();
+            renderBitmoji();
+        }
+
+        // ===============================
+        // STORE
+        // ===============================
         function showStore() {
             toggleSidebar();
             document.getElementById('modal-store').classList.remove('hidden');
-            renderStore();
+            renderStore('shirts');
+            renderCategoryTabs();
         }
 
-        const storeItems = [
-            {id: 'hat1', name: 'Cool Hat', price: 50, type: 'accessory', levelReq: 1},
-            {id: 'glass1', name: 'Sunglasses', price: 100, type: 'accessory', levelReq: 2},
-            {id: 'frame1', name: 'Gold Frame', price: 500, type: 'frame', levelReq: 5},
-            {id: 'skin1', name: 'Neon Skin', price: 1000, type: 'skin', levelReq: 10}
-        ];
+        function renderCategoryTabs() {
+            const tabsDiv = document.getElementById('category-tabs');
+            tabsDiv.innerHTML = '';
+            STORE_CATEGORIES.forEach(cat => {
+                const tab = document.createElement('span');
+                tab.className = 'category-tab';
+                tab.innerText = cat;
+                tab.onclick = () => {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderStore(cat);
+                };
+                tabsDiv.appendChild(tab);
+            });
+            if (tabsDiv.firstChild) tabsDiv.firstChild.classList.add('active');
+        }
 
-        function renderStore() {
+        function renderStore(category) {
             document.getElementById('store-coins').innerText = user.coins;
+            document.getElementById('store-crates').innerText = user.crates;
+
             const grid = document.getElementById('store-items');
             grid.innerHTML = '';
 
-            storeItems.forEach(item => {
+            const items = STORE_ITEMS[category];
+            items.forEach(item => {
                 const div = document.createElement('div');
-                div.classList.add('store-item');
-                if (user.level < item.levelReq) div.classList.add('locked');
-                
-                const btnText = user.inventory.includes(item.id) ? "Owned" : "Buy";
-                const action = user.inventory.includes(item.id) ? "" : `onclick="buyItem('${item.id}', ${item.price})"`;
+                div.className = 'store-card';
 
-                div.innerHTML = `
-                    <div style="font-size:2rem">🎁</div>
-                    <div style="font-weight:bold">${item.name}</div>
-                    <div style="font-size:0.8rem; color:var(--text-sec)">Unlocks at Lvl ${item.levelReq}</div>
-                    <div class="price-tag">${user.inventory.includes(item.id) ? '✅' : item.price + ' 🪙'}</div>
-                    <button class="btn btn-sec" style="margin-top:10px; font-size:0.8rem; padding:5px 10px" ${action} ${user.level < item.levelReq ? 'disabled' : ''}>${btnText}</button>
-                `;
+                let lockedByLevel = user.level < item.levelRequired;
+                let lockedByPremium = item.premium && !user.isPremium;
+                let owned = user.inventory.includes(item.id);
+
+                if (owned) {
+                    div.innerHTML = `
+                        <div class="icon">✅</div>
+                        <div>${item.name}</div>
+                        <div class="owned">Owned</div>
+                    `;
+                } else if (lockedByPremium) {
+                    div.innerHTML = `
+                        <div class="icon">🔒</div>
+                        <div>${item.name}</div>
+                        <div class="locked">Premium Required 💎</div>
+                    `;
+                } else if (lockedByLevel) {
+                    div.innerHTML = `
+                        <div class="icon">🔐</div>
+                        <div>${item.name}</div>
+                        <div class="locked">Unlock at Lv ${item.levelRequired}</div>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="icon">${item.premium ? "💎" : item.icon}</div>
+                        <div>${item.name}</div>
+                        <div class="price">${item.price} 🪙</div>
+                        <button onclick="buyItem('${item.id}', ${item.price})">Buy</button>
+                    `;
+                }
                 grid.appendChild(div);
             });
         }
 
         function buyItem(id, price) {
+            let item = findItemById(id);
+            if (!item) return;
+
+            if (item.premium && !user.isPremium) {
+                alert("Upgrade to Premium to unlock this 💎");
+                return;
+            }
+
+            if (user.level < item.levelRequired) {
+                alert("Reach Level " + item.levelRequired + " to unlock this 🔓");
+                return;
+            }
+
             if (user.coins >= price) {
                 user.coins -= price;
                 user.inventory.push(id);
                 saveState();
-                renderStore();
-                alert("Item Purchased!");
+                renderStore(item.type);
+                alert("Purchased Successfully 🔥");
             } else {
-                alert("Not enough coins!");
+                alert("Not enough coins 🪙");
             }
         }
 
-        // --- PREMIUM ---
-        function showPremium() {
-            toggleSidebar();
-            document.getElementById('modal-premium').classList.remove('hidden');
+        function openCrate() {
+            if (user.crates <= 0) {
+                alert("No crates available 📦");
+                return;
+            }
+
+            const allItems = Object.values(STORE_ITEMS).flat();
+            const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+
+            user.inventory.push(randomItem.id);
+            user.crates -= 1;
+
+            saveState();
+            alert("You got: " + randomItem.name + " 🎉");
+            if (!document.getElementById('modal-store').classList.contains('hidden')) {
+                renderStore(document.querySelector('.category-tab.active')?.innerText || 'shirts');
+            }
+        }
+
+        function claimFreeReward() {
+            const today = new Date().toDateString();
+            if (localStorage.getItem("freeRewardClaimed") === today) {
+                alert("Already claimed today 🎁");
+                return;
+            }
+
+            user.coins += 30;
+            user.xp += 20;
+
+            localStorage.setItem("freeRewardClaimed", today);
+            saveState();
+            alert("Free reward claimed 🎉");
+            if (!document.getElementById('modal-bitmoji').classList.contains('hidden')) {
+                renderBitmoji();
+            }
         }
 
         // Start App
         init();
-
     </script>
 </body>
-</html>
-
-
+</html>1
