@@ -8,7 +8,7 @@
     <!-- Razorpay Checkout Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-        /* ========== STYLES (same as before) ========== */
+        /* ========== STYLES ========== */
         :root {
             --bg: #0f0f13;
             --card-bg: #1e1e24;
@@ -51,6 +51,11 @@
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
         .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
         .btn-accent { background: var(--accent); color: #000; }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(0.6);
+        }
 
         #onboarding {
             height: 100vh;
@@ -263,11 +268,11 @@
             font-weight: bold;
             font-size: 0.8rem;
             cursor: pointer;
+            transition: 0.1s ease;
         }
-        .day-completed { background: var(--accent); color: #000; }
-        .day-locked { background: var(--danger); opacity: 0.4; }
-        .day-today { background: var(--gold); color: #000; box-shadow: 0 0 8px var(--gold); }
-        .day-future { background: var(--glass); }
+        .day-completed { background: var(--accent); color: #000; }      /* green for completed days */
+        .day-locked { background: var(--danger); opacity: 0.8; }        /* red for locked days */
+        .day-start { background: var(--gold); color: #000; }            /* gold for day 1 (always) */
 
         .task-item {
             background: var(--bg);
@@ -450,7 +455,7 @@
             <div class="burger-menu" onclick="toggleSidebar()">☰</div>
             <div style="font-size:1.5rem; font-weight:900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100DayCore</div>
             <div class="calendar-btn" onclick="openCalendar()">
-                <span>📅</span> <span id="header-date">Today</span>
+                <span>📅</span> <span id="header-date">Day 1/100</span>
             </div>
         </header>
 
@@ -458,7 +463,7 @@
             <div class="level-box">
                 <div style="font-size:0.8rem; color:var(--text-sec)">CURRENT LEVEL</div>
                 <div class="level-badge" id="display-level">1</div>
-                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;" id="day-counter">Day 1 / 100</div>
+                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;" id="day-counter"></div>
             </div>
             <div class="streak-box">
                 <div style="font-size:0.8rem; color:var(--text-sec)">STREAK</div>
@@ -560,7 +565,8 @@
             <h2>Today's Tasks</h2>
             <p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p>
             <div id="task-list-container"></div>
-            <button class="btn btn-accent" style="width:100%; margin-top:20px;" onclick="finishDay()">Finish Day & Claim Rewards</button>
+            <div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div>
+            <button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button>
         </div>
     </div>
 
@@ -611,7 +617,7 @@
             <h2>Premium Plans</h2>
             <div class="plan-card">
                 <div style="font-size:1.5rem">🥈 Monthly</div>
-                <div class="plan-price">$9.99</div>
+                <div class="plan-price">₹99</div>
                 <ul class="features-list">
                     <li>Unlimited AI Access</li>
                     <li>Exclusive Themes</li>
@@ -620,15 +626,15 @@
                 <button class="btn btn-sec" onclick="initPayment('monthly')">Subscribe</button>
             </div>
             <div class="plan-card" style="border-color:var(--gold)">
-                <div style="font-size:1.5rem">🏅 Yearly</div>
-                <div class="plan-price">$29.90</div>
+                <div style="font-size:1.5rem">🔥 3 Months</div>
+                <div class="plan-price">₹290</div>
                 <ul class="features-list">
                     <li>All Monthly Features</li>
                     <li>VIP Avatar Frame</li>
                     <li>Early Access to New Features</li>
                     <li>Priority Support</li>
                 </ul>
-                <button class="btn btn-accent" onclick="initPayment('elite')">Subscribe</button>
+                <button class="btn btn-accent" onclick="initPayment('quarterly')">Subscribe</button>
             </div>
         </div>
     </div>
@@ -1013,12 +1019,17 @@
             document.getElementById('xp-fill').style.width = percentage + "%";
             document.getElementById('xp-text').innerText = `${user.xp} / ${xpForNext} XP`;
 
-            // Update day counter in level box
+            // Update day counter in level box – now only the current date
+            const dateObj = new Date();
+            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('day-counter').innerText = formattedDate;
+
+            // Update header with challenge day number (e.g., "Day 3/100")
             const todayStr = new Date().toISOString().split('T')[0];
             const daysDone = user.completedDays.length;
             const isTodayDone = user.completedDays.includes(todayStr);
             const currentDay = isTodayDone ? daysDone : daysDone + 1;
-            document.getElementById('day-counter').innerText = `Day ${currentDay} / 100`;
+            document.getElementById('header-date').innerText = `Day ${currentDay}/100`;
         }
 
         function saveState() {
@@ -1069,19 +1080,28 @@
                 currentDate.setDate(challengeStart.getDate() + (d - 1));
                 const dateStr = currentDate.toISOString().split('T')[0];
 
-                if (user.completedDays.includes(dateStr)) {
+                // Apply colors based on rules:
+                // - Day 1 is always gold (day-start)
+                // - Completed days (except day 1) are green
+                // - All other days are red (locked)
+                if (d === 1) {
+                    div.classList.add('day-start');
+                } else if (user.completedDays.includes(dateStr)) {
                     div.classList.add('day-completed');
-                } else if (currentDate > new Date()) {
-                    div.classList.add('day-locked');
-                } else if (dateStr === today) {
-                    div.classList.add('day-today');
-                    div.onclick = () => {
-                        closeAllModals();
-                        openTasks();
-                    };
                 } else {
-                    div.classList.add('day-future');
+                    div.classList.add('day-locked');
                 }
+
+                // Click handler: only day 1 opens tasks
+                div.onclick = () => {
+                    if (d === 1) {
+                        closeAllModals();      // close calendar
+                        openTasks();            // open today's tasks
+                    } else {
+                        alert(`Day ${d} is locked. Complete day 1 to unlock the next day.`);
+                    }
+                };
+
                 grid.appendChild(div);
             }
         }
@@ -1091,6 +1111,15 @@
         // ===============================
         function openTasks() {
             closeAllModals();
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            
+            // If today is already completed, show message and don't open tasks
+            if (user.completedDays.includes(todayStr)) {
+                alert("You've already completed today's tasks! Come back tomorrow.");
+                return;
+            }
+
             document.getElementById('modal-tasks').classList.remove('hidden');
             
             const today = new Date().toDateString();
@@ -1121,6 +1150,21 @@
                 `;
                 container.appendChild(div);
             });
+
+            // Update finish button state based on completion
+            const allDone = user.tasks.every(t => t.done);
+            const finishBtn = document.getElementById('finish-day-btn');
+            const statusMsg = document.getElementById('tasks-status-message');
+            
+            if (allDone) {
+                finishBtn.disabled = false;
+                finishBtn.innerText = 'Finish Day & Claim Rewards 🎉';
+                statusMsg.innerText = '✅ All tasks complete! Ready to claim.';
+            } else {
+                finishBtn.disabled = true;
+                finishBtn.innerText = 'Complete tasks to claim rewards';
+                statusMsg.innerText = '⚠️ Complete all 5 tasks to finish the day.';
+            }
         }
 
         function toggleTask(index) {
@@ -1251,16 +1295,16 @@
         // ===============================
         function initPayment(plan) {
             const planPrices = {
-                monthly: 999,   // ₹9.99 → 999 paise
-                elite: 2990     // ₹29.90 → 2990 paise
+                monthly: 9900,   // ₹99 = 9900 paise
+                quarterly: 29000  // ₹290 = 29000 paise
             };
 
             const options = {
-                key: "YOUR_KEY_ID", // 🔴 REPLACE WITH YOUR ACTUAL RAZORPAY KEY ID
+                key: "rzp_live_SJ5ukbKmD3GVp8", // 🔴 REPLACE WITH YOUR ACTUAL RAZORPAY KEY ID
                 amount: planPrices[plan],
                 currency: "INR",
                 name: "100DayCore",
-                description: `${plan} Premium Subscription`,
+                description: `${plan === 'monthly' ? 'Monthly' : '3 Months'} Premium Subscription`,
                 image: "https://your-logo-url.com/logo.png", // optional
                 handler: function (response) {
                     alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
@@ -1282,7 +1326,7 @@
         function activatePremium(plan) {
             user.isPremium = true;
             user.premiumPlan = plan;
-            if (plan === "elite") {
+            if (plan === "quarterly") {
                 user.xpMultiplier = 1.5;
                 user.dailyBonusCoins = 20;
             } else {
@@ -1290,7 +1334,7 @@
                 user.dailyBonusCoins = 10;
             }
             saveState();
-            alert(`Premium (${plan}) activated! ⚜️`);
+            alert(`Premium (${plan === 'monthly' ? 'Monthly' : '3 Months'}) activated! ⚜️`);
             closeAllModals();
         }
 
@@ -1484,4 +1528,4 @@
         init();
     </script>
 </body>
-</html>1
+</html>
