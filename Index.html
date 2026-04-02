@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>100DayCore – Smart Tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* ========== EXACT SAME STYLES AS YOUR LATEST HTML (calendar style preserved) ========== */
+        :root {
+            --bg: #0f0f13;
+            --card-bg: #1e1e24;
+            --primary: #8A2BE2;
+            --accent: #00FF7F;
+            --gold: #FFD700;
+            --danger: #FF4500;
+            --text: #ffffff;
+            --text-sec: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        .hidden { display: none !important; }
+        .btn { background: linear-gradient(45deg, var(--primary), #ff00ff); border: none; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+        .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
+        .btn-accent { background: var(--accent); color: #000; }
+        .btn:disabled { opacity: 0.4; pointer-events: none; filter: grayscale(0.6); }
+        .confetti { position: fixed; width: 10px; height: 10px; background-color: var(--gold); opacity: 0.7; top: -10px; border-radius: 2px; animation: fall 4s linear infinite; z-index: 9999; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes coinShine { 0% { filter: drop-shadow(0 0 2px var(--gold)); } 50% { filter: drop-shadow(0 0 8px var(--gold)); } 100% { filter: drop-shadow(0 0 2px var(--gold)); } }
+        @keyframes bgMove { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
+        #onboarding { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle at 30% 30%, #2a0a4a, #0f0f13, #1a1a2e); background-size: 200% 200%; animation: bgMove 15s infinite alternate; padding: 20px; position: relative; overflow: hidden; }
+        .onboarding-card { background: var(--card-bg); padding: 40px; border-radius: 30px; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); animation: cardFloat 5s infinite ease-in-out; position: relative; z-index: 2; }
+        @keyframes cardFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .input-group { margin-bottom: 20px; position: relative; }
+        label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
+        input, select { width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--glass-border); border-radius: 15px; color: white; font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .live-avatar { display: flex; justify-content: center; margin-bottom: 20px; font-size: 4rem; background: var(--glass); border-radius: 50%; width: 100px; height: 100px; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border: 2px solid var(--primary); transition: transform 0.3s; }
+        .live-counter { text-align: center; margin-bottom: 20px; font-size: 0.9rem; color: var(--accent); animation: pulseText 2s infinite; }
+        @keyframes pulseText { 0% { opacity: 0.7; } 50% { opacity: 1; text-shadow: 0 0 5px var(--accent); } 100% { opacity: 0.7; } }
+        .typing::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        .vibe-phrase { text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--gold); font-style: italic; }
+        #app-container { position: relative; min-height: 100vh; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .burger-menu { font-size: 2rem; cursor: pointer; color: var(--accent); transition: transform 0.2s; }
+        .calendar-btn { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; font-size: 0.9rem; }
+        .live-clock { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); font-family: monospace; font-size: 0.9rem; }
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .level-box { background: var(--card-bg); padding: 20px; border-radius: 25px; border: 1px solid var(--glass-border); position: relative; backdrop-filter: blur(5px); }
+        .level-badge { font-size: 3rem; font-weight: 900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .premium-badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; animation: coinShine 2s infinite; }
+        .streak-box { display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--card-bg); border-radius: 25px; border: 1px solid var(--glass-border); padding: 15px; }
+        .streak-count { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
+        .coins-in-streak { font-size: 1.2rem; color: var(--accent); margin-top: 5px; animation: coinShine 2s infinite; }
+        .xp-container { margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); }
+        .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-sec); }
+        .progress-bar { height: 16px; background: var(--bg); border-radius: 20px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); animation: glow 3s infinite; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); background-size: 200% 100%; animation: gradientShift 3s infinite; width: 0%; transition: width 0.5s ease; border-radius: 20px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #000; font-weight: bold; font-size: 0.8rem; }
+        .daily-action { background: linear-gradient(135deg, #2a2a35, #1a1a20); padding: 30px; border-radius: 25px; text-align: center; margin-bottom: 30px; border: 2px solid var(--primary); cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); }
+        .daily-action:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); transform: scale(1.02); }
+        .daily-title { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
+        .ai-section { background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); }
+        .ai-input-area { display: flex; gap: 10px; margin-top: 15px; }
+        .ai-response { margin-top: 15px; padding: 15px; background: var(--bg); border-radius: 15px; font-style: italic; color: var(--text-sec); min-height: 50px; }
+        .quote-box { margin-top: 10px; padding: 10px; background: var(--glass); border-radius: 10px; font-size: 0.9rem; text-align: center; color: var(--accent); cursor: pointer; }
+        .live-feed { background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); }
+        .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--glass-border); font-size: 0.9rem; }
+        .feed-time { color: var(--text-sec); font-size: 0.7rem; }
+        .sidebar { position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: rgba(21,21,26,0.95); backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s ease; padding: 30px; border-right: 1px solid var(--glass-border); overflow-y: auto; }
+        .sidebar.active { left: 0; }
+        .close-sidebar { font-size: 2rem; cursor: pointer; margin-bottom: 30px; display: block; }
+        .menu-item { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: color 0.2s, transform 0.2s; }
+        .menu-item:hover { color: var(--primary); transform: translateX(5px); }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 30px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+        .close-modal:hover { color: var(--danger); }
+        /* Calendar styles (exactly as original) */
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .calendar-progress { background: var(--bg); border-radius: 20px; height: 8px; width: 100%; margin: 10px 0 20px; }
+        .calendar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); border-radius: 20px; transition: width 0.3s; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .day-cell { aspect-ratio: 1; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; background: var(--glass); border: 1px solid var(--glass-border); box-shadow: 0 4px 8px rgba(0,0,0,0.3); position: relative; }
+        .day-completed { background: linear-gradient(145deg, var(--accent), #00cc66); color: #000; border-color: var(--accent); }
+        .day-locked { background: linear-gradient(145deg, #ff4444, #aa0000); color: white; border-color: #ff4444; opacity: 0.8; }
+        .day-start { background: linear-gradient(145deg, var(--gold), #ffaa00); color: #000; border-color: var(--gold); font-weight: 900; }
+        .day-today { border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary); }
+        .task-item { background: var(--bg); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; }
+        .task-check { width: 25px; height: 25px; border: 2px solid var(--text-sec); border-radius: 50%; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+        .task-check.checked { background: var(--accent); border-color: var(--accent); }
+        .task-points { background: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+        .avatar-preview { width: 100px; height: 100px; background: var(--glass); border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border: 2px solid var(--primary); flex-direction: column; line-height: 1.2; transition: box-shadow 0.3s; position: relative; }
+        .avatar-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+        .upload-zone { border: 2px dashed var(--primary); border-radius: 15px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; }
+        .store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .store-card { background: var(--bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); transition: transform 0.2s; }
+        .leaderboard-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--bg); margin-bottom: 10px; border-radius: 15px; }
+        .rank-1 { border: 2px solid var(--gold); }
+        .rank-2 { border: 2px solid silver; }
+        .rank-3 { border: 2px solid #cd7f32; }
+        .plan-card { background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
+        .plan-price { font-size: 2rem; font-weight: 900; color: var(--accent); }
+        .features-list { text-align: left; margin: 15px 0; padding-left: 20px; color: var(--text-sec); }
+        /* step & calorie styles */
+        .step-goal-bar { margin: 10px 0; background: var(--bg); border-radius: 20px; height: 20px; overflow: hidden; }
+        .step-goal-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.3s; }
+        .gauge-container { display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .gauge { position: relative; width: 100px; height: 100px; text-align: center; }
+        .gauge svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .gauge circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .gauge .bg-circle { stroke: var(--glass-border); }
+        .gauge .fill-circle { stroke: var(--accent); transition: stroke-dasharray 0.5s; }
+        .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+        .gauge-label { font-size: 0.7rem; margin-top: 5px; color: var(--text-sec); }
+        .badge-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .badge { background: var(--glass); border-radius: 40px; padding: 8px 15px; font-size: 0.8rem; border: 1px solid var(--gold); color: var(--gold); }
+        .food-item { background: var(--bg); border-radius: 15px; padding: 8px 12px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
+        .step-circle { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .step-number-large { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<!-- ONBOARDING (updated goals) -->
+<div id="onboarding">
+    <div class="onboarding-card">
+        <div class="live-avatar" id="liveAvatar">👤</div>
+        <div class="live-counter">🔥 <span id="joinCount">0</span> people joined today</div>
+        <h2 id="typingTitle" style="text-align:center; margin-bottom:20px;"></h2>
+        <div class="input-group"><label>✨ Name</label><input type="text" id="inp-name" placeholder="Enter your name"></div>
+        <div class="input-group"><label>📧 Email</label><input type="email" id="inp-email" placeholder="Enter email"></div>
+        <div class="input-group"><label>🎂 Age</label><input type="number" id="inp-age" placeholder="Age"></div>
+        <div class="input-group"><label>⚖️ Weight (kg)</label><input type="number" id="inp-weight" placeholder="Weight in kg" step="0.1"></div>
+        <div class="input-group"><label>📏 Height (cm)</label><input type="number" id="inp-height" placeholder="Height in cm"></div>
+        <div class="input-group"><label>🎯 Goal</label><select id="inp-goal">
+            <option value="weightGain">💪 Weight Gain</option>
+            <option value="weightLoss">🔥 Weight Loss</option>
+            <option value="yogaZumba">🧘 Yoga / Zumba</option>
+            <option value="healthyLifestyle">🌿 Healthy Lifestyle</option>
+        </select></div>
+        <div class="input-group"><label>🧑 Gender</label><select id="inp-gender"><option value="Male">🧑 Male</option><option value="Female">👧 Female</option><option value="Other">🧒 Other</option></select></div>
+        <button class="btn" style="width:100%" onclick="saveProfile()" id="startBtn">Start Journey</button>
+        <div class="vibe-phrase" id="vibePhrase"></div>
+    </div>
+</div>
+
+<!-- MAIN APP (same as before) -->
+<div id="app-container" class="hidden">
+    <header>
+        <div class="burger-menu" onclick="toggleSidebar()">☰</div>
+        <div style="font-size:1.5rem; font-weight:900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100DayCore</div>
+        <div style="display: flex; gap: 10px;">
+            <div class="live-clock" id="liveClock">--:--:--</div>
+            <div class="calendar-btn" onclick="openCalendar()"><span>📅</span> <span id="header-date">Day 1/100</span></div>
+        </div>
+    </header>
+
+    <div class="stats-container">
+        <div class="level-box"><div style="font-size:0.8rem; color:var(--text-sec)">CURRENT LEVEL</div><div class="level-badge" id="display-level">1</div><div style="color:var(--accent); font-size:0.9rem; margin-top:5px;" id="day-counter"></div><div id="premiumBadge" class="premium-badge hidden">⚜️ PREMIUM</div></div>
+        <div class="streak-box"><div style="font-size:0.8rem; color:var(--text-sec)">STREAK</div><div class="streak-count" id="display-streak">0 🔥</div><div class="coins-in-streak">🪙 <span id="display-coins">0</span></div></div>
+    </div>
+
+    <div class="xp-container"><div class="xp-text"><span>🚀 XP</span><span id="xp-text">0 / 100</span></div><div class="progress-bar"><div class="progress-fill" id="xp-fill"></div></div></div>
+
+    <div class="step-goal-bar"><div class="step-goal-fill" id="stepGoalFill"></div></div>
+    <div style="text-align:center; margin-bottom:15px;">👟 <span id="stepCountDisplay">0</span> / 10000 steps</div>
+
+    <div class="daily-action" onclick="openTasks()"><div class="daily-title">Complete Today's Tasks</div><div style="color:var(--text-sec); font-size:0.9rem;">Click to view and finish tasks</div></div>
+
+    <div class="ai-section"><h3 style="color:var(--primary)">🤖 AI Coach</h3><div class="ai-response" id="ai-output">Hello! I am your AI Coach. Ask me anything.</div><div class="ai-input-area"><input type="text" id="ai-input" placeholder="Ask for advice..."><button class="btn" onclick="askAI()">Send</button></div><div class="quote-box" id="quoteBox" onclick="refreshQuote()">✨ "The only bad workout is the one that didn't happen."</div></div>
+
+    <div class="live-feed"><h3 style="color:var(--accent); margin-bottom:10px;">🔥 Live Activity</h3><div id="feedContainer"></div><div style="margin-top:10px; font-size:0.8rem; color:var(--text-sec); display: flex; justify-content: space-between;"><span>👥 <span id="onlineCount">128</span> online</span><span>⚜️ <span id="premiumOnline">34</span> premium</span></div></div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <span class="close-sidebar" onclick="toggleSidebar()">×</span>
+    <div class="menu-item" onclick="showProfile()">👤 Profile</div>
+    <div class="menu-item" onclick="showStats()">📊 Stats & Progress</div>
+    <div class="menu-item" onclick="showLeaderboard()">🏆 Leaderboard</div>
+    <div class="menu-item" onclick="showBitmoji()">😎 Bitmoji</div>
+    <div class="menu-item" onclick="showStore()">🛒 Store</div>
+    <div class="menu-item" onclick="showPremium()">⚜️ Premium</div>
+    <div class="menu-item" style="margin-top:50px; color:var(--danger)" onclick="resetData()">❌ Reset Data</div>
+</div>
+
+<!-- MODALS (all original) -->
+<div id="modal-profile" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Edit Profile</h2><div class="input-group"><label>Name</label><input type="text" id="edit-name"></div><div class="input-group"><label>Email</label><input type="email" id="edit-email"></div><div class="input-group"><label>Age</label><input type="number" id="edit-age"></div><div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-weight" step="0.1"></div><div class="input-group"><label>Height (cm)</label><input type="number" id="edit-height"></div><div class="input-group"><label>Goal</label><select id="edit-goal"><option value="weightGain">Weight Gain</option><option value="weightLoss">Weight Loss</option><option value="yogaZumba">Yoga/Zumba</option><option value="healthyLifestyle">Healthy Lifestyle</option></select></div><div class="input-group"><label>Gender</label><select id="edit-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div><button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button></div></div>
+
+<div id="modal-calendar" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>100-Day Challenge</h2><div class="calendar-header"><span>🔥 Streak: <span id="calendar-streak">0</span> days</span><span>📅 <span id="calendar-completed">0</span>/100</span></div><div class="calendar-progress"><div class="calendar-progress-fill" id="calendar-progress-fill" style="width:0%"></div></div><div class="calendar-pagination" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;"><button class="btn btn-sec" id="calendar-prev" onclick="changeCalendarPage(-1)">◀ Prev</button><span id="calendar-page-indicator">Page 1/3</span><button class="btn btn-sec" id="calendar-next" onclick="changeCalendarPage(1)">Next ▶</button></div><div class="calendar-grid" id="calendar-grid"></div></div></div>
+
+<div id="modal-tasks" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2 id="tasks-modal-title">Today's Tasks</h2><p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p><div id="task-bitmoji" style="font-size:4rem; text-align:center; margin:10px 0; background:var(--glass); border-radius:20px; padding:10px;"></div><div id="task-list-container"></div><div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div><button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button></div></div>
+
+<div id="modal-leaderboard" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Leaderboard</h2><div id="leaderboard-list" style="margin-top:20px"></div></div></div>
+
+<div id="modal-bitmoji" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Your Bitmoji</h2><div class="avatar-preview" id="bitmoji-preview" style="position: relative; width: 120px; height: 120px; margin: 0 auto 20px;"><img id="avatar-base" src="" alt="base" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;"><img id="avatar-shirt" class="avatar-layer" src="" alt="shirt" style="z-index:2;"><img id="avatar-jacket" class="avatar-layer" src="" alt="jacket" style="z-index:3;"><img id="avatar-pants" class="avatar-layer" src="" alt="pants" style="z-index:4;"><img id="avatar-shoes" class="avatar-layer" src="" alt="shoes" style="z-index:5;"><img id="avatar-glasses" class="avatar-layer" src="" alt="glasses" style="z-index:6;"></div><div style="text-align:center; margin-bottom:20px;"><span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span><span style="margin-left:20px;">📦 Crates: <span id="bitmoji-crates">0</span></span></div><h3>Upload Your Own PNGs</h3><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;"><div class="upload-zone" id="drop-body" data-category="body" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧍 Body<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shirt" data-category="shirt" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👕 Shirt<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-jacket" data-category="jacket" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧥 Jacket<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-pants" data-category="pants" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👖 Pants<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shoes" data-category="shoes" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👟 Shoes<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-glasses" data-category="glasses" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👓 Glasses<br><small>Drag PNG here</small></div></div><h3>Inventory</h3><div class="bitmoji-inventory" id="bitmoji-inventory"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="claimFreeReward()">🎁 Claim Daily Reward</button><button class="btn" style="margin-top:10px; width:100%;" onclick="saveOutfit()">💾 Save Outfit</button></div></div>
+
+<div id="modal-store" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Store</h2><div style="display: flex; justify-content: space-between; margin: 10px 0;"><span style="color:var(--gold)">🪙 Coins: <span id="store-coins">0</span></span><span>📦 Crates: <span id="store-crates">0</span></span></div><div class="category-tabs" id="category-tabs"></div><div class="store-grid" id="store-items"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="openCrate()">📦 Open Crate (Cost: 1 Crate)</button></div></div>
+
+<div id="modal-premium" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Premium Plans</h2><div id="premiumStatus" style="text-align:center; margin-bottom:20px;"></div><div class="plan-card"><div style="font-size:1.5rem">🥈 Monthly</div><div class="plan-price">₹99</div><ul class="features-list"><li>1.2x XP Multiplier</li><li>+10 Daily Bonus Coins</li><li>Exclusive Themes</li><li>Unlimited AI Access</li></ul><button class="btn btn-sec" onclick="initPayment('monthly')" id="monthlyBtn">Subscribe</button></div><div class="plan-card" style="border-color:var(--gold)"><div style="font-size:1.5rem">🔥 3 Months</div><div class="plan-price">₹290</div><ul class="features-list"><li>1.5x XP Multiplier</li><li>+20 Daily Bonus Coins</li><li>All Monthly Features</li><li>VIP Avatar Frame</li><li>Early Access</li></ul><button class="btn btn-accent" onclick="initPayment('quarterly')" id="quarterlyBtn">Subscribe</button></div><div class="plan-card" style="border-color:var(--accent)"><div style="font-size:1.5rem">⚡ 7 Days Trial</div><div class="plan-price">₹1</div><ul class="features-list"><li>1.2x XP Multiplier</li><li>+10 Daily Bonus Coins</li><li>Exclusive Themes</li><li>Unlimited AI Access</li><li>Valid for 7 days</li></ul><button class="btn" onclick="initPayment('weekly')" id="weeklyBtn">Try for ₹1</button></div></div></div>
+
+<div id="modal-stats" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>📊 Stats & Progress</h2><div class="step-circle"><div>👟 TODAY'S STEPS</div><div class="step-number-large" id="stats-step-count">0</div><button class="btn-sec" onclick="requestStepPermission()" style="margin-top:8px;">Enable Step Tracking</button></div><div class="gauge-container" id="gauge-container"></div><button class="btn" style="width:100%; margin: 10px 0;" onclick="openFoodLogModal()">🍽️ Log Meal with Camera</button><div id="stats-extra" style="margin-top:20px;"></div><div class="badge-list" id="badgeContainer"></div></div></div>
+
+<div id="modal-food" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🍽️ Log Meal</h2><div class="input-group"><label>Food name (or auto-detect)</label><input type="text" id="food-name" placeholder="e.g., Pizza"></div><div class="input-group"><label>Or take a photo</label><input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="analyzeFoodImage(this)"></div><div id="imagePreview"></div><div class="input-group"><label>Calories (auto-filled)</label><input type="number" id="food-calories" placeholder="Calories"></div><button class="btn" onclick="addFoodEntry()">Add Meal</button><h3>Today's Meals</h3><div id="food-list-container"></div><div><strong>Total: <span id="total-food-calories">0</span> kcal</strong></div></div></div>
+
+<script>
+    // ======================= NEW GOAL TASKS (28-day cycle, exactly as provided) =======================
+    const goalTasksData = {
+        weightGain: {
+            1: ["Bench press + incline press", "Train triceps (pushdowns/dips)", "Eat heavy breakfast", "Drink 2.5–3L water", "Eat post-workout meal"],
+            2: ["Lat pulldown + rows", "Biceps curls", "Add 2 bananas", "Track workout weights", "Sleep 7–8 hours"],
+            3: ["Squats + leg press", "Train calves", "Eat extra rice/roti", "Push near failure", "Drink milk"],
+            4: ["Shoulder press + chest", "Triceps isolation", "Add peanut butter", "Control reps", "Eat 5 meals"],
+            5: ["Back + rear delts", "Biceps curls focus", "Eat 4–6 eggs", "Track strength", "Drink water"],
+            6: ["Heavy squats", "Hamstring curls", "Increase food portion", "Stretch after workout", "Sleep well"],
+            7: ["Eat in calorie surplus", "Drink milk twice", "Eat 5–6 meals", "Check body weight", "Sleep 8+ hours"],
+            8: ["Bench press progression", "Shoulder raises", "Add banana shake", "Eat post-workout meal", "Stay hydrated"],
+            9: ["Deadlift + rows", "Biceps curls", "Add healthy fats", "Track reps", "Sleep properly"],
+            10: ["Squats + lunges", "Calf raises", "Eat more carbs", "Push intensity", "Drink milk"],
+            11: ["Incline press focus", "Triceps dips", "Add peanut butter", "Control tempo", "Eat 5 meals"],
+            12: ["Lat pulldown + curls", "Rear delts", "Eat eggs", "Track weights", "Hydrate"],
+            13: ["Leg press heavy", "Hamstring work", "Increase calories", "Stretch", "Sleep well"],
+            14: ["Eat surplus calories", "Drink milk", "Eat protein meals", "Relax muscles", "Sleep 8 hours"],
+            15: ["Bench press + shoulders", "Triceps workout", "Add banana shake", "Eat post-workout meal", "Hydrate"],
+            16: ["Rows + pulldown", "Biceps curls", "Add eggs", "Track progress", "Sleep well"],
+            17: ["Squats + leg press", "Calves training", "Eat extra carbs", "Push hard", "Drink milk"],
+            18: ["Incline press", "Triceps dips", "Add peanut butter", "Control reps", "Eat 5 meals"],
+            19: ["Back + rear delts", "Biceps curls", "Eat protein meals", "Track weights", "Drink water"],
+            20: ["Heavy squats", "Hamstring curls", "Increase calories", "Stretch", "Sleep well"],
+            21: ["Eat surplus calories", "Drink milk twice", "Eat 5–6 meals", "Check body weight", "Sleep 8 hours"],
+            22: ["Bench press progression", "Shoulder raises", "Add banana shake", "Eat post-workout meal", "Hydrate"],
+            23: ["Deadlift + rows", "Biceps curls", "Add healthy fats", "Track reps", "Sleep properly"],
+            24: ["Squats + lunges", "Calf raises", "Eat more carbs", "Push intensity", "Drink milk"],
+            25: ["Incline press", "Triceps workout", "Add peanut butter", "Control tempo", "Eat 5 meals"],
+            26: ["Lat pulldown + curls", "Rear delts", "Eat eggs", "Track weights", "Hydrate"],
+            27: ["Leg press heavy", "Hamstring work", "Increase calories", "Stretch", "Sleep well"],
+            28: ["Eat in calorie surplus", "Drink milk twice", "Eat 5–6 meals", "Review progress", "Sleep 8+ hours"]
+        },
+        weightLoss: {
+            1: ["Bench press + incline press", "Triceps workout", "15 min cardio (treadmill/walk)", "Eat high-protein meals", "Drink 2–3L water"],
+            2: ["Lat pulldown + rows", "Biceps curls", "15 min cardio", "Avoid junk food", "Sleep 7–8 hours"],
+            3: ["Squats + leg press", "Calf raises", "20 min cardio", "Reduce carb portion", "Drink water"],
+            4: ["Shoulder press + chest", "Triceps isolation", "15 min cardio", "Eat small portions", "Stay consistent"],
+            5: ["Back + rear delts", "Biceps workout", "15 min cardio", "Eat protein-rich meals", "Hydrate"],
+            6: ["Squats + lunges", "Hamstring curls", "20 min cardio", "Avoid sugary drinks", "Sleep well"],
+            7: ["Walk 8–10k steps", "Eat clean meals", "Stay in calorie deficit", "Drink water", "Sleep 8 hours"],
+            8: ["Bench press progression", "Shoulder raises", "20 min cardio", "Eat high protein", "Hydrate"],
+            9: ["Deadlift + rows", "Biceps curls", "15 min cardio", "Avoid junk", "Sleep well"],
+            10: ["Squats + press", "Calves", "20 min cardio", "Reduce carbs", "Drink water"],
+            11: ["Incline press", "Triceps dips", "15 min cardio", "Eat small meals", "Stay consistent"],
+            12: ["Lat pulldown + curls", "Rear delts", "15 min cardio", "Eat protein", "Hydrate"],
+            13: ["Leg press", "Hamstrings", "20 min cardio", "Reduce carbs", "Sleep well"],
+            14: ["Walk 10k steps", "Eat clean", "Stay in deficit", "Drink water", "Rest well"],
+            15: ["Bench + shoulders", "Triceps workout", "20 min cardio", "Eat high protein", "Hydrate"],
+            16: ["Rows + pulldown", "Biceps curls", "15 min cardio", "Avoid junk", "Sleep well"],
+            17: ["Squats + lunges", "Calves", "20 min cardio", "Reduce carbs", "Drink water"],
+            18: ["Incline press", "Triceps dips", "15 min cardio", "Eat small meals", "Stay consistent"],
+            19: ["Back + rear delts", "Biceps workout", "15 min cardio", "Eat protein", "Hydrate"],
+            20: ["Heavy squats", "Hamstrings", "20 min cardio", "Avoid sugar", "Sleep well"],
+            21: ["Walk 10k steps", "Eat clean meals", "Stay in deficit", "Drink water", "Sleep 8 hours"],
+            22: ["Bench press progression", "Shoulder raises", "20 min cardio", "Eat protein", "Hydrate"],
+            23: ["Deadlift + rows", "Biceps curls", "15 min cardio", "Avoid junk", "Sleep well"],
+            24: ["Squats + lunges", "Calves", "20 min cardio", "Reduce carbs", "Drink water"],
+            25: ["Incline press", "Triceps workout", "15 min cardio", "Eat small meals", "Stay consistent"],
+            26: ["Lat pulldown + curls", "Rear delts", "15 min cardio", "Eat protein", "Hydrate"],
+            27: ["Leg press", "Hamstrings", "20 min cardio", "Reduce carbs", "Sleep well"],
+            28: ["Walk 10k steps", "Eat clean", "Review progress", "Stay in deficit", "Sleep properly"]
+        },
+        yogaZumba: {
+            1: ["Zumba – 20 mins (high energy)", "Surya Namaskar – 6 rounds", "Bhujangasana + Upward Dog", "Eat light clean meals", "Drink 2–3L water"],
+            2: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Child’s pose", "Walk 15–20 mins", "Sleep 7–8 hours"],
+            3: ["Zumba – 25 mins (leg intense moves)", "Surya Namaskar – 8 rounds", "Chair pose + Warrior 1", "Reduce junk food", "Stay hydrated"],
+            4: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Plank + Chaturanga", "Eat small clean meals", "Stay consistent"],
+            5: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Forward bend", "Walk 20 mins", "Hydrate"],
+            6: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior flow", "Avoid sugar", "Sleep well"],
+            7: ["Light yoga stretching", "Walk 8–10k steps", "Eat clean food", "Drink water", "Deep breathing"],
+            8: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Plank hold", "Eat high-fiber food", "Hydrate"],
+            9: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Cobra", "Walk 25 mins", "Sleep well"],
+            10: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Eat light dinner", "Drink water"],
+            11: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Plank + Chaturanga", "Eat clean", "Stay consistent"],
+            12: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Forward bend", "Walk 20 mins", "Hydrate"],
+            13: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Avoid junk", "Sleep well"],
+            14: ["Full body yoga stretch", "Walk 10k steps", "Eat clean", "Drink water", "Deep breathing"],
+            15: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Plank hold", "Eat light meals", "Hydrate"],
+            16: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Cobra", "Walk 25 mins", "Sleep well"],
+            17: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Eat clean", "Drink water"],
+            18: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Plank + Chaturanga", "Eat small meals", "Stay consistent"],
+            19: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Forward bend", "Walk 20 mins", "Hydrate"],
+            20: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Avoid sugar", "Sleep well"],
+            21: ["Light yoga stretching", "Walk 10k steps", "Eat clean", "Drink water", "Deep breathing"],
+            22: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Plank hold", "Eat fiber-rich food", "Hydrate"],
+            23: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Cobra", "Walk 25 mins", "Sleep well"],
+            24: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Eat light dinner", "Drink water"],
+            25: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Plank + Chaturanga", "Eat clean", "Stay consistent"],
+            26: ["Zumba – 20 mins", "Surya Namaskar – 6 rounds", "Downward Dog + Forward bend", "Walk 20 mins", "Hydrate"],
+            27: ["Zumba – 25 mins", "Surya Namaskar – 8 rounds", "Chair pose + Warrior", "Avoid junk", "Sleep well"],
+            28: ["Full body stretching", "Walk 10k steps", "Review progress", "Stay hydrated", "Deep breathing"]
+        },
+        healthyLifestyle: {
+            1: ["Eat a balanced breakfast (carbs + protein + fats)", "Drink 2–3L water", "Add 1 fruit", "Eat home-cooked lunch", "Sleep on time"],
+            2: ["Include protein in all meals", "Add vegetables to lunch/dinner", "Avoid junk food", "Eat dinner before 9 PM", "Stay hydrated"],
+            3: ["Eat whole grains (roti/brown rice)", "Add nuts (almonds/walnuts)", "Eat fruit snack", "Avoid sugary drinks", "Sleep 7–8 hours"],
+            4: ["Eat light breakfast", "Add salad with meals", "Drink enough water", "Avoid overeating", "Stay consistent"],
+            5: ["Include dairy (milk/curd)", "Eat balanced lunch", "Add fruit", "Avoid fried food", "Hydrate"],
+            6: ["Eat small frequent meals", "Add protein snack", "Drink water regularly", "Eat early dinner", "Sleep well"],
+            7: ["Eat clean meals only", "Drink plenty of water", "Avoid junk completely", "Add fruits + veggies", "Relax digestion"],
+            8: ["Eat protein breakfast", "Add vegetables", "Drink water", "Avoid sugar", "Stay consistent"],
+            9: ["Eat whole grains", "Add nuts", "Eat fruit", "Avoid junk", "Sleep well"],
+            10: ["Eat balanced meals", "Add salad", "Hydrate", "Avoid overeating", "Stay active"],
+            11: ["Include dairy", "Eat home food", "Add fruit", "Avoid fried food", "Drink water"],
+            12: ["Eat small meals", "Add protein snack", "Hydrate", "Eat early dinner", "Sleep well"],
+            13: ["Eat clean meals", "Add vegetables", "Drink water", "Avoid sugar", "Stay consistent"],
+            14: ["Eat light meals", "Add fruits", "Drink water", "Avoid junk", "Relax"],
+            15: ["Eat protein breakfast", "Add vegetables", "Hydrate", "Avoid sugar", "Stay consistent"],
+            16: ["Eat whole grains", "Add nuts", "Eat fruit", "Avoid junk", "Sleep well"],
+            17: ["Eat balanced meals", "Add salad", "Hydrate", "Avoid overeating", "Stay active"],
+            18: ["Include dairy", "Eat home food", "Add fruit", "Avoid fried food", "Drink water"],
+            19: ["Eat small meals", "Add protein snack", "Hydrate", "Eat early dinner", "Sleep well"],
+            20: ["Eat clean meals", "Add vegetables", "Drink water", "Avoid sugar", "Stay consistent"],
+            21: ["Eat clean meals", "Add fruits", "Drink water", "Avoid junk", "Relax digestion"],
+            22: ["Eat protein breakfast", "Add vegetables", "Hydrate", "Avoid sugar", "Stay consistent"],
+            23: ["Eat whole grains", "Add nuts", "Eat fruit", "Avoid junk", "Sleep well"],
+            24: ["Eat balanced meals", "Add salad", "Hydrate", "Avoid overeating", "Stay active"],
+            25: ["Include dairy", "Eat home food", "Add fruit", "Avoid fried food", "Drink water"],
+            26: ["Eat small meals", "Add protein snack", "Hydrate", "Eat early dinner", "Sleep well"],
+            27: ["Eat clean meals", "Add vegetables", "Drink water", "Avoid sugar", "Stay consistent"],
+            28: ["Eat light meals", "Add fruits", "Drink water", "Review diet habits", "Relax"]
+        }
+    };
+
+    function getTasksForDay(goal, dayNumber) {
+        // dayNumber from 1 to 100, repeat every 28 days
+        let cycleDay = ((dayNumber - 1) % 28) + 1;
+        let tasksArray = goalTasksData[goal]?.[cycleDay];
+        if (!tasksArray) {
+            // fallback
+            return Array(5).fill("Complete your daily habit");
+        }
+        // ensure exactly 5 tasks (the data already has 5)
+        return tasksArray.slice(0,5);
+    }
+
+    // ======================= STEP & CALORIE (same as before) =======================
+    let stepCount = 0;
+    let lastAcceleration = null;
+    let stepThreshold = 1.2;
+    let lastStepTime = 0;
+    let stepCooldown = 300;
+
+    function getTodayStr() { return new Date().toISOString().split('T')[0]; }
+    function loadSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepCount = stepsData[getTodayStr()] || 0; updateStepUI(); }
+    function saveSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepsData[getTodayStr()] = stepCount; localStorage.setItem('stepHistory', JSON.stringify(stepsData)); updateStepUI(); checkStepBadge(); }
+    function updateStepUI() { document.getElementById('stepCountDisplay').innerText = stepCount; let percent = Math.min((stepCount/10000)*100,100); document.getElementById('stepGoalFill').style.width = percent+'%'; if(document.getElementById('stats-step-count')) document.getElementById('stats-step-count').innerText = stepCount; }
+    function requestStepPermission() { if(typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') { DeviceMotionEvent.requestPermission().then(()=>{ window.addEventListener('devicemotion', handleMotion); alert('Step tracking enabled!'); }); } else { window.addEventListener('devicemotion', handleMotion); alert('Step tracking active'); } }
+    function handleMotion(e) { let acc = e.accelerationIncludingGravity; if(!acc) return; let mag = Math.sqrt((acc.x||0)**2+(acc.y||0)**2+(acc.z||0)**2); let now = Date.now(); if(mag>stepThreshold && now-lastStepTime>stepCooldown) { stepCount++; saveSteps(); lastStepTime=now; if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); } }
+
+    function calculateBMR(w,h,a,g) { let bmr = 10*w+6.25*h-5*a; if(g==='Male') bmr+=5; else if(g==='Female') bmr-=161; return Math.round(bmr); }
+    function calculateActiveCalories(steps, w) { if(!w||steps===0) return 0; let dur = (steps*0.762)/1.4/3600; return Math.round(3.8*w*dur); }
+    function getFoodCaloriesForToday() { let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; return (foodLog[getTodayStr()]||[]).reduce((s,e)=>s+e.calories,0); }
+
+    const foodDB = { "apple":95, "banana":105, "pizza":285, "burger":550, "salad":150, "rice":200, "chicken":335, "pasta":350 };
+    function analyzeFoodImage(input) {
+        let file = input.files[0];
+        if(!file) return;
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:20px;">`;
+            let fakeName = file.name.split('.')[0].replace(/[0-9]/g,'').slice(0,10) || "meal";
+            let lower = fakeName.toLowerCase();
+            let calories = foodDB[lower] || Math.floor(Math.random()*300)+100;
+            document.getElementById('food-name').value = fakeName;
+            document.getElementById('food-calories').value = calories;
+            addFeedItemManually(`📸 AI guessed ${fakeName} (${calories} kcal)`, true);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function addFoodEntry() {
+        let name = document.getElementById('food-name').value.trim();
+        let cal = parseInt(document.getElementById('food-calories').value);
+        if(!name || isNaN(cal)) return alert("Enter food name or take a photo first");
+        let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {};
+        let today = getTodayStr();
+        if(!foodLog[today]) foodLog[today]=[];
+        foodLog[today].push({name, calories:cal, timestamp:Date.now()});
+        localStorage.setItem('foodLog', JSON.stringify(foodLog));
+        document.getElementById('food-name').value = '';
+        document.getElementById('food-calories').value = '';
+        document.getElementById('imagePreview').innerHTML = '';
+        document.getElementById('cameraInput').value = '';
+        renderFoodList();
+        if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal();
+        addFeedItemManually(`🍽️ Logged ${name} (${cal} kcal)`, true);
+        checkFoodBadge();
+    }
+    function renderFoodList() { let entries = (JSON.parse(localStorage.getItem('foodLog'))||{})[getTodayStr()]||[]; let container = document.getElementById('food-list-container'); container.innerHTML = ''; entries.forEach((e,i)=>{ let div = document.createElement('div'); div.className='food-item'; div.innerHTML=`<span><strong>${e.name}</strong> - ${e.calories} kcal</span><button class="btn-sec" onclick="removeFoodEntry(${i})">🗑️</button>`; container.appendChild(div); }); document.getElementById('total-food-calories').innerText = getFoodCaloriesForToday(); }
+    function removeFoodEntry(idx) { let foodLog = JSON.parse(localStorage.getItem('foodLog'))||{}; let today = getTodayStr(); if(foodLog[today]) foodLog[today].splice(idx,1); localStorage.setItem('foodLog', JSON.stringify(foodLog)); renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+
+    let userBadges = JSON.parse(localStorage.getItem('userBadges')) || [];
+    function checkStepBadge() { if(stepCount>=10000 && !userBadges.includes('10k Steps')) { userBadges.push('10k Steps'); saveBadges(); addFeedItemManually(`🏅 New badge: 10k Steps!`, true); confetti(); } }
+    function checkFoodBadge() { let total = getFoodCaloriesForToday(); if(total>=2000 && !userBadges.includes('2k Calories')) { userBadges.push('2k Calories'); saveBadges(); addFeedItemManually(`🏅 New badge: 2k Calories!`, true); confetti(); } }
+    function saveBadges() { localStorage.setItem('userBadges', JSON.stringify(userBadges)); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+
+    function renderStatsModal() {
+        let w=user.weight, h=user.height, a=user.age, g=user.gender;
+        let bmr = calculateBMR(w,h,a,g);
+        let active = calculateActiveCalories(stepCount, w);
+        let food = getFoodCaloriesForToday();
+        document.getElementById('stats-step-count').innerText = stepCount;
+        let container = document.getElementById('gauge-container');
+        container.innerHTML = '';
+        function createGauge(label,val,max,unit,color){ let p=Math.min((val/max)*100,100); let circ=2*Math.PI*40; let dash=(p/100)*circ; let div=document.createElement('div'); div.className='gauge'; div.innerHTML=`<svg viewBox="0 0 100 100"><circle class="bg-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none"></circle><circle class="fill-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none" stroke="${color}" stroke-dasharray="${circ}" stroke-dashoffset="${circ-dash}"></circle></svg><div class="gauge-value">${val}</div><div class="gauge-label">${label}<br>${unit}</div>`; return div; }
+        container.appendChild(createGauge('BMR',bmr,3000,'kcal','#00FF7F'));
+        container.appendChild(createGauge('Active',active,1000,'kcal','#FFD700'));
+        container.appendChild(createGauge('Food',food,2000,'kcal','#FF4500'));
+        document.getElementById('stats-extra').innerHTML = `<p>🔥 Streak: ${user.streak}</p><p>🏆 Level: ${user.level}</p><p>📅 Days: ${user.completedDays.length}/100</p><p>🪙 Coins: ${user.coins}</p>`;
+        document.getElementById('badgeContainer').innerHTML = userBadges.map(b=>`<div class="badge">🏅 ${b}</div>`).join('') || '<div>No badges yet. Walk 10k steps or eat 2000 cal!</div>';
+    }
+
+    function openFoodLogModal() { closeAllModals(); renderFoodList(); document.getElementById('modal-food').classList.remove('hidden'); }
+
+    // ======================= CORE USER & TASKS (updated to use new goal tasks) =======================
+    let user = JSON.parse(localStorage.getItem('levelUpUser')) || {
+        name: "", email: "", age: 0, weight: 70, height: 170, goal: "weightGain", gender: "Male",
+        xp: 0, level: 1, coins: 100, streak: 0, completedDays: [], tasks: [],
+        inventory: [], crates: 0, isPremium: false, premiumPlan: null,
+        equipped: { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }
+    };
+    if (!user.weight) user.weight = 70;
+    if (!user.height) user.height = 170;
+    if (!user.inventory) user.inventory = [];
+    if (!user.crates) user.crates = 0;
+    if (!user.equipped) user.equipped = { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null };
+    if (!user.completedDays) user.completedDays = [];
+
+    function saveState() { localStorage.setItem('levelUpUser', JSON.stringify(user)); updateUI(); }
+    function updateUI() {
+        document.getElementById('display-level').innerText = user.level;
+        document.getElementById('display-streak').innerText = user.streak + " 🔥";
+        document.getElementById('display-coins').innerText = user.coins;
+        let xpNeeded = user.level * 100;
+        let percent = Math.min((user.xp / xpNeeded) * 100, 100);
+        document.getElementById('xp-fill').style.width = percent + "%";
+        document.getElementById('xp-text').innerText = `${user.xp} / ${xpNeeded} XP`;
+        let today = getTodayStr();
+        let daysDone = user.completedDays.length;
+        let currentDay = user.completedDays.includes(today) ? daysDone : daysDone + 1;
+        document.getElementById('header-date').innerText = `Day ${currentDay}/100`;
+        if (user.isPremium) document.getElementById('premiumBadge').classList.remove('hidden');
+        else document.getElementById('premiumBadge').classList.add('hidden');
+        document.getElementById('bitmoji-coins').innerText = user.coins;
+        document.getElementById('bitmoji-crates').innerText = user.crates;
+        document.getElementById('store-coins').innerText = user.coins;
+        document.getElementById('store-crates').innerText = user.crates;
+    }
+
+    let joinCount = parseInt(localStorage.getItem('globalJoinCount') || '0');
+    document.getElementById('joinCount').innerText = joinCount;
+
+    function confetti() { for (let i=0;i<40;i++){ let c=document.createElement('div'); c.classList.add('confetti'); c.style.left=Math.random()*100+'%'; c.style.animationDelay=Math.random()*2+'s'; document.body.appendChild(c); setTimeout(()=>c.remove(),4000); } }
+
+    function saveProfile() {
+        user.name = document.getElementById('inp-name').value;
+        user.email = document.getElementById('inp-email').value;
+        user.age = parseInt(document.getElementById('inp-age').value);
+        user.weight = parseFloat(document.getElementById('inp-weight').value);
+        user.height = parseFloat(document.getElementById('inp-height').value);
+        user.goal = document.getElementById('inp-goal').value;
+        user.gender = document.getElementById('inp-gender').value;
+        if (!user.name) return alert("Fill all fields");
+        saveState();
+        joinCount++; localStorage.setItem('globalJoinCount', joinCount);
+        confetti();
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('app-container').classList.remove('hidden');
+        updateUI(); loadSteps(); startLiveUpdates();
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') {
+            window.addEventListener('devicemotion', handleMotion);
+        }
+        addFeedItemManually(`${user.name} joined the challenge!`, true);
+    }
+
+    function addFeedItemManually(message, isUser = false) {
+        const feed = document.getElementById('feedContainer');
+        const time = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        const newItem = document.createElement('div');
+        newItem.classList.add('feed-item');
+        newItem.innerHTML = `<span class="feed-time">${time}</span> <span>${isUser ? user.name+': ' : ''}${message}</span>`;
+        feed.prepend(newItem);
+        if (feed.children.length > 8) feed.removeChild(feed.lastChild);
+    }
+
+    function startLiveUpdates() {
+        setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000);
+        setInterval(refreshQuote, 10000);
+        refreshQuote();
+        setInterval(() => {
+            const acts = ["completed a task","leveled up","opened a crate","earned 200 XP","hit streak"];
+            const names = ["Alex","Sarah","Mike","Emma","Leo"];
+            addFeedItemManually(`${names[Math.floor(Math.random()*names.length)]} ${acts[Math.floor(Math.random()*acts.length)]}`);
+        }, 15000);
+        updateOnlineCounts();
+        setInterval(updateOnlineCounts, 20000);
+    }
+    function refreshQuote() { let q=["The only bad workout is the one that didn't happen.","Small progress is still progress.","You are stronger than you think.","Discipline > Motivation"]; document.getElementById('quoteBox').innerText='✨ "'+q[Math.floor(Math.random()*q.length)]+'"'; }
+    function updateOnlineCounts() { document.getElementById('onlineCount').innerText = Math.floor(Math.random()*200)+100; document.getElementById('premiumOnline').innerText = Math.floor(Math.random()*50)+20; }
+
+    // TASKS using new day-specific tasks
+    function openTasks() {
+        let today = getTodayStr();
+        if (user.completedDays.includes(today)) return alert("Already completed today!");
+        closeAllModals();
+        document.getElementById('modal-tasks').classList.remove('hidden');
+        let currentDay = user.completedDays.length + 1;
+        document.getElementById('tasks-modal-title').innerText = `Day ${currentDay} Tasks`;
+        document.getElementById('task-date-display').innerText = new Date().toDateString();
+        // Generate tasks for today based on goal and current day
+        let tasksForDay = getTasksForDay(user.goal, currentDay);
+        user.tasks = tasksForDay.map(task => ({ task: task, points: 50, done: false }));
+        saveState();
+        renderTasks();
+    }
+
+    function renderTasks() {
+        let container = document.getElementById('task-list-container');
+        container.innerHTML = '';
+        user.tasks.forEach((t,i)=>{
+            let div = document.createElement('div'); div.className='task-item';
+            div.innerHTML = `<div style="flex:1"><span style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.task}</span> <span class="task-points">+${t.points}</span></div><div class="task-check ${t.done?'checked':''}" onclick="toggleTask(${i})"></div>`;
+            container.appendChild(div);
+        });
+        let allDone = user.tasks.every(t=>t.done);
+        document.getElementById('finish-day-btn').disabled = !allDone;
+        document.getElementById('tasks-status-message').innerText = allDone ? "✅ All tasks complete!" : "⚠️ Complete all 5 tasks.";
+    }
+    function toggleTask(i) { user.tasks[i].done = !user.tasks[i].done; renderTasks(); saveState(); }
+    function finishDay() {
+        if (!user.tasks.every(t=>t.done)) return;
+        let xpGain = user.tasks.reduce((s,t)=>s+t.points,0);
+        if (user.isPremium && user.xpMultiplier) xpGain = Math.floor(xpGain * user.xpMultiplier);
+        user.xp += xpGain;
+        let bonus = 20 + (user.isPremium ? (user.dailyBonusCoins||0) : 0);
+        user.coins += bonus;
+        user.streak++;
+        while (user.xp >= user.level*100) { user.level++; user.coins+=50; confetti(); }
+        let today = getTodayStr();
+        if (!user.completedDays.includes(today)) user.completedDays.push(today);
+        user.tasks = [];
+        // weekly challenge (simple)
+        let weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay()));
+        if (!user.weeklyChallenge || new Date(user.weeklyChallenge?.weekStart).toDateString() !== weekStart.toDateString()) {
+            user.weeklyChallenge = { weekStart: weekStart.toISOString(), daysCompleted: 0, claimed: false };
+        }
+        user.weeklyChallenge.daysCompleted++;
+        if (user.weeklyChallenge.daysCompleted >= 5 && !user.weeklyChallenge.claimed) {
+            user.weeklyChallenge.claimed = true;
+            user.coins += 200;
+            alert("Weekly challenge completed! +200 coins!");
+        }
+        saveState();
+        closeAllModals();
+        addFeedItemManually(`Completed day! +${xpGain} XP`, true);
+        alert(`Day completed! +${xpGain} XP, +${bonus} Coins`);
+    }
+
+    function askAI() {
+        let q = document.getElementById('ai-input').value.trim();
+        if (!q) return;
+        document.getElementById('ai-output').innerHTML = "🤔 Let me analyze...";
+        setTimeout(() => {
+            let responses = {
+                weightGain: ["Eat more protein", "Add healthy fats", "Progressive overload is key", "Sleep well for recovery", "Track your calories"],
+                weightLoss: ["Stay in a deficit", "High protein keeps you full", "Cardio helps", "Drink water before meals", "Don't skip breakfast"],
+                yogaZumba: ["Consistency over intensity", "Breathe deeply", "Enjoy the flow", "Stay hydrated", "Listen to your body"],
+                healthyLifestyle: ["Small changes stick", "Meal prep helps", "Sleep is non-negotiable", "Walk daily", "Reduce processed food"]
+            };
+            let replies = responses[user.goal] || responses.healthyLifestyle;
+            let reply = replies[Math.floor(Math.random() * replies.length)];
+            document.getElementById('ai-output').innerHTML = `<strong>You:</strong> ${q}<br><br><strong>AI:</strong> ${reply}`;
+            document.getElementById('ai-input').value = '';
+        }, 500);
+    }
+
+    // ======================= OTHER FEATURES (leaderboard, profile, calendar, store, premium, bitmoji) =======================
+    function showLeaderboard() {
+        toggleSidebar();
+        document.getElementById('modal-leaderboard').classList.remove('hidden');
+        let mock = [
+            {name:"Alex", xp:2500, level:5},
+            {name:"Sarah", xp:1800, level:4},
+            {name:user.name, xp:user.xp+user.level*100, level:user.level},
+            {name:"Mike", xp:500, level:2}
+        ].sort((a,b)=>b.xp-a.xp);
+        let listDiv = document.getElementById('leaderboard-list');
+        listDiv.innerHTML = '';
+        mock.forEach((u,i) => {
+            let div = document.createElement('div'); div.className='leaderboard-item';
+            if (i===0) div.classList.add('rank-1');
+            if (i===1) div.classList.add('rank-2');
+            if (i===2) div.classList.add('rank-3');
+            if(u.name === user.name) div.style.borderColor = "var(--primary)";
+            div.innerHTML = `<div style="font-weight:900; width:30px">#${i+1}</div><div style="flex:1"><b>${u.name}</b><br><span style="font-size:0.8rem">Lvl ${u.level}</span></div><div>${u.xp} XP</div>`;
+            listDiv.appendChild(div);
+        });
+    }
+
+    function showProfile() { toggleSidebar(); document.getElementById('modal-profile').classList.remove('hidden'); document.getElementById('edit-name').value=user.name; document.getElementById('edit-email').value=user.email; document.getElementById('edit-age').value=user.age; document.getElementById('edit-weight').value=user.weight; document.getElementById('edit-height').value=user.height; document.getElementById('edit-goal').value=user.goal; document.getElementById('edit-gender').value=user.gender; }
+    function updateProfile() { user.name=document.getElementById('edit-name').value; user.email=document.getElementById('edit-email').value; user.age=parseInt(document.getElementById('edit-age').value); user.weight=parseFloat(document.getElementById('edit-weight').value); user.height=parseFloat(document.getElementById('edit-height').value); user.goal=document.getElementById('edit-goal').value; user.gender=document.getElementById('edit-gender').value; saveState(); closeAllModals(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+
+    let calendarPage = 1;
+    function changeCalendarPage(delta) { let newPage = calendarPage+delta; if(newPage>=1 && newPage<=3) { calendarPage=newPage; renderCalendar(); } }
+    function openCalendar() { closeAllModals(); document.getElementById('modal-calendar').classList.remove('hidden'); renderCalendar(); }
+    function renderCalendar() {
+        let grid = document.getElementById('calendar-grid'); grid.innerHTML = '';
+        let start = (calendarPage-1)*33+1, end = Math.min(start+32,100);
+        document.getElementById('calendar-page-indicator').innerText = `Page ${calendarPage}/3`;
+        document.getElementById('calendar-streak').innerText = user.streak;
+        document.getElementById('calendar-completed').innerText = user.completedDays.length;
+        document.getElementById('calendar-progress-fill').style.width = (user.completedDays.length/100*100)+'%';
+        let challengeStart = new Date(); challengeStart.setDate(1);
+        for (let d=start; d<=end; d++) {
+            let div = document.createElement('div'); div.className='day-cell'; div.innerText = d;
+            let currentDate = new Date(challengeStart); currentDate.setDate(challengeStart.getDate()+(d-1));
+            let dateStr = currentDate.toISOString().split('T')[0];
+            if (currentDate.toDateString() === new Date().toDateString()) div.classList.add('day-today');
+            if (d===1) div.classList.add('day-start');
+            else if (user.completedDays.includes(dateStr)) div.classList.add('day-completed');
+            else div.classList.add('day-locked');
+            div.onclick = () => { if(d===1) openTasks(); else alert(`Day ${d} locked`); };
+            grid.appendChild(div);
+        }
+    }
+
+    function showPremium() { toggleSidebar(); document.getElementById('modal-premium').classList.remove('hidden'); document.getElementById('premiumStatus').innerHTML = user.isPremium ? '<span class="premium-active">⚜️ Premium Active</span>' : ''; }
+    function initPayment(plan) { let prices={weekly:100, monthly:9900, quarterly:29000}; let rzp=new Razorpay({key:"rzp_live_SJ5ukbKmD3GVp8", amount:prices[plan], currency:"INR", name:"100DayCore", handler:()=>activatePremium(plan), prefill:{name:user.name,email:user.email}, theme:{color:"#8A2BE2"}}); rzp.open(); }
+    function activatePremium(plan) { user.isPremium=true; user.premiumPlan=plan; if(plan==="quarterly"){ user.xpMultiplier=1.5; user.dailyBonusCoins=20; } else { user.xpMultiplier=1.2; user.dailyBonusCoins=10; } saveState(); closeAllModals(); confetti(); addFeedItemManually(`${user.name} went premium! 🚀`, true); alert("Premium activated!"); }
+
+    function showBitmoji() { toggleSidebar(); document.getElementById('modal-bitmoji').classList.remove('hidden'); updateBitmojiPreview(); }
+    function updateBitmojiPreview() {
+        const parts = ['base','shirt','jacket','pants','shoes','glasses'];
+        parts.forEach(part => {
+            let img = document.getElementById(`avatar-${part}`);
+            if(img && user.equipped[part]) img.src = user.equipped[part];
+            else if(img && part !== 'base') img.src = '';
+        });
+        if(!user.equipped.base && user.gender === 'Male') document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👦';
+        else if(!user.equipped.base) document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👧';
+    }
+    function claimFreeReward() { user.coins+=50; user.crates=(user.crates||0)+1; saveState(); alert("+50 coins & 1 crate"); addFeedItemManually("Claimed daily reward!", true); showBitmoji(); }
+    function saveOutfit() { alert("Outfit saved!"); }
+    function showStore() { toggleSidebar(); document.getElementById('modal-store').classList.remove('hidden'); renderStore(); }
+    function renderStore() { document.getElementById('store-items').innerHTML = `<div class="store-card">🔥 XP Booster - 100 coins <button onclick="buyItem()">Buy</button></div>`; }
+    function buyItem() { if(user.coins>=100){ user.coins-=100; user.inventory.push('booster'); saveState(); alert("Bought!"); showStore(); } else alert("Not enough coins"); }
+    function openCrate() { if((user.crates||0)>0){ user.crates--; let reward=Math.floor(Math.random()*200)+50; user.coins+=reward; saveState(); alert(`You got ${reward} coins!`); addFeedItemManually("Opened a crate!", true); showStore(); } else alert("No crates"); }
+
+    function showStats() { closeAllModals(); toggleSidebar(); renderStatsModal(); document.getElementById('modal-stats').classList.remove('hidden'); }
+    function resetData() { if(confirm("Reset all data?")){ localStorage.clear(); location.reload(); } }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+    function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden')); }
+
+    // Drag & drop for bitmoji
+    const categories = ['body','shirt','jacket','pants','shoes','glasses'];
+    categories.forEach(cat => {
+        let dropZone = document.getElementById(`drop-${cat}`);
+        if(dropZone) {
+            dropZone.addEventListener('dragover', (e) => e.preventDefault());
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                let file = e.dataTransfer.files[0];
+                if(file && file.type.startsWith('image/')) {
+                    let reader = new FileReader();
+                    reader.onload = (ev) => {
+                        let imgData = ev.target.result;
+                        user.equipped[cat] = imgData;
+                        saveState();
+                        updateBitmojiPreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+
+    (function init() {
+        if(user.name){
+            document.getElementById('onboarding').classList.add('hidden');
+            document.getElementById('app-container').classList.remove('hidden');
+            updateUI(); loadSteps(); startLiveUpdates();
+            if(typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') window.addEventListener('devicemotion', handleMotion);
+        } else {
+            document.getElementById('onboarding').classList.remove('hidden');
+        }
+        let typing = "Create Profile";
+        let i=0; function type(){ if(i<typing.length){ document.getElementById('typingTitle').innerHTML=typing.substring(0,i+1)+'<span class="typing"></span>'; i++; setTimeout(type,100); } else document.getElementById('typingTitle').innerHTML=typing; } type();
+        let phrases = ["No cap, you'll crush it 💯","Let's get this bread 🍞","Main character energy 🎬","Slay the day 💅"];
+        let idx=0; setInterval(()=>{ document.getElementById('vibePhrase').innerText=phrases[idx%phrases.length]; idx++; },4000);
+        addFeedItemManually("Welcome to 100DayCore! Let's go!", false);
+    })();
+</script>
+</body>
+</html>
