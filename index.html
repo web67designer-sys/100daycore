@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>100DayCore - Gen Z Productivity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>100DayCore – Progress Pulse Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <!-- Razorpay Checkout Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-        /* ========== STYLES (same as original, with minor clock adjustments) ========== */
+        /* ========== ORIGINAL APP BACKGROUND STYLES ========== */
         :root {
             --bg: #0f0f13;
             --card-bg: #1e1e24;
@@ -21,87 +20,115 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; }
         .hidden { display: none !important; }
-        .btn {
-            background: linear-gradient(45deg, var(--primary), #ff00ff);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
+        .btn { background: linear-gradient(45deg, var(--primary), #ff00ff); border: none; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--primary); }
         .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
         .btn-accent { background: var(--accent); color: #000; }
-        .btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(0.6);
-        }
-
-        /* Confetti animation */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: var(--gold);
-            opacity: 0.7;
-            top: -10px;
-            border-radius: 2px;
-            animation: fall 4s linear infinite;
-            z-index: 9999;
-        }
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(360deg); }
-        }
-
-        /* XP Bar animation */
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px var(--accent); }
-            50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); }
-            100% { box-shadow: 0 0 5px var(--accent); }
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Coin shine */
-        @keyframes coinShine {
-            0% { filter: drop-shadow(0 0 2px var(--gold)); }
-            50% { filter: drop-shadow(0 0 8px var(--gold)); }
-            100% { filter: drop-shadow(0 0 2px var(--gold)); }
-        }
-
-        /* Onboarding animated background */
-        @keyframes bgMove {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-        #onboarding {
+        .confetti { position: fixed; width: 10px; height: 10px; background-color: var(--gold); opacity: 0.7; top: -10px; border-radius: 2px; animation: fall 4s linear infinite; z-index: 9999; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes coinShine { 0% { filter: drop-shadow(0 0 2px var(--gold)); } 50% { filter: drop-shadow(0 0 8px var(--gold)); } 100% { filter: drop-shadow(0 0 2px var(--gold)); } }
+        @keyframes bgMove { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
+        /* Hero section (with its own animated background) */
+        .pp-hero {
+            position: relative;
             height: 100vh;
+            overflow: hidden;
+            background: var(--bg);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76,175,80,0.2) 10%, transparent 60%);
+            animation: floatWave 12s linear infinite;
+        }
+        .wave2 { animation-duration: 18s; opacity: 0.4; }
+        .wave3 { animation-duration: 25s; opacity: 0.2; }
+        @keyframes floatWave {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+        #particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .pp-card {
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(25px);
+            background: rgba(255,255,255,0.08);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            color: var(--text);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: 0.4s;
+        }
+        .pp-card:hover {
+            transform: scale(1.05);
+        }
+        .pp-title {
+            font-size: 3rem;
+        }
+        .pp-title span {
+            background: linear-gradient(135deg, #4CAF50, #00e5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .pp-subtitle {
+            color: #4CAF50;
+        }
+        .pp-desc {
+            opacity: 0.8;
+            margin: 15px 0;
+        }
+        .pp-btn {
+            border: none;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .pp-btn.primary {
+            background: linear-gradient(135deg, #4CAF50, #22c55e);
+            color: white;
+        }
+        .pp-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+        .pp-btn:hover {
+            transform: scale(1.1);
+        }
+        .pp-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+        /* Light mode for hero only */
+        body.light-mode .pp-hero {
+            --bg: #f5f7fa;
+        }
+        body.light-mode .pp-card {
+            background: rgba(0,0,0,0.05);
+            color: #111;
+        }
+        /* Original onboarding */
+        #onboarding {
+            display: none;
+            height: 100vh;
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at 30% 30%, #2a0a4a, #0f0f13, #1a1a2e);
@@ -111,22 +138,6 @@
             position: relative;
             overflow: hidden;
         }
-        #onboarding::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="10" cy="10" r="2" fill="%238A2BE2" opacity="0.3"/><circle cx="90" cy="30" r="3" fill="%2300FF7F" opacity="0.2"/><circle cx="40" cy="80" r="4" fill="%23FFD700" opacity="0.2"/></svg>');
-            background-size: 200px 200px;
-            opacity: 0.5;
-            animation: float 30s linear infinite;
-            pointer-events: none;
-        }
-        @keyframes float {
-            from { transform: translateY(0) translateX(0); }
-            to { transform: translateY(-100px) translateX(100px); }
-        }
-
         .onboarding-card {
             background: var(--card-bg);
             padding: 40px;
@@ -140,682 +151,198 @@
             position: relative;
             z-index: 2;
         }
-        @keyframes cardFloat {
-            0% { transform: translateY(0px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-            50% { transform: translateY(-5px); box-shadow: 0 25px 60px rgba(138,43,226,0.3); }
-            100% { transform: translateY(0px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        input, select {
-            width: 100%;
-            padding: 15px;
-            background: var(--bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-        }
-        input.valid, select.valid {
-            border-color: var(--accent);
-            box-shadow: 0 0 5px var(--accent);
-        }
-        input.invalid, select.invalid {
-            border-color: var(--danger);
-            box-shadow: 0 0 5px var(--danger);
-        }
-
-        .live-avatar {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 4rem;
-            background: var(--glass);
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            align-items: center;
-            justify-content: center;
-            margin-left: auto;
-            margin-right: auto;
-            border: 2px solid var(--primary);
-            transition: transform 0.3s;
-        }
-        .live-avatar:hover {
-            transform: scale(1.1);
-        }
-
-        .live-counter {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            color: var(--accent);
-            animation: pulseText 2s infinite;
-        }
-        @keyframes pulseText {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; text-shadow: 0 0 5px var(--accent); }
-            100% { opacity: 0.7; }
-        }
-
-        .pulse-btn {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(138,43,226,0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(138,43,226,0); }
-            100% { box-shadow: 0 0 0 0 rgba(138,43,226,0); }
-        }
-
-        .typing::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .vibe-phrase {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        #app-container {
-            position: relative;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .burger-menu {
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--accent);
-            transition: transform 0.2s;
-        }
-        .burger-menu:hover { transform: scale(1.1); }
-        .calendar-btn {
-            background: var(--glass);
-            padding: 8px 15px;  /* slightly reduced */
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            font-size: 0.9rem;   /* smaller text */
-        }
-        .calendar-btn:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--accent);
-        }
-        .live-clock {
-            background: var(--glass);
-            padding: 8px 15px;    /* reduced padding */
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            font-family: monospace;
-            font-size: 0.9rem;    /* smaller font */
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .level-box {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 25px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            backdrop-filter: blur(5px);
-            transition: transform 0.2s;
-        }
-        .level-box:hover { transform: translateY(-2px); }
-        .level-badge {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(to right, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .premium-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--gold);
-            color: #000;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            animation: coinShine 2s infinite;
-        }
-        .streak-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: var(--card-bg);
-            border-radius: 25px;
-            border: 1px solid var(--glass-border);
-            padding: 15px;
-            backdrop-filter: blur(5px);
-            transition: transform 0.2s;
-        }
-        .streak-box:hover { transform: translateY(-2px); }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
+        input, select { width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--glass-border); border-radius: 15px; color: white; font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .live-avatar { display: flex; justify-content: center; margin-bottom: 20px; font-size: 4rem; background: var(--glass); border-radius: 50%; width: 100px; height: 100px; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border: 2px solid var(--primary); transition: transform 0.3s; }
+        .live-counter { text-align: center; margin-bottom: 20px; font-size: 0.9rem; color: var(--accent); animation: pulseText 2s infinite; }
+        @keyframes pulseText { 0% { opacity: 0.7; } 50% { opacity: 1; text-shadow: 0 0 5px var(--accent); } 100% { opacity: 0.7; } }
+        .typing::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        .vibe-phrase { text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--gold); font-style: italic; }
+        #app-container { position: relative; min-height: 100vh; padding: 20px; display: none; background: var(--bg); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .burger-menu { font-size: 2rem; cursor: pointer; color: var(--accent); transition: transform 0.2s; }
+        .calendar-btn { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; font-size: 0.9rem; }
+        .live-clock { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); font-family: monospace; font-size: 0.9rem; }
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .level-box { background: var(--card-bg); padding: 20px; border-radius: 25px; border: 1px solid var(--glass-border); position: relative; backdrop-filter: blur(5px); text-align: center; }
+        .level-badge { font-size: 3rem; font-weight: 900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .level-date { font-size: 0.8rem; color: var(--text-sec); margin-top: 5px; }
+        .premium-badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; animation: coinShine 2s infinite; }
+        .streak-box { display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--card-bg); border-radius: 25px; border: 1px solid var(--glass-border); padding: 15px; }
         .streak-count { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
-        .coins-in-streak {
-            font-size: 1.2rem;
-            color: var(--accent);
-            margin-top: 5px;
-            animation: coinShine 2s infinite;
-        }
-        
-        .xp-container {
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 15px;
-            border: 1px solid var(--glass-border);
-        }
-        .xp-text {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: var(--text-sec);
-        }
-        .progress-bar {
-            height: 16px;
-            background: var(--bg);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-            animation: glow 3s infinite;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
-            background-size: 200% 100%;
-            animation: gradientShift 3s infinite;
-            width: 0%;
-            transition: width 0.5s ease;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 8px;
-            color: #000;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .daily-action {
-            background: linear-gradient(135deg, #2a2a35, #1a1a20);
-            padding: 30px;
-            border-radius: 25px;
-            text-align: center;
-            margin-bottom: 30px;
-            border: 2px solid var(--primary);
-            cursor: pointer;
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-        }
-        .daily-action:hover { 
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
-            transform: scale(1.02);
-        }
+        .coins-in-streak { font-size: 1.2rem; color: var(--accent); margin-top: 5px; animation: coinShine 2s infinite; }
+        .xp-container { margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); }
+        .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-sec); }
+        .progress-bar { height: 16px; background: var(--bg); border-radius: 20px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); animation: glow 3s infinite; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); background-size: 200% 100%; animation: gradientShift 3s infinite; width: 0%; transition: width 0.5s ease; border-radius: 20px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #000; font-weight: bold; font-size: 0.8rem; }
+        .daily-action { background: linear-gradient(135deg, #2a2a35, #1a1a20); padding: 30px; border-radius: 25px; text-align: center; margin-bottom: 30px; border: 2px solid var(--primary); cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); }
+        .daily-action:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); transform: scale(1.02); }
         .daily-title { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
-
-        .ai-section {
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(5px);
-        }
+        .ai-section { background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); }
         .ai-input-area { display: flex; gap: 10px; margin-top: 15px; }
-        .ai-response {
-            margin-top: 15px;
-            padding: 15px;
-            background: var(--bg);
-            border-radius: 15px;
-            font-style: italic;
-            color: var(--text-sec);
-            min-height: 50px;
-        }
-        .quote-box {
-            margin-top: 10px;
-            padding: 10px;
-            background: var(--glass);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            text-align: center;
-            color: var(--accent);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .quote-box:hover { background: rgba(255,255,255,0.1); }
-
-        .live-feed {
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(5px);
-        }
-        .feed-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px dashed var(--glass-border);
-            font-size: 0.9rem;
-        }
-        .feed-item:last-child { border-bottom: none; }
-        .feed-time {
-            color: var(--text-sec);
-            font-size: 0.7rem;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: rgba(21,21,26,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            transition: 0.3s ease;
-            padding: 30px;
-            border-right: 1px solid var(--glass-border);
-            overflow-y: auto;
-        }
+        .ai-response { margin-top: 15px; padding: 15px; background: var(--bg); border-radius: 15px; font-style: italic; color: var(--text-sec); min-height: 80px; max-height: 200px; overflow-y: auto; font-size: 0.9rem; }
+        .quote-box { margin-top: 10px; padding: 10px; background: var(--glass); border-radius: 10px; font-size: 0.9rem; text-align: center; color: var(--accent); cursor: pointer; }
+        .sidebar { position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: rgba(21,21,26,0.95); backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s ease; padding: 30px; border-right: 1px solid var(--glass-border); overflow-y: auto; }
         .sidebar.active { left: 0; }
         .close-sidebar { font-size: 2rem; cursor: pointer; margin-bottom: 30px; display: block; }
-        .menu-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 1.2rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: color 0.2s, transform 0.2s;
-        }
+        .menu-item { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: color 0.2s, transform 0.2s; }
         .menu-item:hover { color: var(--primary); transform: translateX(5px); }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .modal-content {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 500px;
-            border-radius: 30px;
-            padding: 30px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 30px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: var(--danger); }
-
-        /* Calendar enhancements */
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .calendar-progress {
-            background: var(--bg);
-            border-radius: 20px;
-            height: 8px;
-            width: 100%;
-            margin: 10px 0 20px;
-        }
-        .calendar-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            border-radius: 20px;
-            transition: width 0.3s;
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .day-cell {
-            aspect-ratio: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            position: relative;
-        }
-        .day-cell:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-        }
-        .day-completed {
-            background: linear-gradient(145deg, var(--accent), #00cc66);
-            color: #000;
-            border-color: var(--accent);
-        }
-        .day-completed::after {
-            content: "✓";
-            font-size: 1.2rem;
-            opacity: 0.7;
-            position: absolute;
-            top: 2px;
-            right: 5px;
-        }
-        .day-locked {
-            background: linear-gradient(145deg, #ff4444, #aa0000);
-            color: white;
-            border-color: #ff4444;
-            opacity: 0.8;
-        }
-        .day-locked::after {
-            content: "🔒";
-            font-size: 0.8rem;
-            position: absolute;
-            top: 2px;
-            right: 5px;
-            opacity: 0.7;
-        }
-        .day-start {
-            background: linear-gradient(145deg, var(--gold), #ffaa00);
-            color: #000;
-            border-color: var(--gold);
-            font-weight: 900;
-        }
-        .day-start::after {
-            content: "⭐";
-            font-size: 0.9rem;
-            position: absolute;
-            top: 2px;
-            right: 5px;
-        }
-        .day-today {
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .task-item {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
-        }
-        .task-item:hover { transform: translateX(5px); }
-        .task-check {
-            width: 25px;
-            height: 25px;
-            border: 2px solid var(--text-sec);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-        }
-        .task-check.checked {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        .task-points {
-            background: var(--primary);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        /* Store & Bitmoji modals */
-        .avatar-preview {
-            width: 100px;
-            height: 100px;
-            background: var(--glass);
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            border: 2px solid var(--primary);
-            flex-direction: column;
-            line-height: 1.2;
-            transition: box-shadow 0.3s;
-        }
-        .avatar-preview:hover { box-shadow: 0 0 20px var(--primary); }
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .store-card {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .store-card:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--primary); }
-        .store-card .price { color: var(--gold); font-weight: bold; margin: 5px 0; }
-        .store-card .locked { color: var(--danger); font-size: 0.8rem; }
-        .store-card .owned { color: var(--accent); font-size: 0.8rem; }
-        .store-card button {
-            background: var(--primary);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            transition: all 0.2s;
-        }
-        .store-card button:hover:not(:disabled) { background: #9b4dff; transform: scale(1.05); }
-        .store-card button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .category-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0;
-            justify-content: center;
-        }
-        .category-tab {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .category-tab:hover, .category-tab.active {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-        .bitmoji-inventory {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        .inventory-item {
-            width: 50px;
-            height: 50px;
-            background: var(--glass);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-        .inventory-item:hover { border-color: var(--primary); transform: scale(1.1); }
-        .inventory-item.equipped { border-color: var(--accent); }
-
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: var(--bg);
-            margin-bottom: 10px;
-            border-radius: 15px;
-            transition: transform 0.2s;
-        }
-        .leaderboard-item:hover { transform: translateX(5px); }
+        /* Calendar, tasks, inbox styles (same as before) */
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .calendar-progress { background: var(--bg); border-radius: 20px; height: 8px; width: 100%; margin: 10px 0 20px; }
+        .calendar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); border-radius: 20px; transition: width 0.3s; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .day-cell { aspect-ratio: 1; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; background: var(--glass); border: 1px solid var(--glass-border); box-shadow: 0 4px 8px rgba(0,0,0,0.3); position: relative; }
+        .day-completed { background: linear-gradient(145deg, #00cc66, #009944); color: #000; border-color: #00cc66; }
+        .day-completed::after { content: "✓"; font-size: 1rem; position: absolute; top: 2px; right: 5px; color: #000; font-weight: bold; }
+        .day-locked { background: linear-gradient(145deg, #ff4444, #aa0000); color: white; border-color: #ff4444; opacity: 0.9; }
+        .day-locked::after { content: "🔒"; font-size: 0.8rem; position: absolute; top: 2px; right: 5px; opacity: 0.8; }
+        .day-today { background: linear-gradient(145deg, var(--gold), #ffaa00); color: #000; border-color: var(--gold); font-weight: 900; position: relative; }
+        .day-today::after { content: "⭐"; font-size: 1rem; position: absolute; top: 2px; right: 5px; }
+        .day-start { background: linear-gradient(145deg, var(--gold), #ffaa00); color: #000; border-color: var(--gold); font-weight: 900; }
+        .task-item { background: var(--bg); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; cursor: pointer; }
+        .task-check { width: 25px; height: 25px; border: 2px solid var(--text-sec); border-radius: 50%; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+        .task-check.checked { background: var(--accent); border-color: var(--accent); }
+        .task-points { background: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+        .task-bitmoji-demo { display: inline-block; margin-left: 10px; font-size: 1.2rem; animation: bounce 0.3s ease; cursor: pointer; }
+        @keyframes bounce { 0% { transform: scale(0.8); opacity: 0; } 80% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        .task-demo-panel { background: var(--glass); border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 4px solid var(--accent); transition: all 0.3s; }
+        .task-demo-title { font-weight: bold; color: var(--accent); margin-bottom: 8px; }
+        .task-demo-content { font-size: 0.9rem; line-height: 1.5; color: var(--text-sec); }
+        .avatar-preview { width: 100px; height: 100px; background: var(--glass); border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border: 2px solid var(--primary); flex-direction: column; line-height: 1.2; transition: box-shadow 0.3s; position: relative; }
+        .avatar-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+        .upload-zone { border: 2px dashed var(--primary); border-radius: 15px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; }
+        .store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .store-card { background: var(--bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); transition: transform 0.2s; }
+        .leaderboard-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--bg); margin-bottom: 10px; border-radius: 15px; }
         .rank-1 { border: 2px solid var(--gold); }
         .rank-2 { border: 2px solid silver; }
         .rank-3 { border: 2px solid #cd7f32; }
-
-        .plan-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
-            border: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .plan-card:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--primary); }
+        .plan-card { background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
         .plan-price { font-size: 2rem; font-weight: 900; color: var(--accent); }
         .features-list { text-align: left; margin: 15px 0; padding-left: 20px; color: var(--text-sec); }
-        .premium-active {
-            background: var(--gold);
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
+        .step-circle { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .step-number-large { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+        .gauge-container { display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .gauge { position: relative; width: 100px; height: 100px; text-align: center; }
+        .gauge svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .gauge circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .gauge .bg-circle { stroke: var(--glass-border); }
+        .gauge .fill-circle { stroke: var(--accent); transition: stroke-dasharray 0.5s; }
+        .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+        .gauge-label { font-size: 0.7rem; margin-top: 5px; color: var(--text-sec); }
+        .badge-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .badge { background: var(--glass); border-radius: 40px; padding: 8px 15px; font-size: 0.8rem; border: 1px solid var(--gold); color: var(--gold); }
+        .food-item { background: var(--bg); border-radius: 15px; padding: 8px 12px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
+        .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--glass-border); font-size: 0.9rem; }
+        .feed-time { color: var(--text-sec); font-size: 0.7rem; }
+        .inbox-container { max-width: 600px; margin: 0 auto; }
+        .inbox-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .inbox-title { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .search-box { display: flex; gap: 10px; background: var(--glass); border-radius: 30px; padding: 8px 15px; border: 1px solid var(--glass-border); flex: 1; }
+        .search-box input { background: transparent; border: none; padding: 8px 0; color: white; width: 100%; outline: none; }
+        .filter-icon { background: var(--glass); border-radius: 30px; padding: 8px 15px; cursor: pointer; }
+        .chat-list { display: flex; flex-direction: column; gap: 12px; max-height: 60vh; overflow-y: auto; }
+        .chat-item { display: flex; align-items: center; gap: 12px; background: var(--glass); border-radius: 20px; padding: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .chat-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); border-color: var(--glass-border); }
+        .chat-avatar { position: relative; width: 55px; height: 55px; }
+        .online-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #4CAF50; border-radius: 50%; border: 2px solid var(--card-bg); }
+        .chat-info { flex: 1; }
+        .chat-name { font-weight: 700; display: flex; justify-content: space-between; }
+        .chat-status { font-size: 0.7rem; color: var(--accent); margin: 3px 0; }
+        .chat-preview { font-size: 0.75rem; color: var(--text-sec); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .progress-ring-small { width: 40px; height: 40px; position: relative; }
+        .progress-ring-small svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        .progress-ring-small circle { fill: none; stroke-width: 3; }
+        .progress-ring-small .bg-circle { stroke: var(--glass-border); }
+        .progress-ring-small .fill-circle { stroke: var(--accent); transition: stroke-dasharray 0.3s; }
+        .chat-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 3000; display: flex; flex-direction: column; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .chat-header { padding: 15px; background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
+        .back-btn { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: white; }
+        .chat-profile { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .chat-profile-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .chat-profile-info { line-height: 1.2; }
+        .chat-profile-name { font-weight: bold; }
+        .chat-profile-goal { font-size: 0.7rem; color: var(--accent); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .message { max-width: 75%; padding: 10px 14px; border-radius: 22px; font-size: 0.9rem; word-wrap: break-word; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.sent { align-self: flex-end; background: #2a7a3e; color: white; border-bottom-right-radius: 5px; }
+        .message.received { align-self: flex-start; background: var(--glass); color: var(--text); border-bottom-left-radius: 5px; }
+        .message .time { font-size: 0.6rem; opacity: 0.7; margin-top: 4px; text-align: right; }
+        .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: var(--glass); border-radius: 20px; width: fit-content; margin-top: 5px; }
+        .typing-dot { width: 6px; height: 6px; background: var(--text-sec); border-radius: 50%; animation: typing 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+        .chat-input-area { display: flex; gap: 10px; padding: 12px; background: var(--glass); border-top: 1px solid var(--glass-border); }
+        .chat-input-area input { flex: 1; background: var(--bg); border: none; border-radius: 30px; padding: 12px 18px; color: white; outline: none; }
+        .chat-input-area button { background: var(--primary); border: none; border-radius: 30px; padding: 0 20px; color: white; cursor: pointer; transition: 0.2s; }
+        .no-results { text-align: center; padding: 40px; color: var(--text-sec); animation: fadeIn 0.3s; }
+        .https-warning { background: rgba(255,68,68,0.9); color: white; padding: 10px; text-align: center; font-size: 0.8rem; position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
 
-    <!-- ONBOARDING SCREEN -->
+    <!-- HERO SECTION (with its own animated background) -->
+    <div class="pp-hero" id="heroSection">
+        <div class="wave"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <canvas id="particles"></canvas>
+        <div class="pp-card">
+            <h1 class="pp-title">Progress <span>Pulse</span></h1>
+            <h2 class="pp-subtitle">Elite</h2>
+            <p class="pp-desc">Glassmorphic 100-day accountability with real-time competitions</p>
+            <div class="pp-actions">
+                <button class="pp-btn primary" onclick="startJourney()">Start Journey</button>
+                <button class="pp-btn secondary" onclick="findPartners()">+ Find Partners</button>
+            </div>
+        </div>
+        <div class="pp-toggle">
+            <input type="checkbox" id="themeToggle">
+        </div>
+    </div>
+
+    <!-- ORIGINAL ONBOARDING (hidden initially) -->
     <div id="onboarding">
         <div class="onboarding-card">
             <div class="live-avatar" id="liveAvatar">👤</div>
-            <div class="live-counter" id="liveCounter">🔥 <span id="joinCount">0</span> people joined today</div>
+            <div class="live-counter">🔥 <span id="joinCount">0</span> people joined today</div>
             <h2 id="typingTitle" style="text-align:center; margin-bottom:20px;"></h2>
-            <div class="input-group">
-                <label>✨ Name</label>
-                <input type="text" id="inp-name" placeholder="Enter your name" oninput="validateField(this)">
-            </div>
-            <div class="input-group">
-                <label>📧 Email</label>
-                <input type="email" id="inp-email" placeholder="Enter email" oninput="validateField(this)">
-            </div>
-            <div class="input-group">
-                <label>🎂 Age</label>
-                <input type="number" id="inp-age" placeholder="Age" oninput="validateField(this)">
-            </div>
-            <div class="input-group">
-                <label>🎯 Goal</label>
-                <select id="inp-goal" onchange="validateField(this)">
-                    <option value="weightLoss">💪 Weight Loss</option>
-                    <option value="muscleGain">🔥 Muscle Gain</option>
-                    <option value="healthyLifestyle">🌿 Healthy Lifestyle</option>
-                    <option value="productivity">⚡ Productivity</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>🧑 Gender</label>
-                <select id="inp-gender" onchange="updateAvatarPreview(); validateField(this)">
-                    <option value="Male">🧑 Male</option>
-                    <option value="Female">👧 Female</option>
-                    <option value="Other">🧒 Other</option>
-                </select>
-            </div>
-            <button class="btn pulse-btn" style="width:100%" onclick="saveProfile()" id="startBtn">Start Journey</button>
+            <div class="input-group"><label>✨ Name</label><input type="text" id="inp-name" placeholder="Enter your name"></div>
+            <div class="input-group"><label>📧 Email</label><input type="email" id="inp-email" placeholder="Enter email"></div>
+            <div class="input-group"><label>🎂 Age</label><input type="number" id="inp-age" placeholder="Age"></div>
+            <div class="input-group"><label>⚖️ Weight (kg)</label><input type="number" id="inp-weight" placeholder="Weight in kg" step="0.1"></div>
+            <div class="input-group"><label>📏 Height (cm)</label><input type="number" id="inp-height" placeholder="Height in cm"></div>
+            <div class="input-group"><label>🎯 Goal</label><select id="inp-goal">
+                <option value="weightGain">💪 Weight Gain</option>
+                <option value="weightLoss">🔥 Weight Loss</option>
+                <option value="yogaZumba">🧘 Yoga / Zumba</option>
+                <option value="healthyLifestyle">🌿 Healthy Lifestyle</option>
+            </select></div>
+            <div class="input-group"><label>🧑 Gender</label><select id="inp-gender"><option value="Male">🧑 Male</option><option value="Female">👧 Female</option><option value="Other">🧒 Other</option></select></div>
+            <button class="btn" style="width:100%" onclick="saveProfile()" id="startBtn">Start Journey</button>
             <div class="vibe-phrase" id="vibePhrase"></div>
         </div>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="app-container" class="hidden">
+    <!-- MAIN APP (hidden until login) -->
+    <div id="app-container">
         <header>
             <div class="burger-menu" onclick="toggleSidebar()">☰</div>
             <div style="font-size:1.5rem; font-weight:900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100DayCore</div>
             <div style="display: flex; gap: 10px;">
                 <div class="live-clock" id="liveClock">--:--:--</div>
-                <div class="calendar-btn" onclick="openCalendar()">
-                    <span>📅</span> <span id="header-date">Day 1/100</span>
-                </div>
+                <div class="calendar-btn" onclick="openCalendar()"><span>📅</span> <span id="header-date">Day 1/100</span></div>
             </div>
         </header>
 
@@ -823,7 +350,7 @@
             <div class="level-box">
                 <div style="font-size:0.8rem; color:var(--text-sec)">CURRENT LEVEL</div>
                 <div class="level-badge" id="display-level">1</div>
-                <div style="color:var(--accent); font-size:0.9rem; margin-top:5px;" id="day-counter"></div>
+                <div class="level-date" id="level-date"></div>
                 <div id="premiumBadge" class="premium-badge hidden">⚜️ PREMIUM</div>
             </div>
             <div class="streak-box">
@@ -833,849 +360,223 @@
             </div>
         </div>
 
-        <div class="xp-container">
-            <div class="xp-text">
-                <span>🚀 XP</span>
-                <span id="xp-text">0 / 100</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="xp-fill"></div>
-            </div>
-        </div>
+        <div class="xp-container"><div class="xp-text"><span>🚀 XP</span><span id="xp-text">0 / 100</span></div><div class="progress-bar"><div class="progress-fill" id="xp-fill"></div></div></div>
 
-        <div class="daily-action" onclick="openTasks()">
-            <div class="daily-title">Complete Today's Tasks</div>
-            <div style="color:var(--text-sec); font-size:0.9rem;">Click to view and finish tasks</div>
-        </div>
+        <div class="daily-action" onclick="openTasks()"><div class="daily-title">Complete Today's Tasks</div><div style="color:var(--text-sec); font-size:0.9rem;">Click to view and finish tasks</div></div>
 
-        <div class="ai-section">
-            <h3 style="color:var(--primary)">🤖 AI Coach</h3>
-            <div class="ai-response" id="ai-output">
-                Hello! I am your AI Coach. Ask me anything related to your goal: <span id="ai-goal-display" style="color:white"></span>.
-            </div>
-            <div class="ai-input-area">
-                <input type="text" id="ai-input" placeholder="Ask for advice...">
-                <button class="btn" onclick="askAI()">Send</button>
-            </div>
-            <div class="quote-box" id="quoteBox" onclick="refreshQuote()">✨ "The only bad workout is the one that didn't happen."</div>
-        </div>
-
-        <!-- Live Feed -->
-        <div class="live-feed">
-            <h3 style="color:var(--accent); margin-bottom:10px;">🔥 Live Activity</h3>
-            <div id="feedContainer">
-                <div class="feed-item"><span class="feed-time">just now</span> <span>Alex completed 10k steps</span></div>
-                <div class="feed-item"><span class="feed-time">2m ago</span> <span>Sarah leveled up to 5</span></div>
-                <div class="feed-item"><span class="feed-time">5m ago</span> <span>Mike bought new shoes</span></div>
-            </div>
-            <div style="margin-top:10px; font-size:0.8rem; color:var(--text-sec); display: flex; justify-content: space-between;">
-                <span>👥 <span id="onlineCount">128</span> online</span>
-                <span>⚜️ <span id="premiumOnline">34</span> premium</span>
-            </div>
-        </div>
+        <div class="ai-section"><h3 style="color:var(--primary)">🤖 AI Coach</h3><div class="ai-response" id="ai-output">Hello! I am your AI Coach. Ask me anything about fitness, diet, or motivation.</div><div class="ai-input-area"><input type="text" id="ai-input" placeholder="Ask for advice..."><button class="btn" onclick="askAI()">Send</button></div><div class="quote-box" id="quoteBox" onclick="refreshQuote()">✨ "The only bad workout is the one that didn't happen."</div></div>
     </div>
 
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <span class="close-sidebar" onclick="toggleSidebar()">×</span>
         <div class="menu-item" onclick="showProfile()">👤 Profile</div>
+        <div class="menu-item" onclick="showStats()">📊 Stats & Progress</div>
         <div class="menu-item" onclick="showLeaderboard()">🏆 Leaderboard</div>
+        <div class="menu-item" onclick="showInbox()">📬 Inbox</div>
         <div class="menu-item" onclick="showBitmoji()">😎 Bitmoji</div>
         <div class="menu-item" onclick="showStore()">🛒 Store</div>
         <div class="menu-item" onclick="showPremium()">⚜️ Premium</div>
         <div class="menu-item" style="margin-top:50px; color:var(--danger)" onclick="resetData()">❌ Reset Data</div>
     </div>
 
-    <!-- MODALS -->
-    <!-- Profile Modal -->
-    <div id="modal-profile" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Edit Profile</h2>
-            <div class="input-group" style="margin-top:20px">
-                <label>Name</label>
-                <input type="text" id="edit-name">
-            </div>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="edit-email">
-            </div>
-            <div class="input-group">
-                <label>Age</label>
-                <input type="number" id="edit-age">
-            </div>
-            <div class="input-group">
-                <label>Goal</label>
-                <select id="edit-goal">
-                    <option value="weightLoss">Weight Loss</option>
-                    <option value="muscleGain">Muscle Gain</option>
-                    <option value="healthyLifestyle">Healthy Lifestyle</option>
-                    <option value="productivity">Productivity</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Gender</label>
-                <select id="edit-gender">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button>
-        </div>
-    </div>
+    <!-- MODALS (all original) -->
+    <div id="modal-profile" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Edit Profile</h2><div class="input-group"><label>Name</label><input type="text" id="edit-name"></div><div class="input-group"><label>Email</label><input type="email" id="edit-email"></div><div class="input-group"><label>Age</label><input type="number" id="edit-age"></div><div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-weight" step="0.1"></div><div class="input-group"><label>Height (cm)</label><input type="number" id="edit-height"></div><div class="input-group"><label>Goal</label><select id="edit-goal"><option value="weightGain">Weight Gain</option><option value="weightLoss">Weight Loss</option><option value="yogaZumba">Yoga/Zumba</option><option value="healthyLifestyle">Healthy Lifestyle</option></select></div><div class="input-group"><label>Gender</label><select id="edit-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div><button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button></div></div>
 
-    <!-- Calendar Modal (with pagination) -->
-    <div id="modal-calendar" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>100-Day Challenge</h2>
-            <div class="calendar-header">
-                <span>🔥 Streak: <span id="calendar-streak">0</span> days</span>
-                <span>📅 <span id="calendar-completed">0</span>/100</span>
-            </div>
-            <div class="calendar-progress">
-                <div class="calendar-progress-fill" id="calendar-progress-fill" style="width:0%"></div>
-            </div>
-            <!-- Pagination Controls -->
-            <div class="calendar-pagination" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;">
-                <button class="btn btn-sec" id="calendar-prev" onclick="changeCalendarPage(-1)">◀ Prev</button>
-                <span id="calendar-page-indicator">Page 1/3</span>
-                <button class="btn btn-sec" id="calendar-next" onclick="changeCalendarPage(1)">Next ▶</button>
-            </div>
-            <div class="calendar-grid" id="calendar-grid"></div>
-        </div>
-    </div>
+    <div id="modal-calendar" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>100-Day Challenge</h2><div class="calendar-header"><span>🔥 Streak: <span id="calendar-streak">0</span> days</span><span>📅 <span id="calendar-completed">0</span>/100</span></div><div class="calendar-progress"><div class="calendar-progress-fill" id="calendar-progress-fill" style="width:0%"></div></div><div class="calendar-pagination" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;"><button class="btn btn-sec" id="calendar-prev" onclick="changeCalendarPage(-1)">◀ Prev</button><span id="calendar-page-indicator">Page 1/3</span><button class="btn btn-sec" id="calendar-next" onclick="changeCalendarPage(1)">Next ▶</button></div><div class="calendar-grid" id="calendar-grid"></div></div></div>
 
-    <!-- Tasks Modal (updated to show current day) -->
-    <div id="modal-tasks" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2 id="tasks-modal-title">Today's Tasks</h2>
-            <p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p>
-            <div id="task-bitmoji" style="font-size:4rem; text-align:center; margin:10px 0; background:var(--glass); border-radius:20px; padding:10px; min-height:120px;"></div>
-            <div id="task-list-container"></div>
-            <div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div>
-            <button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button>
-        </div>
-    </div>
+    <div id="modal-tasks" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2 id="tasks-modal-title">Today's Tasks</h2><p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p><div id="taskDemoPanel" class="task-demo-panel" style="display: none;"><div class="task-demo-title" id="taskDemoTitle"></div><div class="task-demo-content" id="taskDemoContent"></div></div><div id="task-list-container"></div><div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div><button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button></div></div>
 
-    <!-- Leaderboard Modal -->
-    <div id="modal-leaderboard" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Leaderboard</h2>
-            <div id="leaderboard-list" style="margin-top:20px"></div>
-        </div>
-    </div>
+    <div id="modal-leaderboard" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🏆 Leaderboard</h2><div id="leaderboard-list" style="margin-top:20px"></div><div class="live-feed" style="margin-top:25px; background:var(--glass); border-radius:20px; padding:15px;"><h3 style="color:var(--accent); margin-bottom:10px;">🔥 Live Activity</h3><div id="feedContainer"></div><div style="margin-top:10px; font-size:0.8rem; color:var(--text-sec); display: flex; justify-content: space-between;"><span>👥 <span id="onlineCount">128</span> online</span><span>⚜️ <span id="premiumOnline">34</span> premium</span></div></div></div></div>
 
-    <!-- Bitmoji Modal (with layers and jacket) -->
-    <div id="modal-bitmoji" class="modal hidden">
-        <div class="modal-content">
+    <!-- INBOX MODAL (with close button added) -->
+    <div id="modal-inbox" class="modal hidden">
+        <div class="modal-content" style="max-width: 700px; padding: 0; overflow: hidden;">
             <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Your Bitmoji</h2>
-            <!-- Avatar Preview with Layers (including jacket) -->
-            <div class="avatar-preview" id="bitmoji-preview" style="position: relative; width: 120px; height: 120px; margin: 0 auto 20px;">
-                <img id="avatar-base" src="" alt="base" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">
-                <img id="avatar-shirt" class="avatar-layer" src="" alt="shirt" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 2;">
-                <img id="avatar-jacket" class="avatar-layer" src="" alt="jacket" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 3;">
-                <img id="avatar-pants" class="avatar-layer" src="" alt="pants" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 4;">
-                <img id="avatar-shoes" class="avatar-layer" src="" alt="shoes" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 5;">
-                <img id="avatar-glasses" class="avatar-layer" src="" alt="glasses" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 6;">
-            </div>
-            <div style="text-align:center; margin-bottom:20px;">
-                <span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span>
-                <span style="margin-left:20px;">📦 Crates: <span id="bitmoji-crates">0</span></span>
-            </div>
-            <h3>Upload Your Own PNGs</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
-                <div class="upload-zone" id="drop-body" data-category="body" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    🧍 Body<br><small>Drag PNG here</small>
-                </div>
-                <div class="upload-zone" id="drop-shirt" data-category="shirt" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    👕 Shirt<br><small>Drag PNG here</small>
-                </div>
-                <div class="upload-zone" id="drop-jacket" data-category="jacket" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    🧥 Jacket<br><small>Drag PNG here</small>
-                </div>
-                <div class="upload-zone" id="drop-pants" data-category="pants" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    👖 Pants<br><small>Drag PNG here</small>
-                </div>
-                <div class="upload-zone" id="drop-shoes" data-category="shoes" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    👟 Shoes<br><small>Drag PNG here</small>
-                </div>
-                <div class="upload-zone" id="drop-glasses" data-category="glasses" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">
-                    👓 Glasses<br><small>Drag PNG here</small>
+            <div style="padding: 20px 20px 0 20px;">
+                <div class="inbox-header">
+                    <div class="inbox-title">Inbox</div>
+                    <div class="search-box"><i>🔍</i><input type="text" id="inboxSearch" placeholder="Search by name..."></div>
+                    <div class="filter-icon">📋</div>
                 </div>
             </div>
-            <h3>Inventory</h3>
-            <div class="bitmoji-inventory" id="bitmoji-inventory"></div>
-            <button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="claimFreeReward()">🎁 Claim Daily Reward</button>
-            <button class="btn" style="margin-top:10px; width:100%;" onclick="saveOutfit()">💾 Save Outfit</button>
+            <div id="chatListContainer" class="chat-list" style="padding: 0 20px 20px 20px; max-height: 65vh;"></div>
         </div>
     </div>
 
-    <!-- Store Modal -->
-    <div id="modal-store" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Store</h2>
-            <div style="display: flex; justify-content: space-between; margin: 10px 0;">
-                <span style="color:var(--gold)">🪙 Coins: <span id="store-coins">0</span></span>
-                <span>📦 Crates: <span id="store-crates">0</span></span>
-            </div>
-            <div class="category-tabs" id="category-tabs"></div>
-            <div class="store-grid" id="store-items"></div>
-            <button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="openCrate()">📦 Open Crate (Cost: 1 Crate)</button>
-        </div>
-    </div>
+    <div id="modal-chat" class="chat-fullscreen hidden"><div class="chat-header"><button class="back-btn" onclick="closeChatModal()">←</button><div class="chat-profile" id="chatProfileHeader"></div><button class="btn-sec" id="shareProgressBtn" style="padding: 6px 12px; font-size: 0.8rem;">📊 Share Progress</button></div><div id="chatMessagesContainer" class="chat-messages"></div><div class="chat-input-area"><input type="text" id="chatMessageInput" placeholder="Type a message..."><button onclick="sendChatMessage()">Send</button></div></div>
 
-    <!-- Premium Modal (with ₹1 for 7 days) -->
-    <div id="modal-premium" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeAllModals()">×</span>
-            <h2>Premium Plans</h2>
-            <div id="premiumStatus" style="text-align:center; margin-bottom:20px;"></div>
-            <div class="plan-card">
-                <div style="font-size:1.5rem">🥈 Monthly</div>
-                <div class="plan-price">₹99</div>
-                <ul class="features-list">
-                    <li>1.2x XP Multiplier</li>
-                    <li>+10 Daily Bonus Coins</li>
-                    <li>Exclusive Themes</li>
-                    <li>Unlimited AI Access</li>
-                </ul>
-                <button class="btn btn-sec" onclick="initPayment('monthly')" id="monthlyBtn">Subscribe</button>
-            </div>
-            <div class="plan-card" style="border-color:var(--gold)">
-                <div style="font-size:1.5rem">🔥 3 Months</div>
-                <div class="plan-price">₹290</div>
-                <ul class="features-list">
-                    <li>1.5x XP Multiplier</li>
-                    <li>+20 Daily Bonus Coins</li>
-                    <li>All Monthly Features</li>
-                    <li>VIP Avatar Frame</li>
-                    <li>Early Access</li>
-                </ul>
-                <button class="btn btn-accent" onclick="initPayment('quarterly')" id="quarterlyBtn">Subscribe</button>
-            </div>
-            <!-- New 7-day plan for ₹1 -->
-            <div class="plan-card" style="border-color:var(--accent)">
-                <div style="font-size:1.5rem">⚡ 7 Days Trial</div>
-                <div class="plan-price">₹1</div>
-                <ul class="features-list">
-                    <li>1.2x XP Multiplier</li>
-                    <li>+10 Daily Bonus Coins</li>
-                    <li>Exclusive Themes</li>
-                    <li>Unlimited AI Access</li>
-                    <li>Valid for 7 days</li>
-                </ul>
-                <button class="btn" onclick="initPayment('weekly')" id="weeklyBtn">Try for ₹1</button>
-            </div>
-        </div>
-    </div>
+    <div id="modal-bitmoji" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Your Bitmoji</h2><div class="avatar-preview" id="bitmoji-preview" style="position: relative; width: 120px; height: 120px; margin: 0 auto 20px;"><img id="avatar-base" src="" alt="base" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;"><img id="avatar-shirt" class="avatar-layer" src="" alt="shirt" style="z-index:2;"><img id="avatar-jacket" class="avatar-layer" src="" alt="jacket" style="z-index:3;"><img id="avatar-pants" class="avatar-layer" src="" alt="pants" style="z-index:4;"><img id="avatar-shoes" class="avatar-layer" src="" alt="shoes" style="z-index:5;"><img id="avatar-glasses" class="avatar-layer" src="" alt="glasses" style="z-index:6;"></div><div style="text-align:center; margin-bottom:20px;"><span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span><span style="margin-left:20px;">📦 Crates: <span id="bitmoji-crates">0</span></span></div><h3>Upload Your Own PNGs</h3><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;"><div class="upload-zone" id="drop-body" data-category="body" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧍 Body<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shirt" data-category="shirt" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👕 Shirt<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-jacket" data-category="jacket" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧥 Jacket<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-pants" data-category="pants" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👖 Pants<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shoes" data-category="shoes" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👟 Shoes<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-glasses" data-category="glasses" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👓 Glasses<br><small>Drag PNG here</small></div></div><h3>Inventory</h3><div class="bitmoji-inventory" id="bitmoji-inventory"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="claimFreeReward()">🎁 Claim Daily Reward</button><button class="btn" style="margin-top:10px; width:100%;" onclick="saveOutfit()">💾 Save Outfit</button></div></div>
 
-    <!-- Main Script (core with full tasks, AI, and calendar pagination + premium updates) -->
+    <div id="modal-store" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Store</h2><div style="display: flex; justify-content: space-between; margin: 10px 0;"><span style="color:var(--gold)">🪙 Coins: <span id="store-coins">0</span></span><span>📦 Crates: <span id="store-crates">0</span></span></div><div class="category-tabs" id="category-tabs"></div><div class="store-grid" id="store-items"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="openCrate()">📦 Open Crate (Cost: 1 Crate)</button></div></div>
+
+    <div id="modal-premium" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Premium Plans</h2><div id="premiumStatus" style="text-align:center; margin-bottom:20px;"></div><div class="plan-card" style="border-color:var(--gold)"><div style="font-size:1.5rem">🎁 Starter Pack</div><div class="plan-price">₹49</div><ul class="features-list"><li>One-time purchase (once per user)</li><li>1.3x XP Multiplier</li><li>+15 Daily Bonus Coins</li><li>Exclusive “Starter” Badge</li><li>Unlimited AI Access for 30 days</li></ul><button class="btn btn-accent" onclick="initPayment('starter')" id="starterBtn">Get Started</button></div><div class="plan-card"><div style="font-size:1.5rem">🥈 Monthly</div><div class="plan-price">₹99</div><ul class="features-list"><li>1.2x XP Multiplier</li><li>+10 Daily Bonus Coins</li><li>Exclusive Themes</li><li>Unlimited AI Access</li></ul><button class="btn btn-sec" onclick="initPayment('monthly')" id="monthlyBtn">Subscribe</button></div><div class="plan-card" style="border-color:var(--gold)"><div style="font-size:1.5rem">🔥 3 Months</div><div class="plan-price">₹290</div><ul class="features-list"><li>1.5x XP Multiplier</li><li>+20 Daily Bonus Coins</li><li>All Monthly Features</li><li>VIP Avatar Frame</li><li>Early Access</li></ul><button class="btn btn-accent" onclick="initPayment('quarterly')" id="quarterlyBtn">Subscribe</button></div></div></div>
+
+    <div id="modal-stats" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>📊 Stats & Progress</h2><div class="step-circle"><div>👟 TODAY'S STEPS</div><div class="step-number-large" id="stats-step-count">0</div><button class="btn-sec" onclick="requestStepPermission()" style="margin-top:8px;">Enable Step Tracking</button></div><div class="gauge-container" id="gauge-container"></div><button class="btn" style="width:100%; margin: 10px 0;" onclick="openFoodLogModal()">🍽️ Log Meal with Camera</button><div id="stats-extra" style="margin-top:20px;"></div><div class="badge-list" id="badgeContainer"></div></div></div>
+
+    <div id="modal-food" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🍽️ Log Meal</h2><div class="input-group"><label>Food name (or auto-detect)</label><input type="text" id="food-name" placeholder="e.g., Pizza"></div><div class="input-group"><label>Or take a photo</label><input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="analyzeFoodImage(this)"></div><div id="imagePreview"></div><div class="input-group"><label>Calories (auto-filled)</label><input type="number" id="food-calories" placeholder="Calories"></div><button class="btn" onclick="addFoodEntry()">Add Meal</button><h3>Today's Meals</h3><div id="food-list-container"></div><div><strong>Total: <span id="total-food-calories">0</span> kcal</strong></div></div></div>
+
     <script>
-        // ===============================
-        // GOAL TASKS - FULL 50 EACH (keep as original – abbreviated for brevity)
-        // ===============================
-        const goalTasks = {
-            weightLoss: Array(50).fill().map((_,i)=>({task:`Weight Loss Task ${i+1}`, points:50})),
-            muscleGain: Array(50).fill().map((_,i)=>({task:`Muscle Gain Task ${i+1}`, points:50})),
-            healthyLifestyle: Array(50).fill().map((_,i)=>({task:`Healthy Lifestyle Task ${i+1}`, points:50})),
-            productivity: Array(50).fill().map((_,i)=>({task:`Productivity Task ${i+1}`, points:50}))
+        // ======================= FULL SCRIPT (all features intact, same as previous working version) =======================
+        // 28-DAY TASKS DATA (condensed but complete)
+        const goalTasksData = {
+            weightGain: {1:["Bench press + incline press","Train triceps","Eat heavy breakfast","Drink 2.5–3L water","Eat post-workout meal"],2:["Lat pulldown + rows","Biceps curls","Add 2 bananas","Track workout weights","Sleep 7–8 hours"],3:["Squats + leg press","Train calves","Eat extra rice/roti","Push near failure","Drink milk"],4:["Shoulder press + chest","Triceps isolation","Add peanut butter","Control reps","Eat 5 meals"],5:["Back + rear delts","Biceps curls focus","Eat 4–6 eggs","Track strength","Drink water"],6:["Heavy squats","Hamstring curls","Increase food portion","Stretch after workout","Sleep well"],7:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8+ hours"],8:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Stay hydrated"],9:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],10:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],11:["Incline press focus","Triceps dips","Add peanut butter","Control tempo","Eat 5 meals"],12:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],13:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],14:["Eat surplus calories","Drink milk","Eat protein meals","Relax muscles","Sleep 8 hours"],15:["Bench press + shoulders","Triceps workout","Add banana shake","Eat post-workout meal","Hydrate"],16:["Rows + pulldown","Biceps curls","Add eggs","Track progress","Sleep well"],17:["Squats + leg press","Calves training","Eat extra carbs","Push hard","Drink milk"],18:["Incline press","Triceps dips","Add peanut butter","Control reps","Eat 5 meals"],19:["Back + rear delts","Biceps curls","Eat protein meals","Track weights","Drink water"],20:["Heavy squats","Hamstring curls","Increase calories","Stretch","Sleep well"],21:["Eat surplus calories","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Hydrate"],23:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],24:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],25:["Incline press","Triceps workout","Add peanut butter","Control tempo","Eat 5 meals"],26:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],27:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],28:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Review progress","Sleep 8+ hours"]},
+            weightLoss: {1:["Bench press + incline press","Triceps workout","15 min cardio","Eat high-protein meals","Drink 2–3L water"],2:["Lat pulldown + rows","Biceps curls","15 min cardio","Avoid junk food","Sleep 7–8 hours"],3:["Squats + leg press","Calf raises","20 min cardio","Reduce carb portion","Drink water"],4:["Shoulder press + chest","Triceps isolation","15 min cardio","Eat small portions","Stay consistent"],5:["Back + rear delts","Biceps workout","15 min cardio","Eat protein-rich meals","Hydrate"],6:["Squats + lunges","Hamstring curls","20 min cardio","Avoid sugary drinks","Sleep well"],7:["Walk 8–10k steps","Eat clean meals","Stay in calorie deficit","Drink water","Sleep 8 hours"],8:["Bench press progression","Shoulder raises","20 min cardio","Eat high protein","Hydrate"],9:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],10:["Squats + press","Calves","20 min cardio","Reduce carbs","Drink water"],11:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],12:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],13:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],14:["Walk 10k steps","Eat clean","Stay in deficit","Drink water","Rest well"],15:["Bench + shoulders","Triceps workout","20 min cardio","Eat high protein","Hydrate"],16:["Rows + pulldown","Biceps curls","15 min cardio","Avoid junk","Sleep well"],17:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],18:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],19:["Back + rear delts","Biceps workout","15 min cardio","Eat protein","Hydrate"],20:["Heavy squats","Hamstrings","20 min cardio","Avoid sugar","Sleep well"],21:["Walk 10k steps","Eat clean meals","Stay in deficit","Drink water","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","20 min cardio","Eat protein","Hydrate"],23:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],24:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],25:["Incline press","Triceps workout","15 min cardio","Eat small meals","Stay consistent"],26:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],27:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],28:["Walk 10k steps","Eat clean","Review progress","Stay in deficit","Sleep properly"]},
+            yogaZumba: {1:["Zumba 20 mins","Surya Namaskar 6 rounds","Bhujangasana","Eat light meals","Drink water"],2:["Zumba 20 mins","Surya Namaskar 6 rounds","Downward Dog","Walk 15 mins","Sleep 7-8h"],3:["Zumba 25 mins","Surya Namaskar 8 rounds","Chair pose","Reduce junk","Hydrate"],4:["Zumba 20 mins","Surya Namaskar 6 rounds","Plank","Eat clean","Stay consistent"],5:["Zumba 20 mins","Surya Namaskar 6 rounds","Forward bend","Walk 20 mins","Hydrate"],6:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior flow","Avoid sugar","Sleep well"],7:["Light yoga","Walk 8k steps","Eat clean","Drink water","Deep breathing"],8:["Zumba 25 mins","Surya Namaskar 8 rounds","Plank hold","High-fiber food","Hydrate"],9:["Zumba 20 mins","Surya Namaskar 6 rounds","Cobra","Walk 25 mins","Sleep well"],10:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Light dinner","Drink water"],11:["Zumba 20 mins","Surya Namaskar 6 rounds","Chaturanga","Eat clean","Consistent"],12:["Zumba 20 mins","Surya Namaskar 6 rounds","Forward bend","Walk 20 mins","Hydrate"],13:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Avoid junk","Sleep well"],14:["Full body stretch","Walk 10k steps","Eat clean","Drink water","Deep breathing"],15:["Zumba 25 mins","Surya Namaskar 8 rounds","Plank hold","Light meals","Hydrate"],16:["Zumba 20 mins","Surya Namaskar 6 rounds","Cobra","Walk 25 mins","Sleep well"],17:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Eat clean","Drink water"],18:["Zumba 20 mins","Surya Namaskar 6 rounds","Chaturanga","Small meals","Consistent"],19:["Zumba 20 mins","Surya Namaskar 6 rounds","Forward bend","Walk 20 mins","Hydrate"],20:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Avoid sugar","Sleep well"],21:["Light yoga","Walk 10k steps","Eat clean","Drink water","Deep breathing"],22:["Zumba 25 mins","Surya Namaskar 8 rounds","Plank hold","Fiber-rich","Hydrate"],23:["Zumba 20 mins","Surya Namaskar 6 rounds","Cobra","Walk 25 mins","Sleep well"],24:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Light dinner","Drink water"],25:["Zumba 20 mins","Surya Namaskar 6 rounds","Chaturanga","Eat clean","Consistent"],26:["Zumba 20 mins","Surya Namaskar 6 rounds","Forward bend","Walk 20 mins","Hydrate"],27:["Zumba 25 mins","Surya Namaskar 8 rounds","Warrior","Avoid junk","Sleep well"],28:["Full body stretch","Walk 10k steps","Review progress","Stay hydrated","Deep breathing"]},
+            healthyLifestyle: {1:["Balanced breakfast","Drink 2-3L water","Add fruit","Home-cooked lunch","Sleep on time"],2:["Protein in meals","Add vegetables","Avoid junk","Dinner before 9PM","Hydrate"],3:["Whole grains","Add nuts","Fruit snack","Avoid sugary drinks","Sleep 7-8h"],4:["Light breakfast","Add salad","Drink water","Avoid overeating","Consistent"],5:["Include dairy","Balanced lunch","Add fruit","Avoid fried food","Hydrate"],6:["Small frequent meals","Protein snack","Drink water","Early dinner","Sleep well"],7:["Clean meals only","Plenty water","Avoid junk","Add fruits+veggies","Relax digestion"],8:["Protein breakfast","Add vegetables","Drink water","Avoid sugar","Consistent"],9:["Whole grains","Add nuts","Eat fruit","Avoid junk","Sleep well"],10:["Balanced meals","Add salad","Hydrate","Avoid overeating","Stay active"],11:["Include dairy","Home food","Add fruit","Avoid fried food","Drink water"],12:["Small meals","Protein snack","Hydrate","Early dinner","Sleep well"],13:["Clean meals","Add vegetables","Drink water","Avoid sugar","Consistent"],14:["Light meals","Add fruits","Drink water","Avoid junk","Relax"],15:["Protein breakfast","Add vegetables","Hydrate","Avoid sugar","Consistent"],16:["Whole grains","Add nuts","Eat fruit","Avoid junk","Sleep well"],17:["Balanced meals","Add salad","Hydrate","Avoid overeating","Stay active"],18:["Include dairy","Home food","Add fruit","Avoid fried food","Drink water"],19:["Small meals","Protein snack","Hydrate","Early dinner","Sleep well"],20:["Clean meals","Add vegetables","Drink water","Avoid sugar","Consistent"],21:["Clean meals","Add fruits","Drink water","Avoid junk","Relax digestion"],22:["Protein breakfast","Add vegetables","Hydrate","Avoid sugar","Consistent"],23:["Whole grains","Add nuts","Eat fruit","Avoid junk","Sleep well"],24:["Balanced meals","Add salad","Hydrate","Avoid overeating","Stay active"],25:["Include dairy","Home food","Add fruit","Avoid fried food","Drink water"],26:["Small meals","Protein snack","Hydrate","Early dinner","Sleep well"],27:["Clean meals","Add vegetables","Drink water","Avoid sugar","Consistent"],28:["Light meals","Add fruits","Drink water","Review diet","Relax"]}
         };
+        function getTasksForDay(goal, dayNumber) { let cycleDay = ((dayNumber - 1) % 28) + 1; let tasksArray = goalTasksData[goal]?.[cycleDay]; if (!tasksArray) return Array(5).fill("Complete your daily habit"); return tasksArray.slice(0,5); }
 
-        // ===============================
-        // AI RESPONSES - FULL 50+ EACH (abbreviated)
-        // ===============================
-        const aiResponses = {
-            weightLoss: Array(50).fill().map((_,i)=>`Weight Loss advice ${i+1}`),
-            muscleGain: Array(50).fill().map((_,i)=>`Muscle Gain advice ${i+1}`),
-            healthyLifestyle: Array(50).fill().map((_,i)=>`Healthy Lifestyle advice ${i+1}`),
-            productivity: Array(50).fill().map((_,i)=>`Productivity advice ${i+1}`)
-        };
+        // STEP & CALORIE
+        let stepCount = 0, lastAcceleration = null, stepThreshold = 1.2, lastStepTime = 0, stepCooldown = 300, stepListenerActive = false;
+        function getTodayStr() { return new Date().toISOString().split('T')[0]; }
+        function loadSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepCount = stepsData[getTodayStr()] || 0; updateStepUI(); }
+        function saveSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepsData[getTodayStr()] = stepCount; localStorage.setItem('stepHistory', JSON.stringify(stepsData)); updateStepUI(); checkStepBadge(); }
+        function updateStepUI() { if(document.getElementById('stats-step-count')) document.getElementById('stats-step-count').innerText = stepCount; }
+        function requestStepPermission() { if (!window.isSecureContext) { alert("⚠️ Step tracking requires HTTPS."); return; } if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') { DeviceMotionEvent.requestPermission().then(p => { if (p === 'granted') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; alert('Step tracking enabled!'); } else alert('Permission denied'); }).catch(console.error); } else { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; alert('Step tracking active'); } }
+        function handleMotion(e) { if (!stepListenerActive) return; let acc = e.accelerationIncludingGravity; if (!acc) return; let mag = Math.sqrt((acc.x||0)**2+(acc.y||0)**2+(acc.z||0)**2); let now = Date.now(); if (mag > stepThreshold && (now - lastStepTime) > stepCooldown) { stepCount++; saveSteps(); lastStepTime = now; if (!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); } }
+        function calculateBMR(w,h,a,g) { let bmr = 10*w+6.25*h-5*a; if(g==='Male') bmr+=5; else if(g==='Female') bmr-=161; return Math.round(bmr); }
+        function calculateActiveCalories(steps, w) { if(!w||steps===0) return 0; let dur = (steps*0.762)/1.4/3600; return Math.round(3.8*w*dur); }
+        function getFoodCaloriesForToday() { let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; return (foodLog[getTodayStr()]||[]).reduce((s,e)=>s+e.calories,0); }
+        const foodDB = { "apple":95, "banana":105, "pizza":285, "burger":550, "salad":150, "rice":200, "chicken":335, "pasta":350 };
+        function analyzeFoodImage(input) { let file = input.files[0]; if(!file) return; let reader = new FileReader(); reader.onload = function(e) { document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:20px;">`; let fakeName = file.name.split('.')[0].replace(/[0-9]/g,'').slice(0,10) || "meal"; let lower = fakeName.toLowerCase(); let calories = foodDB[lower] || Math.floor(Math.random()*300)+100; document.getElementById('food-name').value = fakeName; document.getElementById('food-calories').value = calories; addFeedItemManually(`📸 AI guessed ${fakeName} (${calories} kcal)`, true); }; reader.readAsDataURL(file); }
+        function addFoodEntry() { let name = document.getElementById('food-name').value.trim(); let cal = parseInt(document.getElementById('food-calories').value); if(!name || isNaN(cal)) return alert("Enter food name or take a photo first"); let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; let today = getTodayStr(); if(!foodLog[today]) foodLog[today]=[]; foodLog[today].push({name, calories:cal, timestamp:Date.now()}); localStorage.setItem('foodLog', JSON.stringify(foodLog)); document.getElementById('food-name').value = ''; document.getElementById('food-calories').value = ''; document.getElementById('imagePreview').innerHTML = ''; document.getElementById('cameraInput').value = ''; renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); addFeedItemManually(`🍽️ Logged ${name} (${cal} kcal)`, true); checkFoodBadge(); }
+        function renderFoodList() { let entries = (JSON.parse(localStorage.getItem('foodLog'))||{})[getTodayStr()]||[]; let container = document.getElementById('food-list-container'); container.innerHTML = ''; entries.forEach((e,i)=>{ let div = document.createElement('div'); div.className='food-item'; div.innerHTML=`<span><strong>${e.name}</strong> - ${e.calories} kcal</span><button class="btn-sec" onclick="removeFoodEntry(${i})">🗑️</button>`; container.appendChild(div); }); document.getElementById('total-food-calories').innerText = getFoodCaloriesForToday(); }
+        function removeFoodEntry(idx) { let foodLog = JSON.parse(localStorage.getItem('foodLog'))||{}; let today = getTodayStr(); if(foodLog[today]) foodLog[today].splice(idx,1); localStorage.setItem('foodLog', JSON.stringify(foodLog)); renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+        let userBadges = JSON.parse(localStorage.getItem('userBadges')) || [];
+        function checkStepBadge() { if(stepCount>=10000 && !userBadges.includes('10k Steps')) { userBadges.push('10k Steps'); saveBadges(); addFeedItemManually(`🏅 New badge: 10k Steps!`, true); confetti(); } }
+        function checkFoodBadge() { let total = getFoodCaloriesForToday(); if(total>=2000 && !userBadges.includes('2k Calories')) { userBadges.push('2k Calories'); saveBadges(); addFeedItemManually(`🏅 New badge: 2k Calories!`, true); confetti(); } }
+        function saveBadges() { localStorage.setItem('userBadges', JSON.stringify(userBadges)); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+        function renderStatsModal() { let w=user.weight, h=user.height, a=user.age, g=user.gender; let bmr = calculateBMR(w,h,a,g); let active = calculateActiveCalories(stepCount, w); let food = getFoodCaloriesForToday(); document.getElementById('stats-step-count').innerText = stepCount; let container = document.getElementById('gauge-container'); container.innerHTML = ''; function createGauge(label,val,max,unit,color){ let p=Math.min((val/max)*100,100); let circ=2*Math.PI*40; let dash=(p/100)*circ; let div=document.createElement('div'); div.className='gauge'; div.innerHTML=`<svg viewBox="0 0 100 100"><circle class="bg-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none"></circle><circle class="fill-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none" stroke="${color}" stroke-dasharray="${circ}" stroke-dashoffset="${circ-dash}"></circle></svg><div class="gauge-value">${val}</div><div class="gauge-label">${label}<br>${unit}</div>`; return div; } container.appendChild(createGauge('BMR',bmr,3000,'kcal','#00FF7F')); container.appendChild(createGauge('Active',active,1000,'kcal','#FFD700')); container.appendChild(createGauge('Food',food,2000,'kcal','#FF4500')); document.getElementById('stats-extra').innerHTML = `<p>🔥 Streak: ${user.streak}</p><p>🏆 Level: ${user.level}</p><p>📅 Days: ${user.completedDays.length}/100</p><p>🪙 Coins: ${user.coins}</p>`; document.getElementById('badgeContainer').innerHTML = userBadges.map(b=>`<div class="badge">🏅 ${b}</div>`).join('') || '<div>No badges yet.</div>'; }
+        function openFoodLogModal() { closeAllModals(); renderFoodList(); document.getElementById('modal-food').classList.remove('hidden'); }
 
-        // ===============================
-        // STATE MANAGEMENT (with equipped including jacket)
-        // ===============================
-        const defaultState = {
-            name: "", email: "", age: 0, goal: "weightLoss", gender: "Male",
-            xp: 0, level: 1, coins: 100, streak: 0, completedDays: [], tasks: [],
-            inventory: [], crates: 0, isPremium: false, premiumPlan: null,
-            equipped: { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }
-        };
-        let user = JSON.parse(localStorage.getItem('levelUpUser')) || defaultState;
-        if (!user.inventory) user.inventory = [];
-        if (!user.crates) user.crates = 0;
-        if (!user.isPremium) user.isPremium = false;
-        if (!user.premiumPlan) user.premiumPlan = null;
-        if (!user.equipped) user.equipped = { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null };
+        // USER CORE
+        let user = JSON.parse(localStorage.getItem('levelUpUser')) || { name: "", email: "", age: 0, weight: 70, height: 170, goal: "weightGain", gender: "Male", xp: 0, level: 1, coins: 100, streak: 0, completedDays: [], tasks: [], inventory: [], crates: 0, isPremium: false, premiumPlan: null, starterPurchased: false, equipped: { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }, friends: [], chats: {}, lastActivity: {} };
+        if (!user.weight) user.weight = 70; if (!user.height) user.height = 170; if (!user.inventory) user.inventory = []; if (!user.crates) user.crates = 0; if (!user.equipped) user.equipped = { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }; if (!user.completedDays) user.completedDays = []; if (!user.friends) user.friends = []; if (!user.chats) user.chats = {}; if (!user.lastActivity) user.lastActivity = {}; if (user.starterPurchased === undefined) user.starterPurchased = false;
+        if (user.friends.length === 0 && user.name) { user.friends = ["Alex", "Sarah", "Mike"]; user.chats["Alex"] = [{ from: "Alex", text: "Hey! Keep going!", time: new Date().toLocaleTimeString() }]; user.chats["Sarah"] = [{ from: "Sarah", text: "You got this!", time: new Date().toLocaleTimeString() }]; user.chats["Mike"] = [{ from: "Mike", text: "Let's finish strong!", time: new Date().toLocaleTimeString() }]; user.lastActivity["Alex"] = Date.now() - 3*24*60*60*1000; user.lastActivity["Sarah"] = Date.now() - 1*24*60*60*1000; user.lastActivity["Mike"] = Date.now() - 0.5*24*60*60*1000; saveState(); }
+        function saveState() { localStorage.setItem('levelUpUser', JSON.stringify(user)); updateUI(); }
+        function updateUI() { document.getElementById('display-level').innerText = user.level; document.getElementById('display-streak').innerText = user.streak + " 🔥"; document.getElementById('display-coins').innerText = user.coins; let xpNeeded = user.level * 100; let percent = Math.min((user.xp / xpNeeded) * 100, 100); document.getElementById('xp-fill').style.width = percent + "%"; document.getElementById('xp-text').innerText = `${user.xp} / ${xpNeeded} XP`; let today = getTodayStr(); let daysDone = user.completedDays.length; let currentDay = user.completedDays.includes(today) ? daysDone : daysDone + 1; document.getElementById('header-date').innerText = `Day ${currentDay}/100`; const now = new Date(); const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); document.getElementById('level-date').innerText = dateStr; if (user.isPremium) document.getElementById('premiumBadge').classList.remove('hidden'); else document.getElementById('premiumBadge').classList.add('hidden'); document.getElementById('bitmoji-coins').innerText = user.coins; document.getElementById('bitmoji-crates').innerText = user.crates; document.getElementById('store-coins').innerText = user.coins; document.getElementById('store-crates').innerText = user.crates; }
+        let joinCount = parseInt(localStorage.getItem('globalJoinCount') || '0'); document.getElementById('joinCount').innerText = joinCount;
+        function confetti() { for (let i=0;i<40;i++){ let c=document.createElement('div'); c.classList.add('confetti'); c.style.left=Math.random()*100+'%'; c.style.animationDelay=Math.random()*2+'s'; document.body.appendChild(c); setTimeout(()=>c.remove(),4000); } }
+        function saveProfile() { user.name = document.getElementById('inp-name').value; user.email = document.getElementById('inp-email').value; user.age = parseInt(document.getElementById('inp-age').value); user.weight = parseFloat(document.getElementById('inp-weight').value); user.height = parseFloat(document.getElementById('inp-height').value); user.goal = document.getElementById('inp-goal').value; user.gender = document.getElementById('inp-gender').value; if (!user.name) return alert("Fill all fields"); saveState(); joinCount++; localStorage.setItem('globalJoinCount', joinCount); confetti(); document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; updateUI(); loadSteps(); startLiveUpdates(); if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; } addFeedItemManually(`${user.name} joined the challenge!`, true); if (user.friends.length === 0) { user.friends = ["Alex", "Sarah", "Mike"]; user.chats["Alex"] = [{ from: "Alex", text: "Hey! Keep going!", time: new Date().toLocaleTimeString() }]; user.chats["Sarah"] = [{ from: "Sarah", text: "You got this!", time: new Date().toLocaleTimeString() }]; user.chats["Mike"] = [{ from: "Mike", text: "Let's finish strong!", time: new Date().toLocaleTimeString() }]; user.lastActivity["Alex"] = Date.now() - 3*24*60*60*1000; user.lastActivity["Sarah"] = Date.now() - 1*24*60*60*1000; user.lastActivity["Mike"] = Date.now() - 0.5*24*60*60*1000; saveState(); } }
+        function addFeedItemManually(message, isUser = false) { const feed = document.getElementById('feedContainer'); if (!feed) return; const time = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); const newItem = document.createElement('div'); newItem.classList.add('feed-item'); newItem.innerHTML = `<span class="feed-time">${time}</span> <span>${isUser ? user.name+': ' : ''}${message}</span>`; feed.prepend(newItem); if (feed.children.length > 8) feed.removeChild(feed.lastChild); }
+        function startLiveUpdates() { setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000); setInterval(refreshQuote, 10000); refreshQuote(); setInterval(() => { const acts = ["completed a task","leveled up","opened a crate","earned 200 XP","hit streak"]; const names = ["Alex","Sarah","Mike","Emma","Leo"]; addFeedItemManually(`${names[Math.floor(Math.random()*names.length)]} ${acts[Math.floor(Math.random()*acts.length)]}`); }, 15000); updateOnlineCounts(); setInterval(updateOnlineCounts, 20000); checkWeeklyReview(); cleanupExpiredMessages(); setInterval(cleanupExpiredMessages, 3600000); }
+        function refreshQuote() { let q=["The only bad workout is the one that didn't happen.","Small progress is still progress.","You are stronger than you think.","Discipline > Motivation"]; document.getElementById('quoteBox').innerText='✨ "'+q[Math.floor(Math.random()*q.length)]+'"'; }
+        function updateOnlineCounts() { document.getElementById('onlineCount').innerText = Math.floor(Math.random()*200)+100; document.getElementById('premiumOnline').innerText = Math.floor(Math.random()*50)+20; }
 
-        window.user = user;
-        window.saveState = saveState;
+        // TASKS (with demo)
+        const taskDemos = {"bench press":"🧠 How to Bench Press:\n1. Lie on bench with eyes under bar.\n2. Grip bar slightly wider than shoulders.\n3. Unrack, lower to mid-chest, elbows at 45°.\n4. Drive feet into floor, press explosively up.\n5. Keep shoulders pinned back.","squat":"🧠 How to Squat:\n1. Stand with feet shoulder-width, bar on upper back.\n2. Brace core, sit back like into a chair.\n3. Descend until hips below knees.\n4. Drive through heels to stand.\n5. Keep chest up.","deadlift":"🧠 Deadlift Setup:\n1. Bar over mid-foot, shins touch bar.\n2. Hinge at hips, grab bar outside knees.\n3. Flatten back, pull slack out of bar.\n4. Drag bar up legs, stand tall.\n5. Hinge hips back to lower.","pull up":"🧠 Pull Up Form:\n1. Grip bar slightly wider than shoulders.\n2. Engage lats, pull elbows down.\n3. Pull chin above bar.\n4. Lower controlled, don't drop.\n5. If can't do one, use band or negatives.","push up":"🧠 Perfect Push Up:\n1. Hands slightly wider than shoulders.\n2. Body straight from head to heels.\n3. Lower chest to floor, elbows at 45°.\n4. Push through palms to return.\n5. Keep core tight.","zumba":"💃 Zumba Tips:\n1. Keep knees soft, bounce lightly.\n2. Follow the rhythm – don't overthink steps.\n3. Use your hips, not just feet.\n4. Hydrate before and after.\n5. Have fun and let loose!","surya namaskar":"🧘 Surya Namaskar (Sun Salutation):\n1. Stand tall, hands in prayer.\n2. Reach arms up, backbend.\n3. Forward fold.\n4. Step back into plank, lower to cobra.\n5. Upward dog, downward dog, step forward, fold, arms up, hands down.\nRepeat 6-12 rounds.","plank":"📏 Plank Form:\n1. Shoulders over wrists.\n2. Engage abs, squeeze glutes.\n3. Body in straight line, don't sag hips.\n4. Hold 20-60 seconds.\n5. Breathe throughout.","eat":"🍽️ Healthy Eating:\n1. Include protein in every meal.\n2. Fill half plate with veggies.\n3. Choose whole grains over refined.\n4. Stay hydrated – water first.\n5. Eat slowly, savor each bite.","drink water":"💧 Hydration Tips:\n1. Aim for 2-3L water daily.\n2. Start morning with a glass.\n3. Carry a bottle with time markers.\n4. Drink before meals.\n5. Add lemon or mint for flavor.","sleep":"😴 Better Sleep:\n1. Same bedtime every night.\n2. No screens 1 hour before.\n3. Keep room cool and dark.\n4. Avoid caffeine after 2 PM.\n5. Wind down with reading or stretching.","walk":"🚶 Walking for Health:\n1. Aim for 10,000 steps daily.\n2. Swing arms naturally.\n3. Land mid-foot, roll through step.\n4. Maintain good posture.\n5. Brisk pace = slight breathlessness."};
+        function getTaskDemo(taskText) { const lower = taskText.toLowerCase(); for (let [key, demo] of Object.entries(taskDemos)) if (lower.includes(key)) return demo; return "🧠 Read the task carefully and follow instructions."; }
+        function showTaskDemo(taskText) { const demo = getTaskDemo(taskText); const panel = document.getElementById('taskDemoPanel'); document.getElementById('taskDemoTitle').innerHTML = `📘 How to: ${taskText.substring(0, 50)}`; document.getElementById('taskDemoContent').innerHTML = demo.replace(/\n/g, '<br>'); panel.style.display = 'block'; }
+        function openTasks() { let today = getTodayStr(); if (user.completedDays.includes(today)) return alert("Already completed today!"); closeAllModals(); document.getElementById('modal-tasks').classList.remove('hidden'); let currentDay = user.completedDays.length + 1; document.getElementById('tasks-modal-title').innerText = `Day ${currentDay} Tasks`; document.getElementById('task-date-display').innerText = new Date().toDateString(); let tasksForDay = getTasksForDay(user.goal, currentDay); user.tasks = tasksForDay.map(task => ({ task: task, points: 50, done: false })); saveState(); renderTasksEditable(); document.getElementById('finish-day-btn').disabled = true; document.getElementById('finish-day-btn').innerText = 'Complete tasks to claim rewards'; document.getElementById('tasks-status-message').innerText = "⚠️ Complete all 5 tasks to finish the day."; document.getElementById('taskDemoPanel').style.display = 'none'; }
+        function renderTasksEditable() { const container = document.getElementById('task-list-container'); container.innerHTML = ''; user.tasks.forEach((t, idx) => { const div = document.createElement('div'); div.className = 'task-item'; div.onclick = (e) => { if (e.target.classList.contains('task-check') || e.target.classList.contains('task-bitmoji-demo')) return; showTaskDemo(t.task); }; div.innerHTML = `<div style="flex:1; display: flex; align-items: center; gap: 10px;"><span style="${t.done ? 'text-decoration:line-through;opacity:0.5' : ''}">${t.task}</span><span class="task-points">+${t.points}</span><span class="task-bitmoji-demo" data-task="${t.task}" style="cursor:pointer; font-size:1.2rem;">🧑‍🎤</span></div><div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTaskEditable(${idx})"></div>`; container.appendChild(div); }); document.querySelectorAll('.task-bitmoji-demo').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const taskText = el.getAttribute('data-task'); const emojiAction = getTaskEmoji(taskText); el.innerHTML = emojiAction; setTimeout(() => { el.innerHTML = '🧑‍🎤'; }, 2000); addFeedItemManually(`🧑‍🎤 Bitmoji demonstrates: ${emojiAction}`, true); showTaskDemo(taskText); }); }); const allDone = user.tasks.every(t => t.done); document.getElementById('finish-day-btn').disabled = !allDone; if (allDone) document.getElementById('tasks-status-message').innerText = "✅ All tasks complete! Ready to claim."; }
+        function toggleTaskEditable(idx) { user.tasks[idx].done = !user.tasks[idx].done; renderTasksEditable(); saveState(); }
+        function finishDay() { if (!user.tasks.every(t=>t.done)) return; let xpGain = user.tasks.reduce((s,t)=>s+t.points,0); if (user.isPremium && user.xpMultiplier) xpGain = Math.floor(xpGain * user.xpMultiplier); user.xp += xpGain; let bonus = 20 + (user.isPremium ? (user.dailyBonusCoins||0) : 0); user.coins += bonus; user.streak++; while (user.xp >= user.level*100) { user.level++; user.coins+=50; confetti(); } let today = getTodayStr(); if (!user.completedDays.includes(today)) user.completedDays.push(today); user.tasks = []; let weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())); if (!user.weeklyChallenge || new Date(user.weeklyChallenge?.weekStart).toDateString() !== weekStart.toDateString()) { user.weeklyChallenge = { weekStart: weekStart.toISOString(), daysCompleted: 0, claimed: false }; } user.weeklyChallenge.daysCompleted++; if (user.weeklyChallenge.daysCompleted >= 5 && !user.weeklyChallenge.claimed) { user.weeklyChallenge.claimed = true; user.coins += 200; alert("Weekly challenge completed! +200 coins!"); } saveState(); closeAllModals(); addFeedItemManually(`Completed day! +${xpGain} XP`, true); alert(`Day completed! +${xpGain} XP, +${bonus} Coins`); }
+        function getTaskEmoji(taskText) { const lower = taskText.toLowerCase(); if (lower.includes('bench')) return '🏋️‍♂️ Bench press'; if (lower.includes('squat')) return '🦵 Squats'; if (lower.includes('curl')) return '💪 Bicep curl'; if (lower.includes('zumba')) return '💃 Zumba'; if (lower.includes('surya')) return '🧘 Surya Namaskar'; if (lower.includes('plank')) return '📏 Plank'; if (lower.includes('eat')) return '🍽️ Eating healthy'; if (lower.includes('drink')) return '💧 Stay hydrated'; if (lower.includes('sleep')) return '😴 Sleep well'; if (lower.includes('walk')) return '🚶 Walking'; return '🎯 ' + taskText.split(' ')[0]; }
 
-        let joinCount = parseInt(localStorage.getItem('globalJoinCount') || '0');
-        document.getElementById('joinCount').innerText = joinCount;
-
-        function incrementJoinCount() {
-            joinCount++;
-            localStorage.setItem('globalJoinCount', joinCount);
-            document.getElementById('joinCount').innerText = joinCount;
-        }
-
-        // ===============================
-        // ONBOARDING HELPERS
-        // ===============================
-        function validateField(field) {
-            if (field.value.trim() !== '') {
-                field.classList.add('valid');
-                field.classList.remove('invalid');
-            } else {
-                field.classList.add('invalid');
-                field.classList.remove('valid');
-            }
-        }
-
-        function updateAvatarPreview() {
-            const gender = document.getElementById('inp-gender').value;
-            const avatar = document.getElementById('liveAvatar');
-            if (gender === 'Male') avatar.innerText = '👦';
-            else if (gender === 'Female') avatar.innerText = '👧';
-            else avatar.innerText = '🧑';
-        }
-
-        const titleEl = document.getElementById('typingTitle');
-        const fullTitle = 'Create Profile';
-        let i = 0;
-        function typeWriter() {
-            if (i < fullTitle.length) {
-                titleEl.innerHTML = fullTitle.substring(0, i+1) + '<span class="typing"></span>';
-                i++;
-                setTimeout(typeWriter, 100);
-            } else {
-                titleEl.innerHTML = fullTitle + '<span class="typing"></span>';
-            }
-        }
-        typeWriter();
-
-        const vibePhrases = [
-            "No cap, you'll crush it 💯",
-            "Let's get this bread 🍞",
-            "Main character energy 🎬",
-            "Slay the day 💅",
-            "Yeet! 🚀",
-            "Bet. You got this.",
-            "Vibe check: passed ✅",
-            "It's giving… productivity ✨"
-        ];
-        let phraseIndex = 0;
-        setInterval(() => {
-            phraseIndex = (phraseIndex + 1) % vibePhrases.length;
-            document.getElementById('vibePhrase').innerText = vibePhrases[phraseIndex];
-        }, 4000);
-        document.getElementById('vibePhrase').innerText = vibePhrases[0];
-
-        function confetti() {
-            for (let i = 0; i < 20; i++) {
-                const conf = document.createElement('div');
-                conf.classList.add('confetti');
-                conf.style.left = Math.random() * 100 + '%';
-                conf.style.animationDelay = Math.random() * 2 + 's';
-                conf.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 4000);
-            }
-        }
-
-        // ===============================
-        // CORE APP FUNCTIONS
-        // ===============================
-        function saveState() {
-            localStorage.setItem('levelUpUser', JSON.stringify(user));
-        }
-
-        function updateUI() {
-            document.getElementById('ai-goal-display').innerText = user.goal.replace(/([A-Z])/g, ' $1').trim();
-            document.getElementById('display-level').innerText = user.level;
-            document.getElementById('display-streak').innerText = user.streak + " 🔥";
-            document.getElementById('display-coins').innerText = user.coins;
-            
-            const xpForNext = user.level * 100;
-            const percentage = Math.min((user.xp / xpForNext) * 100, 100);
-            document.getElementById('xp-fill').style.width = percentage + "%";
-            document.getElementById('xp-fill').innerText = Math.round(percentage) + "%";
-            document.getElementById('xp-text').innerText = `${user.xp} / ${xpForNext} XP`;
-
-            const dateObj = new Date();
-            const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            document.getElementById('day-counter').innerText = formattedDate;
-
-            const todayStr = new Date().toISOString().split('T')[0];
-            const daysDone = user.completedDays.length;
-            const isTodayDone = user.completedDays.includes(todayStr);
-            const currentDay = isTodayDone ? daysDone : daysDone + 1;
-            document.getElementById('header-date').innerText = `Day ${currentDay}/100`;
-
-            const badge = document.getElementById('premiumBadge');
-            if (user.isPremium) {
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function startLiveUpdates() {
-            setInterval(updateClock, 1000);
-            updateClock();
-            setInterval(refreshQuote, 10000);
-            refreshQuote();
-            setInterval(addFeedItem, 15000);
-            addFeedItem();
-            setInterval(updateOnlineCounts, 20000);
-            updateOnlineCounts();
-        }
-
-        function updateClock() {
-            const now = new Date();
-            const time = now.toLocaleTimeString('en-US', { hour12: false });
-            document.getElementById('liveClock').innerText = time;
-        }
-
-        const quotes = [
-            "The only bad workout is the one that didn't happen.",
-            "Small progress is still progress.",
-            "You are stronger than you think.",
-            "Discipline is choosing what you want now for what you want most.",
-            "Don't stop when you're tired. Stop when you're done.",
-            "It's going to be a journey. It's not a sprint.",
-            "Your body can stand almost anything. It's your mind you have to convince.",
-            "The pain you feel today will be the strength you feel tomorrow.",
-            "Success is the sum of small efforts, repeated day in and day out.",
-            "Fall in love with taking care of yourself."
-        ];
-
-        function refreshQuote() {
-            const quoteBox = document.getElementById('quoteBox');
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            quoteBox.innerText = '✨ "' + quotes[randomIndex] + '"';
-        }
-
-        function addFeedItem() {
-            const feed = document.getElementById('feedContainer');
-            const activities = [
-                'completed a task', 'leveled up', 'bought new shoes', 'opened a crate',
-                'started a workout', 'reached 5-day streak', 'earned 200 XP', 'joined the challenge'
-            ];
-            const names = ['Alex', 'Sarah', 'Mike', 'Emma', 'Jay', 'Zara', 'Leo', 'Mia'];
-            const name = names[Math.floor(Math.random() * names.length)];
-            const action = activities[Math.floor(Math.random() * activities.length)];
-            const time = Math.floor(Math.random() * 10) + 1;
-            const timeStr = time + 'm ago';
-            const newItem = document.createElement('div');
-            newItem.classList.add('feed-item');
-            newItem.innerHTML = `<span class="feed-time">${timeStr}</span> <span>${name} ${action}</span>`;
-            feed.prepend(newItem);
-            if (feed.children.length > 5) {
-                feed.removeChild(feed.lastChild);
-            }
-        }
-
-        function updateOnlineCounts() {
-            const online = Math.floor(Math.random() * 200) + 100;
-            const premium = Math.floor(online * (0.1 + Math.random() * 0.2));
-            document.getElementById('onlineCount').innerText = online;
-            document.getElementById('premiumOnline').innerText = premium;
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        function closeAllModals() {
-            document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
-        }
-
-        // ===============================
-        // ONBOARDING & PROFILE
-        // ===============================
-        function saveProfile() {
-            const name = document.getElementById('inp-name').value;
-            const email = document.getElementById('inp-email').value;
-            const age = document.getElementById('inp-age').value;
-            const goal = document.getElementById('inp-goal').value;
-            const gender = document.getElementById('inp-gender').value;
-            if (!name || !email) {
-                alert("Please fill in required fields");
-                return;
-            }
-
-            const btn = document.getElementById('startBtn');
-            btn.innerText = 'Loading...';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                user.name = name;
-                user.email = email;
-                user.age = age;
-                user.goal = goal;
-                user.gender = gender;
-                saveState();
-
-                incrementJoinCount();
-                confetti();
-
-                document.getElementById('onboarding').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                updateUI();
-                startLiveUpdates();
-
-                btn.innerText = 'Start Journey';
-                btn.disabled = false;
-            }, 800);
-        }
-
-        function showProfile() {
-            toggleSidebar();
-            document.getElementById('modal-profile').classList.remove('hidden');
-            document.getElementById('edit-name').value = user.name;
-            document.getElementById('edit-email').value = user.email;
-            document.getElementById('edit-age').value = user.age;
-            document.getElementById('edit-goal').value = user.goal;
-            document.getElementById('edit-gender').value = user.gender;
-        }
-
-        function updateProfile() {
-            user.name = document.getElementById('edit-name').value;
-            user.email = document.getElementById('edit-email').value;
-            user.age = document.getElementById('edit-age').value;
-            user.goal = document.getElementById('edit-goal').value;
-            user.gender = document.getElementById('edit-gender').value;
-            saveState();
-            updateUI();
-            closeAllModals();
-        }
-
-        function resetData() {
-            if(confirm("Reset all progress?")) {
-                localStorage.removeItem('levelUpUser');
-                localStorage.removeItem('globalJoinCount');
-                location.reload();
-            }
-        }
-
-        // ===============================
-        // CALENDAR (with pagination)
-        // ===============================
-        let calendarPage = 1;
-        function changeCalendarPage(delta) {
-            const newPage = calendarPage + delta;
-            if (newPage < 1 || newPage > 3) return;
-            calendarPage = newPage;
-            renderCalendar();
-        }
-
-        function openCalendar() {
-            closeAllModals();
-            document.getElementById('modal-calendar').classList.remove('hidden');
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = '';
-            const today = new Date().toISOString().split('T')[0];
-            const challengeStart = new Date();
-            challengeStart.setDate(1); // start from 1st of current month for demo
-
-            const completedCount = user.completedDays.length;
-            document.getElementById('calendar-streak').innerText = user.streak;
-            document.getElementById('calendar-completed').innerText = completedCount;
-            document.getElementById('calendar-progress-fill').style.width = (completedCount / 100 * 100) + '%';
-
-            const daysPerPage = 33;
-            const startDay = (calendarPage - 1) * daysPerPage + 1;
-            const endDay = Math.min(startDay + daysPerPage - 1, 100);
-            document.getElementById('calendar-page-indicator').innerText = `Page ${calendarPage}/3`;
-
-            for (let d = startDay; d <= endDay; d++) {
-                const div = document.createElement('div');
-                div.classList.add('day-cell');
-                div.innerText = d;
-                const currentDate = new Date(challengeStart);
-                currentDate.setDate(challengeStart.getDate() + (d - 1));
-                const dateStr = currentDate.toISOString().split('T')[0];
-                
-                if (currentDate.toDateString() === new Date().toDateString()) {
-                    div.classList.add('day-today');
-                }
-
-                if (d === 1) {
-                    div.classList.add('day-start');
-                } else if (user.completedDays.includes(dateStr)) {
-                    div.classList.add('day-completed');
-                } else {
-                    div.classList.add('day-locked');
-                }
-
-                div.onclick = () => {
-                    if (d === 1) {
-                        closeAllModals();
-                        openTasks();
-                    } else {
-                        alert(`Day ${d} is locked. Complete previous days to unlock.`);
-                    }
-                };
-                grid.appendChild(div);
-            }
-        }
-
-        // ===============================
-        // TASKS (updated to show current day)
-        // ===============================
-        function openTasks() {
-            closeAllModals();
-            const todayStr = new Date().toISOString().split('T')[0];
-            if (user.completedDays.includes(todayStr)) {
-                alert("You've already completed today's tasks! Come back tomorrow.");
-                return;
-            }
-            document.getElementById('modal-tasks').classList.remove('hidden');
-            
-            // Calculate current day number
-            const currentDay = user.completedDays.length + 1; // since today not completed
-            document.getElementById('tasks-modal-title').innerText = `Day ${currentDay} Tasks`;
-            document.getElementById('task-date-display').innerText = new Date().toDateString();
-            
-            if (user.tasks.length === 0) {
-                const allTasks = goalTasks[user.goal];
-                // Shuffle and pick 5 tasks for the day
-                const shuffled = [...allTasks].sort(() => 0.5 - Math.random());
-                user.tasks = shuffled.slice(0, 5).map(t => ({ ...t, done: false }));
-            }
-            renderTasks();
-        }
-
-        function renderTasks() {
-            const container = document.getElementById('task-list-container');
-            container.innerHTML = '';
-            user.tasks.forEach((t, index) => {
-                const div = document.createElement('div');
-                div.classList.add('task-item');
-                div.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; flex:1;">
-                        <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.task}</span>
-                        <span class="task-points">+${t.points}</span>
-                    </div>
-                    <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${index})"></div>
-                `;
-                container.appendChild(div);
-            });
-            
-            const allDone = user.tasks.every(t => t.done);
-            const finishBtn = document.getElementById('finish-day-btn');
-            const statusMsg = document.getElementById('tasks-status-message');
-            if (allDone) {
-                finishBtn.disabled = false;
-                finishBtn.innerText = 'Finish Day & Claim Rewards 🎉';
-                statusMsg.innerText = '✅ All tasks complete! Ready to claim.';
-            } else {
-                finishBtn.disabled = true;
-                finishBtn.innerText = 'Complete tasks to claim rewards';
-                statusMsg.innerText = '⚠️ Complete all 5 tasks to finish the day.';
-            }
-        }
-
-        function toggleTask(index) {
-            user.tasks[index].done = !user.tasks[index].done;
-            renderTasks();
-        }
-
-        function finishDay() {
-            const allDone = user.tasks.every(t => t.done);
-            if (!allDone) return alert("Complete all tasks first!");
-            const totalPoints = user.tasks.reduce((sum, t) => sum + t.points, 0);
-            let xpGain = totalPoints;
-            if (user.isPremium && user.xpMultiplier) {
-                xpGain = Math.floor(xpGain * user.xpMultiplier);
-            }
-            user.xp += xpGain;
-            user.coins += 20 + (user.isPremium ? (user.dailyBonusCoins || 0) : 0);
-            user.streak += 1;
-            const oldLevel = user.level;
-            while (user.xp >= user.level * 100) {
-                user.level++;
-                user.coins += 50;
-                confetti();
-            }
-            if (user.level > oldLevel) {
-                alert(`🎉 LEVEL UP! You are now Level ${user.level}!`);
-            }
-            const today = new Date().toISOString().split('T')[0];
-            if (!user.completedDays.includes(today)) {
-                user.completedDays.push(today);
-            }
-            user.tasks = [];
-            saveState();
-            updateUI();
-            closeAllModals();
-            alert(`Day Completed! +${xpGain} XP, +20 Coins`);
-        }
-
-        // ===============================
         // AI COACH
-        // ===============================
-        function askAI() {
-            const input = document.getElementById('ai-input');
-            const output = document.getElementById('ai-output');
-            const question = input.value.trim().toLowerCase();
-            if (!question) return;
-            output.innerHTML = "🤔 Let me think...";
-            setTimeout(() => {
-                const goal = user.goal;
-                const goalResponses = aiResponses[goal] || aiResponses.weightLoss;
-                let matchedResponse = null;
-                const keywords = {
-                    diet: ['diet', 'eat', 'food', 'meal', 'nutrition', 'calorie', 'hungry', 'snack'],
-                    workout: ['workout', 'exercise', 'gym', 'train', 'run', 'cardio', 'lift', 'squat'],
-                    motivation: ['motivate', 'give up', 'lazy', 'tired', 'bored', 'quit', 'inspired'],
-                    sleep: ['sleep', 'tired', 'rest', 'insomnia', 'wake'],
-                    stress: ['stress', 'anxious', 'relax', 'calm', 'meditate', 'breath']
-                };
-                for (let [topic, words] of Object.entries(keywords)) {
-                    if (words.some(word => question.includes(word))) {
-                        const possible = goalResponses.filter(r => r.toLowerCase().includes(topic));
-                        if (possible.length > 0) {
-                            matchedResponse = possible[Math.floor(Math.random() * possible.length)];
-                        }
-                        break;
-                    }
-                }
-                if (!matchedResponse) {
-                    matchedResponse = goalResponses[Math.floor(Math.random() * goalResponses.length)];
-                }
-                output.innerHTML = `<strong>You:</strong> ${input.value}<br><br><strong>AI:</strong> ${matchedResponse}`;
-                input.value = '';
-            }, 800);
-        }
+        let aiMemory = [];
+        function askAI() { let q = document.getElementById('ai-input').value.trim(); if (!q) return; const outputDiv = document.getElementById('ai-output'); outputDiv.innerHTML = "🤔 Let me think..."; setTimeout(() => { let reply = generateSmartReply(q, user.goal); aiMemory.push({ role: "user", content: q }, { role: "assistant", content: reply }); if (aiMemory.length > 16) aiMemory = aiMemory.slice(-16); outputDiv.innerHTML = `<strong>You:</strong> ${q}<br><br><strong>AI Coach:</strong> ${reply}`; document.getElementById('ai-input').value = ''; }, 500); }
+        function generateSmartReply(question, goal) { const lowerQ = question.toLowerCase(); const goalAdvice = { weightGain: { diet: "Eat 300-500 cal surplus, nutrient-dense foods, protein shake.", workout: "Compound lifts, progressive overload, train each group 2x/week.", motivation: "Muscle is built on rest days. Track strength gains weekly.", sleep: "7-9 hours for muscle repair.", stress: "High cortisol blocks growth. Try meditation." }, weightLoss: { diet: "300-500 cal deficit, high protein, half plate veggies.", workout: "Strength 3x/week + cardio 150-300 min/week.", motivation: "Focus on non-scale victories.", sleep: "7-8 hours to regulate hunger hormones.", stress: "Pause before stress eating; walk 5 minutes." }, yogaZumba: { diet: "Light before practice: banana/yogurt. Stay hydrated.", workout: "Consistency over intensity. Mix flows with static holds.", motivation: "Movement is celebration. 15 minutes counts.", sleep: "Yoga nidra improves sleep.", stress: "Pranayama breathing: inhale 4, hold 7, exhale 8." }, healthyLifestyle: { diet: "Half veggies, quarter protein, quarter grains. Cook at home.", workout: "30 min daily of enjoyable activity.", motivation: "Small daily habits create lasting change.", sleep: "Consistent schedule, relaxing routine.", stress: "Gratitude, walks, social connections." } }; const current = goalAdvice[goal] || goalAdvice.healthyLifestyle; if (lowerQ.includes('diet')||lowerQ.includes('food')) return current.diet; if (lowerQ.includes('workout')||lowerQ.includes('exercise')) return current.workout; if (lowerQ.includes('motivation')||lowerQ.includes('give up')) return current.motivation; if (lowerQ.includes('sleep')) return current.sleep; if (lowerQ.includes('stress')) return current.stress; if (lowerQ.includes('hello')) return `Hello ${user.name}! Ask me about diet, workouts, motivation, sleep, or stress.`; return `That's a great question. Could you tell me more? (diet, workout, motivation, sleep, stress)`; }
 
-        // ===============================
-        // LEADERBOARD
-        // ===============================
-        function showLeaderboard() {
-            toggleSidebar();
-            document.getElementById('modal-leaderboard').classList.remove('hidden');
-            const mockUsers = [
-                {name: "Alex", xp: 2500, level: 5},
-                {name: "Sarah", xp: 1800, level: 4},
-                {name: "You", xp: user.xp + (user.level*100), level: user.level},
-                {name: "Mike", xp: 500, level: 2}
-            ].sort((a,b) => b.xp - a.xp);
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '';
-            mockUsers.forEach((u, i) => {
-                let reward = i < 3 ? `<span style="color:var(--gold); font-size:0.8rem">+100 Coins 🏆</span>` : "";
-                const div = document.createElement('div');
-                div.classList.add('leaderboard-item');
-                if (i === 0) div.classList.add('rank-1');
-                if (i === 1) div.classList.add('rank-2');
-                if (i === 2) div.classList.add('rank-3');
-                if(u.name === "You") div.style.borderColor = "var(--primary)";
-                div.innerHTML = `
-                    <div style="font-weight:900; font-size:1.2rem; width:30px">#${i+1}</div>
-                    <div style="flex:1">
-                        <div style="font-weight:bold">${u.name}</div>
-                        <div style="font-size:0.8rem; color:var(--text-sec)">Lvl ${u.level}</div>
-                    </div>
-                    <div>${u.xp} XP</div>
-                    <div>${reward}</div>
-                `;
-                list.appendChild(div);
+        // INBOX (full)
+        let currentChatFriend = null, typingTimeout = null;
+        function showInbox() { closeAllModals(); document.getElementById('modal-inbox').classList.remove('hidden'); renderChatList(); }
+        function renderChatList() { const searchTerm = document.getElementById('inboxSearch')?.value.toLowerCase() || ''; let friendList = user.friends.map(fname => { const mockCompleted = (fname.length * 7) % 100; const mockStreak = (fname.length * 3) % 30; const lastActive = user.lastActivity[fname] || Date.now(); const daysSinceActive = (Date.now() - lastActive) / (1000*3600*24); const lastMessage = user.chats[fname]?.slice(-1)[0]?.text || "Say hello!"; const lastTime = user.chats[fname]?.slice(-1)[0]?.time || ""; return { name: fname, completedDays: mockCompleted, streak: mockStreak, lastActive, isOnline: daysSinceActive < 0.1, goal: user.goal, avatar: fname === "Alex" ? "😎" : (fname === "Sarah" ? "👩‍🦰" : "🧔"), lastMessage, lastTime, status: `Day ${mockCompleted} ${mockStreak > 0 ? '🔥' : ''}` }; }); if (searchTerm) friendList = friendList.filter(f => f.name.toLowerCase().includes(searchTerm)); const container = document.getElementById('chatListContainer'); if (friendList.length === 0) { container.innerHTML = '<div class="no-results">✨ No users found</div>'; return; } container.innerHTML = friendList.map(f => { const percent = (f.completedDays / 100) * 100; const circumference = 2 * Math.PI * 18; const dash = (percent / 100) * circumference; return `<div class="chat-item" onclick="openFullChat('${f.name}')"><div class="chat-avatar"><div style="width:55px;height:55px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${f.avatar}</div>${f.isOnline ? '<span class="online-dot"></span>' : ''}</div><div class="chat-info"><div class="chat-name"><span>${f.name}</span><span>${f.lastTime}</span></div><div class="chat-status">${f.status}</div><div class="chat-preview">${f.lastMessage.substring(0,40)}${f.lastMessage.length>40?'…':''}</div></div><div class="progress-ring-small"><svg width="40" height="40"><circle class="bg-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none"></circle><circle class="fill-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference - dash}"></circle></svg></div></div>`; }).join(''); }
+        function openFullChat(friendName) { currentChatFriend = friendName; document.getElementById('modal-inbox').classList.add('hidden'); const chatModal = document.getElementById('modal-chat'); chatModal.classList.remove('hidden'); renderFullChat(friendName); startTypingSimulation(); }
+        function renderFullChat(friendName) { const friendData = { name: friendName, goal: user.goal, completedDays: (friendName.length * 7) % 100, streak: (friendName.length * 3) % 30 }; document.getElementById('chatProfileHeader').innerHTML = `<div class="chat-profile-avatar">${friendName === "Alex" ? "😎" : (friendName === "Sarah" ? "👩‍🦰" : "🧔")}</div><div class="chat-profile-info"><div class="chat-profile-name">${friendName}</div><div class="chat-profile-goal">Day ${friendData.completedDays} · ${friendData.goal.replace(/([A-Z])/g, ' $1')}</div></div>`; const messages = user.chats[friendName] || []; const messagesHtml = messages.map(msg => `<div class="message ${msg.from === user.name ? 'sent' : 'received'}">${msg.text}<div class="time">${msg.time} ${msg.from === user.name ? (msg.seen ? '✓✓' : '✓') : ''}</div></div>`).join(''); document.getElementById('chatMessagesContainer').innerHTML = messagesHtml; document.getElementById('chatMessagesContainer').scrollTop = document.getElementById('chatMessagesContainer').scrollHeight; if (messages.some(m => m.from !== user.name && !m.seen)) { setTimeout(() => { user.chats[friendName] = user.chats[friendName].map(m => { if (m.from !== user.name && !m.seen) m.seen = true; return m; }); saveState(); renderFullChat(friendName); }, 2000); } }
+        function sendChatMessage() { if (!currentChatFriend) return; const input = document.getElementById('chatMessageInput'); const msg = input.value.trim(); if (!msg) return; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: msg, time: new Date().toLocaleTimeString(), seen: false }); saveState(); input.value = ''; renderFullChat(currentChatFriend); addFeedItemManually(`Sent message to ${currentChatFriend}`, true); simulateReply(currentChatFriend); }
+        function simulateReply(friendName) { setTimeout(() => { if (currentChatFriend === friendName) { const replies = ["Nice! Keep going 💪", "You're crushing it!", "Let's finish strong!", "I'm with you!"]; const reply = replies[Math.floor(Math.random() * replies.length)]; if (!user.chats[friendName]) user.chats[friendName] = []; user.chats[friendName].push({ from: friendName, text: reply, time: new Date().toLocaleTimeString(), seen: false }); saveState(); renderFullChat(friendName); addFeedItemManually(`${friendName} replied`, false); } }, 3000); }
+        function startTypingSimulation() { const input = document.getElementById('chatMessageInput'); const container = document.getElementById('chatMessagesContainer'); let typingDiv = null; input.addEventListener('input', () => { if (typingDiv) return; typingDiv = document.createElement('div'); typingDiv.className = 'typing-indicator'; typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>'; container.appendChild(typingDiv); container.scrollTop = container.scrollHeight; clearTimeout(typingTimeout); typingTimeout = setTimeout(() => { if (typingDiv) typingDiv.remove(); typingDiv = null; }, 1500); }); }
+        function sendProgressCard() { if (!currentChatFriend) return; const stats = `Day ${user.completedDays.length} | 🔥 ${user.streak} streak | 🪙 ${user.coins} coins | 👟 ${stepCount} steps`; const card = `📊 Progress Card:\n${stats}\n🎯 ${Math.round((user.completedDays.length/100)*100)}% complete!`; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: card, time: new Date().toLocaleTimeString(), seen: false }); saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Shared progress card with ${currentChatFriend}`, true); alert("Progress card sent!"); }
+        function sendSnapPhoto() { if (!currentChatFriend) return; const fakePhotoMsg = "📸 Snap: [Photo of today's workout] (disappears in 24h)"; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: fakePhotoMsg, time: new Date().toLocaleTimeString(), expires: Date.now() + 24*3600*1000 }); saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Sent a snap to ${currentChatFriend}`, true); alert("Snap sent! It will disappear after 24 hours."); }
+        function closeChatModal() { document.getElementById('modal-chat').classList.add('hidden'); currentChatFriend = null; }
+        function searchUsers() { const query = document.getElementById('inboxSearch').value.toLowerCase(); const resultsDiv = document.getElementById('searchResults'); if (!query) { resultsDiv.style.display = 'none'; return; } const allUsers = JSON.parse(localStorage.getItem('allUsers')) || []; const filtered = allUsers.filter(u => u.name.toLowerCase().includes(query) && u.name !== user.name && !user.friends.includes(u.name)); if (filtered.length === 0) resultsDiv.innerHTML = '<div>No users found</div>'; else resultsDiv.innerHTML = filtered.map(u => `<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${u.name}</span><button class="btn-sec" onclick="addFriend('${u.name}')">Add</button></div>`).join(''); resultsDiv.style.display = 'block'; }
+        function addFriend(name) { if (!user.friends.includes(name)) { user.friends.push(name); user.chats[name] = []; user.lastActivity[name] = Date.now(); saveState(); renderChatList(); addFeedItemManually(`Added ${name} as a friend!`, true); alert(`Added ${name}`); } else alert(`${name} is already your friend.`); }
+        function cleanupExpiredMessages() { for (let friend in user.chats) user.chats[friend] = user.chats[friend].filter(msg => !msg.expires || msg.expires > Date.now()); saveState(); }
+        function checkWeeklyReview() { const now = new Date(); if (now.getDay() === 0) { const lastReview = localStorage.getItem('lastWeeklyReview'); if (lastReview !== getTodayStr()) { const summary = `📅 Weekly Review: Completed ${user.completedDays.length} days, earned ${user.coins} coins, streak ${user.streak}. Keep going!`; user.friends.forEach(friend => { if (!user.chats[friend]) user.chats[friend] = []; user.chats[friend].push({ from: "System", text: summary, time: new Date().toLocaleTimeString() }); }); localStorage.setItem('lastWeeklyReview', getTodayStr()); saveState(); } } }
+
+        // OTHER FEATURES
+        function showLeaderboard() { toggleSidebar(); document.getElementById('modal-leaderboard').classList.remove('hidden'); let mock = [{name:"Alex", xp:2500, level:5},{name:"Sarah", xp:1800, level:4},{name:user.name, xp:user.xp+user.level*100, level:user.level},{name:"Mike", xp:500, level:2}].sort((a,b)=>b.xp-a.xp); let listDiv = document.getElementById('leaderboard-list'); listDiv.innerHTML = ''; mock.forEach((u,i) => { let div = document.createElement('div'); div.className='leaderboard-item'; if(i===0) div.classList.add('rank-1'); if(i===1) div.classList.add('rank-2'); if(i===2) div.classList.add('rank-3'); if(u.name === user.name) div.style.borderColor = "var(--primary)"; div.innerHTML = `<div style="font-weight:900; width:30px">#${i+1}</div><div style="flex:1"><b>${u.name}</b><br><span style="font-size:0.8rem">Lvl ${u.level}</span></div><div>${u.xp} XP</div>`; listDiv.appendChild(div); }); }
+        function showProfile() { toggleSidebar(); document.getElementById('modal-profile').classList.remove('hidden'); document.getElementById('edit-name').value=user.name; document.getElementById('edit-email').value=user.email; document.getElementById('edit-age').value=user.age; document.getElementById('edit-weight').value=user.weight; document.getElementById('edit-height').value=user.height; document.getElementById('edit-goal').value=user.goal; document.getElementById('edit-gender').value=user.gender; }
+        function updateProfile() { user.name=document.getElementById('edit-name').value; user.email=document.getElementById('edit-email').value; user.age=parseInt(document.getElementById('edit-age').value); user.weight=parseFloat(document.getElementById('edit-weight').value); user.height=parseFloat(document.getElementById('edit-height').value); user.goal=document.getElementById('edit-goal').value; user.gender=document.getElementById('edit-gender').value; saveState(); closeAllModals(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+        let calendarPage = 1; function changeCalendarPage(delta) { let newPage = calendarPage+delta; if(newPage>=1 && newPage<=3) { calendarPage=newPage; renderCalendar(); } }
+        function openCalendar() { closeAllModals(); document.getElementById('modal-calendar').classList.remove('hidden'); renderCalendar(); }
+        function renderCalendar() { let grid = document.getElementById('calendar-grid'); grid.innerHTML = ''; let start = (calendarPage-1)*33+1, end = Math.min(start+32,100); document.getElementById('calendar-page-indicator').innerText = `Page ${calendarPage}/3`; document.getElementById('calendar-streak').innerText = user.streak; document.getElementById('calendar-completed').innerText = user.completedDays.length; document.getElementById('calendar-progress-fill').style.width = (user.completedDays.length/100*100)+'%'; let todayDate = new Date().toISOString().split('T')[0]; for (let d=start; d<=end; d++) { let div = document.createElement('div'); div.className='day-cell'; div.innerText = d; let dayDate = new Date(); dayDate.setDate(dayDate.getDate() + (d - (user.completedDays.length + 1))); let dateStr = dayDate.toISOString().split('T')[0]; let isCompleted = user.completedDays.includes(dateStr); let isToday = (dateStr === todayDate); if (isCompleted) div.classList.add('day-completed'); else if (isToday) div.classList.add('day-today'); else div.classList.add('day-locked'); if (d === 1 && !isCompleted && !isToday) { div.classList.add('day-start'); div.classList.remove('day-locked'); } div.onclick = () => { if (isCompleted) alert(`Day ${d} completed!`); else if (isToday || d === 1) openTasks(); else alert(`Day ${d} locked.`); }; grid.appendChild(div); } }
+        function showPremium() { toggleSidebar(); document.getElementById('modal-premium').classList.remove('hidden'); document.getElementById('premiumStatus').innerHTML = user.isPremium ? '<span class="premium-active">⚜️ Premium Active</span>' : ''; if (user.starterPurchased) document.getElementById('starterBtn').disabled = true; }
+        function initPayment(plan) { if (plan === 'starter' && user.starterPurchased) { alert("Starter Pack can only be purchased once!"); return; } let prices = { starter: 4900, monthly: 9900, quarterly: 29000 }; let rzp = new Razorpay({ key: "rzp_live_SJ5ukbKmD3GVp8", amount: prices[plan], currency: "INR", name: "100DayCore", handler: function() { activatePremium(plan); }, prefill: { name: user.name, email: user.email }, theme: { color: "#8A2BE2" } }); rzp.open(); }
+        function activatePremium(plan) { if (plan === "starter") { user.starterPurchased = true; user.xpMultiplier = 1.3; user.dailyBonusCoins = 15; } else if (plan === "quarterly") { user.xpMultiplier = 1.5; user.dailyBonusCoins = 20; } else { user.xpMultiplier = 1.2; user.dailyBonusCoins = 10; } user.isPremium = true; user.premiumPlan = plan; saveState(); closeAllModals(); confetti(); addFeedItemManually(`${user.name} activated ${plan} premium! 🚀`, true); alert("Premium activated!"); }
+        function showBitmoji() { toggleSidebar(); document.getElementById('modal-bitmoji').classList.remove('hidden'); updateBitmojiPreview(); }
+        function updateBitmojiPreview() { const parts = ['base','shirt','jacket','pants','shoes','glasses']; parts.forEach(part => { let img = document.getElementById(`avatar-${part}`); if(img && user.equipped[part]) img.src = user.equipped[part]; else if(img && part !== 'base') img.src = ''; }); if(!user.equipped.base && user.gender === 'Male') document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👦'; else if(!user.equipped.base) document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👧'; }
+        function claimFreeReward() { user.coins+=50; user.crates=(user.crates||0)+1; saveState(); alert("+50 coins & 1 crate"); addFeedItemManually("Claimed daily reward!", true); showBitmoji(); }
+        function saveOutfit() { alert("Outfit saved!"); }
+        function showStore() { toggleSidebar(); document.getElementById('modal-store').classList.remove('hidden'); renderStore(); }
+        function renderStore() { document.getElementById('store-items').innerHTML = `<div class="store-card">🔥 XP Booster - 100 coins <button class="btn-sec" onclick="buyItem()">Buy</button></div>`; }
+        function buyItem() { if(user.coins>=100){ user.coins-=100; user.inventory.push('booster'); saveState(); alert("Bought!"); showStore(); } else alert("Not enough coins"); }
+        function openCrate() { if((user.crates||0)>0){ user.crates--; let reward=Math.floor(Math.random()*200)+50; user.coins+=reward; saveState(); alert(`You got ${reward} coins!`); addFeedItemManually("Opened a crate!", true); showStore(); } else alert("No crates"); }
+        function showStats() { closeAllModals(); toggleSidebar(); renderStatsModal(); document.getElementById('modal-stats').classList.remove('hidden'); }
+        function resetData() { if(confirm("Reset all data?")){ localStorage.clear(); location.reload(); } }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden')); document.getElementById('modal-chat').classList.add('hidden'); currentChatFriend = null; }
+        const categories = ['body','shirt','jacket','pants','shoes','glasses']; categories.forEach(cat => { let dropZone = document.getElementById(`drop-${cat}`); if(dropZone) { dropZone.addEventListener('dragover', (e) => e.preventDefault()); dropZone.addEventListener('drop', (e) => { e.preventDefault(); let file = e.dataTransfer.files[0]; if(file && file.type.startsWith('image/')) { let reader = new FileReader(); reader.onload = (ev) => { let imgData = ev.target.result; user.equipped[cat] = imgData; saveState(); updateBitmojiPreview(); }; reader.readAsDataURL(file); } }); } });
+        document.getElementById('inboxSearch')?.addEventListener('input', () => renderChatList());
+        document.getElementById('shareProgressBtn')?.addEventListener('click', () => sendProgressCard());
+
+        // Hero functions
+        function startJourney() { showOnboardingForm(); }
+        function findPartners() {
+            const shareData = {
+                title: 'Progress Pulse Elite',
+                text: 'Join me on the 100-day fitness journey! Track steps, calories, tasks, and compete with friends.',
+                url: window.location.href,
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => alert('Share cancelled or failed'));
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied! Share it with your friends.');
+            }
+        }
+        function showOnboardingForm() { document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'flex'; }
+        function closeOnboardingForm() { document.getElementById('onboarding').style.display = 'none'; document.getElementById('heroSection').style.display = 'flex'; }
+
+        // Particles and theme toggle (only for hero)
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        let particles = [];
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2,
+                dx: Math.random() - 0.5,
+                dy: Math.random() - 0.5
             });
         }
-
-        // ===============================
-        // PREMIUM & RAZORPAY (updated with ₹1 plan)
-        // ===============================
-        function showPremium() {
-            toggleSidebar();
-            document.getElementById('modal-premium').classList.remove('hidden');
-            const statusDiv = document.getElementById('premiumStatus');
-            if (user.isPremium) {
-                statusDiv.innerHTML = `<span class="premium-active">⚜️ Premium Active (${user.premiumPlan === 'weekly' ? '7 Days' : user.premiumPlan === 'monthly' ? 'Monthly' : 'Quarterly'})</span>`;
-                document.getElementById('monthlyBtn').disabled = true;
-                document.getElementById('quarterlyBtn').disabled = true;
-                document.getElementById('weeklyBtn').disabled = true;
-            } else {
-                statusDiv.innerHTML = '';
-                document.getElementById('monthlyBtn').disabled = false;
-                document.getElementById('quarterlyBtn').disabled = false;
-                document.getElementById('weeklyBtn').disabled = false;
-            }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(255,255,255,0.6)";
+                ctx.fill();
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+            requestAnimationFrame(animateParticles);
         }
+        animateParticles();
+        document.getElementById("themeToggle")?.addEventListener("change", (e) => {
+            document.body.classList.toggle("light-mode", e.target.checked);
+        });
 
-        function initPayment(plan) {
-            const planPrices = { weekly: 100, monthly: 9900, quarterly: 29000 }; // ₹1 = 100 paise
-            const options = {
-                key: "rzp_live_SJ5ukbKmD3GVp8",
-                amount: planPrices[plan],
-                currency: "INR",
-                name: "100DayCore",
-                description: `${plan === 'weekly' ? '7 Days' : plan === 'monthly' ? 'Monthly' : '3 Months'} Premium Subscription`,
-                image: "https://your-logo-url.com/logo.png",
-                handler: function (response) {
-                    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
-                    activatePremium(plan);
-                },
-                prefill: { name: user.name, email: user.email },
-                theme: { color: "#8A2BE2" }
-            };
-            const rzp = new Razorpay(options);
-            rzp.open();
-        }
-
-        function activatePremium(plan) {
-            user.isPremium = true;
-            user.premiumPlan = plan;
-            if (plan === "quarterly") {
-                user.xpMultiplier = 1.5;
-                user.dailyBonusCoins = 20;
-            } else if (plan === "monthly") {
-                user.xpMultiplier = 1.2;
-                user.dailyBonusCoins = 10;
-            } else { // weekly (7 days)
-                user.xpMultiplier = 1.2;
-                user.dailyBonusCoins = 10;
-                // Optionally set expiry (not implemented here)
-            }
-            saveState();
-            updateUI();
-            closeAllModals();
-            confetti();
-            alert(`✨ Premium (${plan === 'weekly' ? '7 Days' : plan === 'monthly' ? 'Monthly' : '3 Months'}) activated! Enjoy your benefits.`);
-        }
-
-        // ===============================
-        // STORE & BITMOJI are external – functions defined in separate files
-        // ===============================
-
-        // Initialisation
-        (function init() {
-            if (user.name) {
-                document.getElementById('onboarding').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                updateUI();
-                startLiveUpdates();
-            } else {
-                document.getElementById('onboarding').classList.remove('hidden');
-                document.getElementById('app-container').classList.add('hidden');
-            }
-        })();
+        // Init
+        (function init() { if(user.name){ document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; updateUI(); loadSteps(); startLiveUpdates(); if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; } } else { document.getElementById('heroSection').style.display = 'flex'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'none'; } })();
     </script>
-
-    <!-- External Scripts -->
-    <script src="bitmoji.js"></script>
-    <script src="store.js"></script>
 </body>
 </html>
