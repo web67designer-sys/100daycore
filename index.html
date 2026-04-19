@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-        /* ========== ORIGINAL APP BACKGROUND STYLES ========== */
+        /* ========== ORIGINAL STYLES (unchanged) ========== */
         :root {
             --bg: #0f0f13;
             --card-bg: #1e1e24;
@@ -33,7 +33,6 @@
         @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes coinShine { 0% { filter: drop-shadow(0 0 2px var(--gold)); } 50% { filter: drop-shadow(0 0 8px var(--gold)); } 100% { filter: drop-shadow(0 0 2px var(--gold)); } }
         @keyframes bgMove { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
-        /* Hero section (with its own animated background) */
         .pp-hero {
             position: relative;
             height: 100vh;
@@ -73,59 +72,18 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             transition: 0.4s;
         }
-        .pp-card:hover {
-            transform: scale(1.05);
-        }
-        .pp-title {
-            font-size: 3rem;
-        }
-        .pp-title span {
-            background: linear-gradient(135deg, #4CAF50, #00e5ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .pp-subtitle {
-            color: #4CAF50;
-        }
-        .pp-desc {
-            opacity: 0.8;
-            margin: 15px 0;
-        }
-        .pp-btn {
-            border: none;
-            padding: 12px 25px;
-            margin: 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .pp-btn.primary {
-            background: linear-gradient(135deg, #4CAF50, #22c55e);
-            color: white;
-        }
-        .pp-btn.secondary {
-            background: rgba(255,255,255,0.1);
-            color: var(--text);
-        }
-        .pp-btn:hover {
-            transform: scale(1.1);
-        }
-        .pp-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-        }
-        /* Light mode for hero only */
-        body.light-mode .pp-hero {
-            --bg: #f5f7fa;
-        }
-        body.light-mode .pp-card {
-            background: rgba(0,0,0,0.05);
-            color: #111;
-        }
-        /* Original onboarding */
+        .pp-card:hover { transform: scale(1.05); }
+        .pp-title { font-size: 3rem; }
+        .pp-title span { background: linear-gradient(135deg, #4CAF50, #00e5ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .pp-subtitle { color: #4CAF50; }
+        .pp-desc { opacity: 0.8; margin: 15px 0; }
+        .pp-btn { border: none; padding: 12px 25px; margin: 10px; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .pp-btn.primary { background: linear-gradient(135deg, #4CAF50, #22c55e); color: white; }
+        .pp-btn.secondary { background: rgba(255,255,255,0.1); color: var(--text); }
+        .pp-btn:hover { transform: scale(1.1); }
+        .pp-toggle { position: absolute; top: 20px; right: 20px; z-index: 10; }
+        body.light-mode .pp-hero { --bg: #f5f7fa; }
+        body.light-mode .pp-card { background: rgba(0,0,0,0.05); color: #111; }
         #onboarding {
             display: none;
             height: 100vh;
@@ -194,12 +152,13 @@
         .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 30px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
         .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .close-modal:hover { color: var(--danger); }
-        /* Calendar, tasks, inbox styles (same as before) */
+        /* Calendar styles */
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .calendar-progress { background: var(--bg); border-radius: 20px; height: 8px; width: 100%; margin: 10px 0 20px; }
         .calendar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); border-radius: 20px; transition: width 0.3s; }
         .calendar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
         .day-cell { aspect-ratio: 1; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; background: var(--glass); border: 1px solid var(--glass-border); box-shadow: 0 4px 8px rgba(0,0,0,0.3); position: relative; }
+        .day-cell:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.5); }
         .day-completed { background: linear-gradient(145deg, #00cc66, #009944); color: #000; border-color: #00cc66; }
         .day-completed::after { content: "✓"; font-size: 1rem; position: absolute; top: 2px; right: 5px; color: #000; font-weight: bold; }
         .day-locked { background: linear-gradient(145deg, #ff4444, #aa0000); color: white; border-color: #ff4444; opacity: 0.9; }
@@ -207,15 +166,44 @@
         .day-today { background: linear-gradient(145deg, var(--gold), #ffaa00); color: #000; border-color: var(--gold); font-weight: 900; position: relative; }
         .day-today::after { content: "⭐"; font-size: 1rem; position: absolute; top: 2px; right: 5px; }
         .day-start { background: linear-gradient(145deg, var(--gold), #ffaa00); color: #000; border-color: var(--gold); font-weight: 900; }
+        .day-milestone {
+            background: linear-gradient(145deg, #ffaa33, #ff6600);
+            color: white;
+            border-color: var(--gold);
+            font-weight: 900;
+            box-shadow: 0 0 12px rgba(255,102,0,0.6);
+        }
+        .day-milestone::after { content: "🏆"; font-size: 0.9rem; position: absolute; top: 2px; right: 5px; }
         .task-item { background: var(--bg); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; cursor: pointer; }
         .task-check { width: 25px; height: 25px; border: 2px solid var(--text-sec); border-radius: 50%; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
         .task-check.checked { background: var(--accent); border-color: var(--accent); }
         .task-points { background: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-        .task-bitmoji-demo { display: inline-block; margin-left: 10px; font-size: 1.2rem; animation: bounce 0.3s ease; cursor: pointer; }
-        @keyframes bounce { 0% { transform: scale(0.8); opacity: 0; } 80% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-        .task-demo-panel { background: var(--glass); border-radius: 20px; padding: 15px; margin: 15px 0; border-left: 4px solid var(--accent); transition: all 0.3s; }
-        .task-demo-title { font-weight: bold; color: var(--accent); margin-bottom: 8px; }
-        .task-demo-content { font-size: 0.9rem; line-height: 1.5; color: var(--text-sec); }
+        .bitmoji-demo-block {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .bitmoji-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            border: 2px solid var(--primary);
+        }
+        .bitmoji-demo-text { font-size: 0.9rem; color: var(--text-sec); }
         .avatar-preview { width: 100px; height: 100px; background: var(--glass); border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border: 2px solid var(--primary); flex-direction: column; line-height: 1.2; transition: box-shadow 0.3s; position: relative; }
         .avatar-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         .upload-zone { border: 2px dashed var(--primary); border-radius: 15px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; }
@@ -238,12 +226,9 @@
         .gauge .fill-circle { stroke: var(--accent); transition: stroke-dasharray 0.5s; }
         .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: bold; color: var(--accent); }
         .gauge-label { font-size: 0.7rem; margin-top: 5px; color: var(--text-sec); }
-        .badge-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
-        .badge { background: var(--glass); border-radius: 40px; padding: 8px 15px; font-size: 0.8rem; border: 1px solid var(--gold); color: var(--gold); }
         .food-item { background: var(--bg); border-radius: 15px; padding: 8px 12px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
         .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--glass-border); font-size: 0.9rem; }
         .feed-time { color: var(--text-sec); font-size: 0.7rem; }
-        .inbox-container { max-width: 600px; margin: 0 auto; }
         .inbox-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .inbox-title { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .search-box { display: flex; gap: 10px; background: var(--glass); border-radius: 30px; padding: 8px 15px; border: 1px solid var(--glass-border); flex: 1; }
@@ -288,11 +273,20 @@
         .chat-input-area button { background: var(--primary); border: none; border-radius: 30px; padding: 0 20px; color: white; cursor: pointer; transition: 0.2s; }
         .no-results { text-align: center; padding: 40px; color: var(--text-sec); animation: fadeIn 0.3s; }
         .https-warning { background: rgba(255,68,68,0.9); color: white; padding: 10px; text-align: center; font-size: 0.8rem; position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000; backdrop-filter: blur(10px); }
+        .diet-locked { position: relative; filter: blur(8px); pointer-events: none; user-select: none; }
+        .diet-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10; border-radius: 30px; }
+        .rhyme-slogan { font-size: 1.2rem; color: var(--gold); text-align: center; margin-bottom: 15px; font-style: italic; }
+        .stats-enhanced { text-align: center; }
+        .stats-grid { display: flex; flex-direction: column; gap: 20px; }
+        .stats-card { background: var(--glass); border-radius: 20px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); }
+        .stats-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .stats-value { font-size: 2rem; font-weight: 800; color: var(--accent); }
+        .stats-label { font-size: 0.8rem; color: var(--text-sec); }
     </style>
 </head>
 <body>
 
-    <!-- HERO SECTION (with its own animated background) -->
+    <!-- HERO SECTION -->
     <div class="pp-hero" id="heroSection">
         <div class="wave"></div>
         <div class="wave wave2"></div>
@@ -312,7 +306,7 @@
         </div>
     </div>
 
-    <!-- ORIGINAL ONBOARDING (hidden initially) -->
+    <!-- ORIGINAL ONBOARDING -->
     <div id="onboarding">
         <div class="onboarding-card">
             <div class="live-avatar" id="liveAvatar">👤</div>
@@ -329,13 +323,17 @@
                 <option value="yogaZumba">🧘 Yoga / Zumba</option>
                 <option value="healthyLifestyle">🌿 Healthy Lifestyle</option>
             </select></div>
-            <div class="input-group"><label>🧑 Gender</label><select id="inp-gender"><option value="Male">🧑 Male</option><option value="Female">👧 Female</option><option value="Other">🧒 Other</option></select></div>
+            <div class="input-group"><label>🧑 Gender</label><select id="inp-gender" onchange="updateGenderPreview()">
+                <option value="Male">🧑 Male</option>
+                <option value="Female">👧 Female</option>
+                <option value="Other">🧒 Other</option>
+            </select></div>
             <button class="btn" style="width:100%" onclick="saveProfile()" id="startBtn">Start Journey</button>
             <div class="vibe-phrase" id="vibePhrase"></div>
         </div>
     </div>
 
-    <!-- MAIN APP (hidden until login) -->
+    <!-- MAIN APP -->
     <div id="app-container">
         <header>
             <div class="burger-menu" onclick="toggleSidebar()">☰</div>
@@ -377,25 +375,40 @@
         <div class="menu-item" onclick="showBitmoji()">😎 Bitmoji</div>
         <div class="menu-item" onclick="showStore()">🛒 Store</div>
         <div class="menu-item" onclick="showPremium()">⚜️ Premium</div>
+        <div class="menu-item" onclick="showDiet()">🍽️ Diet</div>
         <div class="menu-item" style="margin-top:50px; color:var(--danger)" onclick="resetData()">❌ Reset Data</div>
     </div>
 
-    <!-- MODALS (all original) -->
+    <!-- MODALS -->
     <div id="modal-profile" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Edit Profile</h2><div class="input-group"><label>Name</label><input type="text" id="edit-name"></div><div class="input-group"><label>Email</label><input type="email" id="edit-email"></div><div class="input-group"><label>Age</label><input type="number" id="edit-age"></div><div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-weight" step="0.1"></div><div class="input-group"><label>Height (cm)</label><input type="number" id="edit-height"></div><div class="input-group"><label>Goal</label><select id="edit-goal"><option value="weightGain">Weight Gain</option><option value="weightLoss">Weight Loss</option><option value="yogaZumba">Yoga/Zumba</option><option value="healthyLifestyle">Healthy Lifestyle</option></select></div><div class="input-group"><label>Gender</label><select id="edit-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div><button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button></div></div>
 
     <div id="modal-calendar" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>100-Day Challenge</h2><div class="calendar-header"><span>🔥 Streak: <span id="calendar-streak">0</span> days</span><span>📅 <span id="calendar-completed">0</span>/100</span></div><div class="calendar-progress"><div class="calendar-progress-fill" id="calendar-progress-fill" style="width:0%"></div></div><div class="calendar-pagination" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;"><button class="btn btn-sec" id="calendar-prev" onclick="changeCalendarPage(-1)">◀ Prev</button><span id="calendar-page-indicator">Page 1/3</span><button class="btn btn-sec" id="calendar-next" onclick="changeCalendarPage(1)">Next ▶</button></div><div class="calendar-grid" id="calendar-grid"></div></div></div>
 
-    <div id="modal-tasks" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2 id="tasks-modal-title">Today's Tasks</h2><p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p><div id="taskDemoPanel" class="task-demo-panel" style="display: none;"><div class="task-demo-title" id="taskDemoTitle"></div><div class="task-demo-content" id="taskDemoContent"></div></div><div id="task-list-container"></div><div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div><button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button></div></div>
+    <!-- TASKS MODAL with Bitmoji demo block -->
+    <div id="modal-tasks" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2 id="tasks-modal-title">Today's Tasks</h2>
+            <p id="task-date-display" style="color:var(--text-sec); margin-bottom:15px;"></p>
+            <div class="bitmoji-demo-block" id="bitmojiDemoBlock">
+                <div class="bitmoji-avatar" id="bitmojiDemoAvatar">🧑‍🎤</div>
+                <div class="bitmoji-demo-text" id="bitmojiDemoText">Click any task to see your bitmoji demonstrate it</div>
+            </div>
+            <div id="task-list-container"></div>
+            <div id="tasks-status-message" style="text-align:center; margin:15px 0; color:var(--gold);"></div>
+            <button class="btn btn-accent" id="finish-day-btn" style="width:100%; margin-top:20px;" onclick="finishDay()" disabled>Complete tasks to claim rewards</button>
+        </div>
+    </div>
 
     <div id="modal-leaderboard" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🏆 Leaderboard</h2><div id="leaderboard-list" style="margin-top:20px"></div><div class="live-feed" style="margin-top:25px; background:var(--glass); border-radius:20px; padding:15px;"><h3 style="color:var(--accent); margin-bottom:10px;">🔥 Live Activity</h3><div id="feedContainer"></div><div style="margin-top:10px; font-size:0.8rem; color:var(--text-sec); display: flex; justify-content: space-between;"><span>👥 <span id="onlineCount">128</span> online</span><span>⚜️ <span id="premiumOnline">34</span> premium</span></div></div></div></div>
 
-    <!-- INBOX MODAL (with close button added) -->
+    <!-- INBOX MODAL (only Mike and Sarah) -->
     <div id="modal-inbox" class="modal hidden">
         <div class="modal-content" style="max-width: 700px; padding: 0; overflow: hidden;">
             <span class="close-modal" onclick="closeAllModals()">×</span>
             <div style="padding: 20px 20px 0 20px;">
                 <div class="inbox-header">
-                    <div class="inbox-title">Inbox</div>
+                    <div class="inbox-title">Messages</div>
                     <div class="search-box"><i>🔍</i><input type="text" id="inboxSearch" placeholder="Search by name..."></div>
                     <div class="filter-icon">📋</div>
                 </div>
@@ -404,21 +417,52 @@
         </div>
     </div>
 
-    <div id="modal-chat" class="chat-fullscreen hidden"><div class="chat-header"><button class="back-btn" onclick="closeChatModal()">←</button><div class="chat-profile" id="chatProfileHeader"></div><button class="btn-sec" id="shareProgressBtn" style="padding: 6px 12px; font-size: 0.8rem;">📊 Share Progress</button></div><div id="chatMessagesContainer" class="chat-messages"></div><div class="chat-input-area"><input type="text" id="chatMessageInput" placeholder="Type a message..."><button onclick="sendChatMessage()">Send</button></div></div>
-
-    <div id="modal-bitmoji" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Your Bitmoji</h2><div class="avatar-preview" id="bitmoji-preview" style="position: relative; width: 120px; height: 120px; margin: 0 auto 20px;"><img id="avatar-base" src="" alt="base" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;"><img id="avatar-shirt" class="avatar-layer" src="" alt="shirt" style="z-index:2;"><img id="avatar-jacket" class="avatar-layer" src="" alt="jacket" style="z-index:3;"><img id="avatar-pants" class="avatar-layer" src="" alt="pants" style="z-index:4;"><img id="avatar-shoes" class="avatar-layer" src="" alt="shoes" style="z-index:5;"><img id="avatar-glasses" class="avatar-layer" src="" alt="glasses" style="z-index:6;"></div><div style="text-align:center; margin-bottom:20px;"><span style="color:var(--gold)">🪙 Coins: <span id="bitmoji-coins">0</span></span><span style="margin-left:20px;">📦 Crates: <span id="bitmoji-crates">0</span></span></div><h3>Upload Your Own PNGs</h3><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;"><div class="upload-zone" id="drop-body" data-category="body" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧍 Body<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shirt" data-category="shirt" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👕 Shirt<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-jacket" data-category="jacket" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">🧥 Jacket<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-pants" data-category="pants" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👖 Pants<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-shoes" data-category="shoes" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👟 Shoes<br><small>Drag PNG here</small></div><div class="upload-zone" id="drop-glasses" data-category="glasses" style="border:2px dashed var(--primary); border-radius:15px; padding:15px; text-align:center;">👓 Glasses<br><small>Drag PNG here</small></div></div><h3>Inventory</h3><div class="bitmoji-inventory" id="bitmoji-inventory"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="claimFreeReward()">🎁 Claim Daily Reward</button><button class="btn" style="margin-top:10px; width:100%;" onclick="saveOutfit()">💾 Save Outfit</button></div></div>
-
-    <div id="modal-store" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Store</h2><div style="display: flex; justify-content: space-between; margin: 10px 0;"><span style="color:var(--gold)">🪙 Coins: <span id="store-coins">0</span></span><span>📦 Crates: <span id="store-crates">0</span></span></div><div class="category-tabs" id="category-tabs"></div><div class="store-grid" id="store-items"></div><button class="btn btn-sec" style="margin-top:20px; width:100%;" onclick="openCrate()">📦 Open Crate (Cost: 1 Crate)</button></div></div>
+    <div id="modal-chat" class="chat-fullscreen hidden">
+        <div class="chat-header">
+            <button class="back-btn" onclick="closeChatModal()">←</button>
+            <div class="chat-profile" id="chatProfileHeader"></div>
+            <button class="btn-sec" id="shareProgressBtn" style="padding: 6px 12px; font-size: 0.8rem;">📊 Share Progress</button>
+        </div>
+        <div id="chatMessagesContainer" class="chat-messages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chatMessageInput" placeholder="Type a message...">
+            <button onclick="sendChatMessage()">Send</button>
+        </div>
+    </div>
 
     <div id="modal-premium" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Premium Plans</h2><div id="premiumStatus" style="text-align:center; margin-bottom:20px;"></div><div class="plan-card" style="border-color:var(--gold)"><div style="font-size:1.5rem">🎁 Starter Pack</div><div class="plan-price">₹49</div><ul class="features-list"><li>One-time purchase (once per user)</li><li>1.3x XP Multiplier</li><li>+15 Daily Bonus Coins</li><li>Exclusive “Starter” Badge</li><li>Unlimited AI Access for 30 days</li></ul><button class="btn btn-accent" onclick="initPayment('starter')" id="starterBtn">Get Started</button></div><div class="plan-card"><div style="font-size:1.5rem">🥈 Monthly</div><div class="plan-price">₹99</div><ul class="features-list"><li>1.2x XP Multiplier</li><li>+10 Daily Bonus Coins</li><li>Exclusive Themes</li><li>Unlimited AI Access</li></ul><button class="btn btn-sec" onclick="initPayment('monthly')" id="monthlyBtn">Subscribe</button></div><div class="plan-card" style="border-color:var(--gold)"><div style="font-size:1.5rem">🔥 3 Months</div><div class="plan-price">₹290</div><ul class="features-list"><li>1.5x XP Multiplier</li><li>+20 Daily Bonus Coins</li><li>All Monthly Features</li><li>VIP Avatar Frame</li><li>Early Access</li></ul><button class="btn btn-accent" onclick="initPayment('quarterly')" id="quarterlyBtn">Subscribe</button></div></div></div>
 
-    <div id="modal-stats" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>📊 Stats & Progress</h2><div class="step-circle"><div>👟 TODAY'S STEPS</div><div class="step-number-large" id="stats-step-count">0</div><button class="btn-sec" onclick="requestStepPermission()" style="margin-top:8px;">Enable Step Tracking</button></div><div class="gauge-container" id="gauge-container"></div><button class="btn" style="width:100%; margin: 10px 0;" onclick="openFoodLogModal()">🍽️ Log Meal with Camera</button><div id="stats-extra" style="margin-top:20px;"></div><div class="badge-list" id="badgeContainer"></div></div></div>
+    <!-- STATS MODAL (enhanced, no streak/level/coins) -->
+    <div id="modal-stats" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>📊 Your Fitness Pulse</h2>
+            <div class="stats-enhanced">
+                <div class="step-circle">
+                    <div class="stats-icon">👟</div>
+                    <div class="stats-value" id="stats-step-count">0</div>
+                    <div class="stats-label">TODAY'S STEPS</div>
+                    <button class="btn-sec" onclick="requestStepPermission()" style="margin-top:8px;">Enable Step Tracking</button>
+                </div>
+                <div class="gauge-container" id="gauge-container"></div>
+                <button class="btn" style="width:100%; margin: 20px 0;" onclick="openFoodLogModal()">🍽️ Log Meal with Camera</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIET MODAL -->
+    <div id="modal-diet" class="modal hidden">
+        <div class="modal-content" style="position: relative;">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>🍽️ Personalized Diet Plan</h2>
+            <div id="dietContent" style="min-height: 200px;"></div>
+        </div>
+    </div>
 
     <div id="modal-food" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🍽️ Log Meal</h2><div class="input-group"><label>Food name (or auto-detect)</label><input type="text" id="food-name" placeholder="e.g., Pizza"></div><div class="input-group"><label>Or take a photo</label><input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="analyzeFoodImage(this)"></div><div id="imagePreview"></div><div class="input-group"><label>Calories (auto-filled)</label><input type="number" id="food-calories" placeholder="Calories"></div><button class="btn" onclick="addFoodEntry()">Add Meal</button><h3>Today's Meals</h3><div id="food-list-container"></div><div><strong>Total: <span id="total-food-calories">0</span> kcal</strong></div></div></div>
 
     <script>
-        // ======================= FULL SCRIPT (all features intact, same as previous working version) =======================
-        // 28-DAY TASKS DATA (condensed but complete)
+        // ======================= 28-DAY TASKS DATA (condensed) =======================
         const goalTasksData = {
             weightGain: {1:["Bench press + incline press","Train triceps","Eat heavy breakfast","Drink 2.5–3L water","Eat post-workout meal"],2:["Lat pulldown + rows","Biceps curls","Add 2 bananas","Track workout weights","Sleep 7–8 hours"],3:["Squats + leg press","Train calves","Eat extra rice/roti","Push near failure","Drink milk"],4:["Shoulder press + chest","Triceps isolation","Add peanut butter","Control reps","Eat 5 meals"],5:["Back + rear delts","Biceps curls focus","Eat 4–6 eggs","Track strength","Drink water"],6:["Heavy squats","Hamstring curls","Increase food portion","Stretch after workout","Sleep well"],7:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8+ hours"],8:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Stay hydrated"],9:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],10:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],11:["Incline press focus","Triceps dips","Add peanut butter","Control tempo","Eat 5 meals"],12:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],13:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],14:["Eat surplus calories","Drink milk","Eat protein meals","Relax muscles","Sleep 8 hours"],15:["Bench press + shoulders","Triceps workout","Add banana shake","Eat post-workout meal","Hydrate"],16:["Rows + pulldown","Biceps curls","Add eggs","Track progress","Sleep well"],17:["Squats + leg press","Calves training","Eat extra carbs","Push hard","Drink milk"],18:["Incline press","Triceps dips","Add peanut butter","Control reps","Eat 5 meals"],19:["Back + rear delts","Biceps curls","Eat protein meals","Track weights","Drink water"],20:["Heavy squats","Hamstring curls","Increase calories","Stretch","Sleep well"],21:["Eat surplus calories","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Hydrate"],23:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],24:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],25:["Incline press","Triceps workout","Add peanut butter","Control tempo","Eat 5 meals"],26:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],27:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],28:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Review progress","Sleep 8+ hours"]},
             weightLoss: {1:["Bench press + incline press","Triceps workout","15 min cardio","Eat high-protein meals","Drink 2–3L water"],2:["Lat pulldown + rows","Biceps curls","15 min cardio","Avoid junk food","Sleep 7–8 hours"],3:["Squats + leg press","Calf raises","20 min cardio","Reduce carb portion","Drink water"],4:["Shoulder press + chest","Triceps isolation","15 min cardio","Eat small portions","Stay consistent"],5:["Back + rear delts","Biceps workout","15 min cardio","Eat protein-rich meals","Hydrate"],6:["Squats + lunges","Hamstring curls","20 min cardio","Avoid sugary drinks","Sleep well"],7:["Walk 8–10k steps","Eat clean meals","Stay in calorie deficit","Drink water","Sleep 8 hours"],8:["Bench press progression","Shoulder raises","20 min cardio","Eat high protein","Hydrate"],9:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],10:["Squats + press","Calves","20 min cardio","Reduce carbs","Drink water"],11:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],12:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],13:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],14:["Walk 10k steps","Eat clean","Stay in deficit","Drink water","Rest well"],15:["Bench + shoulders","Triceps workout","20 min cardio","Eat high protein","Hydrate"],16:["Rows + pulldown","Biceps curls","15 min cardio","Avoid junk","Sleep well"],17:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],18:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],19:["Back + rear delts","Biceps workout","15 min cardio","Eat protein","Hydrate"],20:["Heavy squats","Hamstrings","20 min cardio","Avoid sugar","Sleep well"],21:["Walk 10k steps","Eat clean meals","Stay in deficit","Drink water","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","20 min cardio","Eat protein","Hydrate"],23:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],24:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],25:["Incline press","Triceps workout","15 min cardio","Eat small meals","Stay consistent"],26:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],27:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],28:["Walk 10k steps","Eat clean","Review progress","Stay in deficit","Sleep properly"]},
@@ -427,156 +471,588 @@
         };
         function getTasksForDay(goal, dayNumber) { let cycleDay = ((dayNumber - 1) % 28) + 1; let tasksArray = goalTasksData[goal]?.[cycleDay]; if (!tasksArray) return Array(5).fill("Complete your daily habit"); return tasksArray.slice(0,5); }
 
-        // STEP & CALORIE
-        let stepCount = 0, lastAcceleration = null, stepThreshold = 1.2, lastStepTime = 0, stepCooldown = 300, stepListenerActive = false;
-        function getTodayStr() { return new Date().toISOString().split('T')[0]; }
-        function loadSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepCount = stepsData[getTodayStr()] || 0; updateStepUI(); }
-        function saveSteps() { let stepsData = JSON.parse(localStorage.getItem('stepHistory')) || {}; stepsData[getTodayStr()] = stepCount; localStorage.setItem('stepHistory', JSON.stringify(stepsData)); updateStepUI(); checkStepBadge(); }
-        function updateStepUI() { if(document.getElementById('stats-step-count')) document.getElementById('stats-step-count').innerText = stepCount; }
-        function requestStepPermission() { if (!window.isSecureContext) { alert("⚠️ Step tracking requires HTTPS."); return; } if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') { DeviceMotionEvent.requestPermission().then(p => { if (p === 'granted') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; alert('Step tracking enabled!'); } else alert('Permission denied'); }).catch(console.error); } else { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; alert('Step tracking active'); } }
-        function handleMotion(e) { if (!stepListenerActive) return; let acc = e.accelerationIncludingGravity; if (!acc) return; let mag = Math.sqrt((acc.x||0)**2+(acc.y||0)**2+(acc.z||0)**2); let now = Date.now(); if (mag > stepThreshold && (now - lastStepTime) > stepCooldown) { stepCount++; saveSteps(); lastStepTime = now; if (!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); } }
+        // ======================= STEP TRACKING ENGINE =======================
+        let steps = 0, lastStepTime = 0, lastMagnitude = 0, filteredMagnitude = 0, stepListenerActive = false;
+        const STEP_THRESHOLD = 1.8, STEP_COOLDOWN = 400, ALPHA = 0.8;
+        let stepBuffer = [];
+        function handleMotion(event) {
+            const acc = event.acceleration;
+            if (!acc) return;
+            const magnitude = Math.sqrt((acc.x||0)**2 + (acc.y||0)**2 + (acc.z||0)**2);
+            filteredMagnitude = ALPHA * filteredMagnitude + (1 - ALPHA) * magnitude;
+            const delta = Math.abs(filteredMagnitude - lastMagnitude);
+            const now = Date.now();
+            if (delta > STEP_THRESHOLD) {
+                stepBuffer.push(now);
+                if (stepBuffer.length > 5) stepBuffer.shift();
+                if (stepBuffer.length >= 3) {
+                    let i1 = stepBuffer[1] - stepBuffer[0];
+                    let i2 = stepBuffer[2] - stepBuffer[1];
+                    if (Math.abs(i1 - i2) < 250 && (now - lastStepTime) > STEP_COOLDOWN) {
+                        steps++;
+                        lastStepTime = now;
+                        updateStepDisplay();
+                        saveStepsToLocal();
+                    }
+                }
+            }
+            lastMagnitude = filteredMagnitude;
+        }
+        async function requestStepPermission() {
+            if (!window.isSecureContext) { alert("❌ Use HTTPS for step tracking"); return; }
+            try {
+                if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+                    const permission = await DeviceMotionEvent.requestPermission();
+                    if (permission !== "granted") { alert("❌ Motion permission denied"); return; }
+                }
+                window.addEventListener("devicemotion", handleMotion);
+                stepListenerActive = true;
+                alert("✅ Step tracking started. Now walk!");
+            } catch (err) { console.error(err); alert("⚠️ Motion not supported"); }
+        }
+        function saveStepsToLocal() {
+            const today = new Date().toISOString().split('T')[0];
+            let data = JSON.parse(localStorage.getItem('stepHistory')) || {};
+            data[today] = steps;
+            localStorage.setItem('stepHistory', JSON.stringify(data));
+        }
+        function loadStepsForToday() {
+            const today = new Date().toISOString().split('T')[0];
+            let data = JSON.parse(localStorage.getItem('stepHistory')) || {};
+            steps = data[today] || 0;
+            updateStepDisplay();
+        }
+        function updateStepDisplay() { const el = document.getElementById("stats-step-count"); if (el) el.innerText = steps; }
+
+        // ======================= CALORIE & BMR =======================
         function calculateBMR(w,h,a,g) { let bmr = 10*w+6.25*h-5*a; if(g==='Male') bmr+=5; else if(g==='Female') bmr-=161; return Math.round(bmr); }
         function calculateActiveCalories(steps, w) { if(!w||steps===0) return 0; let dur = (steps*0.762)/1.4/3600; return Math.round(3.8*w*dur); }
         function getFoodCaloriesForToday() { let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; return (foodLog[getTodayStr()]||[]).reduce((s,e)=>s+e.calories,0); }
         const foodDB = { "apple":95, "banana":105, "pizza":285, "burger":550, "salad":150, "rice":200, "chicken":335, "pasta":350 };
         function analyzeFoodImage(input) { let file = input.files[0]; if(!file) return; let reader = new FileReader(); reader.onload = function(e) { document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-width:100%; border-radius:20px;">`; let fakeName = file.name.split('.')[0].replace(/[0-9]/g,'').slice(0,10) || "meal"; let lower = fakeName.toLowerCase(); let calories = foodDB[lower] || Math.floor(Math.random()*300)+100; document.getElementById('food-name').value = fakeName; document.getElementById('food-calories').value = calories; addFeedItemManually(`📸 AI guessed ${fakeName} (${calories} kcal)`, true); }; reader.readAsDataURL(file); }
-        function addFoodEntry() { let name = document.getElementById('food-name').value.trim(); let cal = parseInt(document.getElementById('food-calories').value); if(!name || isNaN(cal)) return alert("Enter food name or take a photo first"); let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; let today = getTodayStr(); if(!foodLog[today]) foodLog[today]=[]; foodLog[today].push({name, calories:cal, timestamp:Date.now()}); localStorage.setItem('foodLog', JSON.stringify(foodLog)); document.getElementById('food-name').value = ''; document.getElementById('food-calories').value = ''; document.getElementById('imagePreview').innerHTML = ''; document.getElementById('cameraInput').value = ''; renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); addFeedItemManually(`🍽️ Logged ${name} (${cal} kcal)`, true); checkFoodBadge(); }
+        function addFoodEntry() { let name = document.getElementById('food-name').value.trim(); let cal = parseInt(document.getElementById('food-calories').value); if(!name || isNaN(cal)) return alert("Enter food name or take a photo first"); let foodLog = JSON.parse(localStorage.getItem('foodLog')) || {}; let today = getTodayStr(); if(!foodLog[today]) foodLog[today]=[]; foodLog[today].push({name, calories:cal, timestamp:Date.now()}); localStorage.setItem('foodLog', JSON.stringify(foodLog)); document.getElementById('food-name').value = ''; document.getElementById('food-calories').value = ''; document.getElementById('imagePreview').innerHTML = ''; document.getElementById('cameraInput').value = ''; renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); addFeedItemManually(`🍽️ Logged ${name} (${cal} kcal)`, true); }
         function renderFoodList() { let entries = (JSON.parse(localStorage.getItem('foodLog'))||{})[getTodayStr()]||[]; let container = document.getElementById('food-list-container'); container.innerHTML = ''; entries.forEach((e,i)=>{ let div = document.createElement('div'); div.className='food-item'; div.innerHTML=`<span><strong>${e.name}</strong> - ${e.calories} kcal</span><button class="btn-sec" onclick="removeFoodEntry(${i})">🗑️</button>`; container.appendChild(div); }); document.getElementById('total-food-calories').innerText = getFoodCaloriesForToday(); }
         function removeFoodEntry(idx) { let foodLog = JSON.parse(localStorage.getItem('foodLog'))||{}; let today = getTodayStr(); if(foodLog[today]) foodLog[today].splice(idx,1); localStorage.setItem('foodLog', JSON.stringify(foodLog)); renderFoodList(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
-        let userBadges = JSON.parse(localStorage.getItem('userBadges')) || [];
-        function checkStepBadge() { if(stepCount>=10000 && !userBadges.includes('10k Steps')) { userBadges.push('10k Steps'); saveBadges(); addFeedItemManually(`🏅 New badge: 10k Steps!`, true); confetti(); } }
-        function checkFoodBadge() { let total = getFoodCaloriesForToday(); if(total>=2000 && !userBadges.includes('2k Calories')) { userBadges.push('2k Calories'); saveBadges(); addFeedItemManually(`🏅 New badge: 2k Calories!`, true); confetti(); } }
-        function saveBadges() { localStorage.setItem('userBadges', JSON.stringify(userBadges)); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
-        function renderStatsModal() { let w=user.weight, h=user.height, a=user.age, g=user.gender; let bmr = calculateBMR(w,h,a,g); let active = calculateActiveCalories(stepCount, w); let food = getFoodCaloriesForToday(); document.getElementById('stats-step-count').innerText = stepCount; let container = document.getElementById('gauge-container'); container.innerHTML = ''; function createGauge(label,val,max,unit,color){ let p=Math.min((val/max)*100,100); let circ=2*Math.PI*40; let dash=(p/100)*circ; let div=document.createElement('div'); div.className='gauge'; div.innerHTML=`<svg viewBox="0 0 100 100"><circle class="bg-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none"></circle><circle class="fill-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none" stroke="${color}" stroke-dasharray="${circ}" stroke-dashoffset="${circ-dash}"></circle></svg><div class="gauge-value">${val}</div><div class="gauge-label">${label}<br>${unit}</div>`; return div; } container.appendChild(createGauge('BMR',bmr,3000,'kcal','#00FF7F')); container.appendChild(createGauge('Active',active,1000,'kcal','#FFD700')); container.appendChild(createGauge('Food',food,2000,'kcal','#FF4500')); document.getElementById('stats-extra').innerHTML = `<p>🔥 Streak: ${user.streak}</p><p>🏆 Level: ${user.level}</p><p>📅 Days: ${user.completedDays.length}/100</p><p>🪙 Coins: ${user.coins}</p>`; document.getElementById('badgeContainer').innerHTML = userBadges.map(b=>`<div class="badge">🏅 ${b}</div>`).join('') || '<div>No badges yet.</div>'; }
+        function renderStatsModal() {
+            let w=user.weight, h=user.height, a=user.age, g=user.gender;
+            let bmr = calculateBMR(w,h,a,g);
+            let active = calculateActiveCalories(steps, w);
+            let food = getFoodCaloriesForToday();
+            document.getElementById('stats-step-count').innerText = steps;
+            let container = document.getElementById('gauge-container');
+            container.innerHTML = '';
+            function createGauge(label,val,max,unit,color){ let p=Math.min((val/max)*100,100); let circ=2*Math.PI*40; let dash=(p/100)*circ; let div=document.createElement('div'); div.className='gauge'; div.innerHTML=`<svg viewBox="0 0 100 100"><circle class="bg-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none"></circle><circle class="fill-circle" cx="50" cy="50" r="40" stroke-width="8" fill="none" stroke="${color}" stroke-dasharray="${circ}" stroke-dashoffset="${circ-dash}"></circle></svg><div class="gauge-value">${val}</div><div class="gauge-label">${label}<br>${unit}</div>`; return div; }
+            container.appendChild(createGauge('BMR',bmr,3000,'kcal','#00FF7F'));
+            container.appendChild(createGauge('Active',active,1000,'kcal','#FFD700'));
+            container.appendChild(createGauge('Food',food,2000,'kcal','#FF4500'));
+        }
         function openFoodLogModal() { closeAllModals(); renderFoodList(); document.getElementById('modal-food').classList.remove('hidden'); }
 
-        // USER CORE
-        let user = JSON.parse(localStorage.getItem('levelUpUser')) || { name: "", email: "", age: 0, weight: 70, height: 170, goal: "weightGain", gender: "Male", xp: 0, level: 1, coins: 100, streak: 0, completedDays: [], tasks: [], inventory: [], crates: 0, isPremium: false, premiumPlan: null, starterPurchased: false, equipped: { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }, friends: [], chats: {}, lastActivity: {} };
-        if (!user.weight) user.weight = 70; if (!user.height) user.height = 170; if (!user.inventory) user.inventory = []; if (!user.crates) user.crates = 0; if (!user.equipped) user.equipped = { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }; if (!user.completedDays) user.completedDays = []; if (!user.friends) user.friends = []; if (!user.chats) user.chats = {}; if (!user.lastActivity) user.lastActivity = {}; if (user.starterPurchased === undefined) user.starterPurchased = false;
-        if (user.friends.length === 0 && user.name) { user.friends = ["Alex", "Sarah", "Mike"]; user.chats["Alex"] = [{ from: "Alex", text: "Hey! Keep going!", time: new Date().toLocaleTimeString() }]; user.chats["Sarah"] = [{ from: "Sarah", text: "You got this!", time: new Date().toLocaleTimeString() }]; user.chats["Mike"] = [{ from: "Mike", text: "Let's finish strong!", time: new Date().toLocaleTimeString() }]; user.lastActivity["Alex"] = Date.now() - 3*24*60*60*1000; user.lastActivity["Sarah"] = Date.now() - 1*24*60*60*1000; user.lastActivity["Mike"] = Date.now() - 0.5*24*60*60*1000; saveState(); }
+        // ======================= USER CORE =======================
+        let user = JSON.parse(localStorage.getItem('levelUpUser')) || { name: "", email: "", age: 0, weight: 70, height: 170, goal: "weightGain", gender: "Male", xp: 0, level: 1, coins: 100, streak: 0, completedDays: [], tasks: [], inventory: [], crates: 0, isPremium: false, premiumPlan: null, starterPurchased: false, equipped: { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }, friends: [], chats: {}, lastActivity: {}, chatMemory: {} };
+        if (!user.weight) user.weight = 70; if (!user.height) user.height = 170; if (!user.inventory) user.inventory = []; if (!user.crates) user.crates = 0; if (!user.equipped) user.equipped = { body: null, shirt: null, jacket: null, pants: null, shoes: null, glasses: null }; if (!user.completedDays) user.completedDays = []; if (!user.friends) user.friends = []; if (!user.chats) user.chats = {}; if (!user.lastActivity) user.lastActivity = {}; if (!user.chatMemory) user.chatMemory = {};
+        if (user.starterPurchased === undefined) user.starterPurchased = false;
+        // Only Mike and Sarah as AI friends
+        if (user.friends.length === 0 && user.name) {
+            user.friends = ["Mike", "Sarah"];
+            user.chats["Mike"] = [];
+            user.chats["Sarah"] = [];
+            user.lastActivity["Mike"] = Date.now();
+            user.lastActivity["Sarah"] = Date.now();
+            user.chatMemory["Mike"] = [];
+            user.chatMemory["Sarah"] = [];
+            saveState();
+        }
         function saveState() { localStorage.setItem('levelUpUser', JSON.stringify(user)); updateUI(); }
-        function updateUI() { document.getElementById('display-level').innerText = user.level; document.getElementById('display-streak').innerText = user.streak + " 🔥"; document.getElementById('display-coins').innerText = user.coins; let xpNeeded = user.level * 100; let percent = Math.min((user.xp / xpNeeded) * 100, 100); document.getElementById('xp-fill').style.width = percent + "%"; document.getElementById('xp-text').innerText = `${user.xp} / ${xpNeeded} XP`; let today = getTodayStr(); let daysDone = user.completedDays.length; let currentDay = user.completedDays.includes(today) ? daysDone : daysDone + 1; document.getElementById('header-date').innerText = `Day ${currentDay}/100`; const now = new Date(); const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); document.getElementById('level-date').innerText = dateStr; if (user.isPremium) document.getElementById('premiumBadge').classList.remove('hidden'); else document.getElementById('premiumBadge').classList.add('hidden'); document.getElementById('bitmoji-coins').innerText = user.coins; document.getElementById('bitmoji-crates').innerText = user.crates; document.getElementById('store-coins').innerText = user.coins; document.getElementById('store-crates').innerText = user.crates; }
+        function updateUI() {
+            document.getElementById('display-level').innerText = user.level;
+            document.getElementById('display-streak').innerText = user.streak + " 🔥";
+            document.getElementById('display-coins').innerText = user.coins;
+            let xpNeeded = user.level * 100;
+            let percent = Math.min((user.xp / xpNeeded) * 100, 100);
+            document.getElementById('xp-fill').style.width = percent + "%";
+            document.getElementById('xp-text').innerText = `${user.xp} / ${xpNeeded} XP`;
+            let today = getTodayStr();
+            let daysDone = user.completedDays.length;
+            let currentDay = user.completedDays.includes(today) ? daysDone : daysDone + 1;
+            document.getElementById('header-date').innerText = `Day ${currentDay}/100`;
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('level-date').innerText = dateStr;
+            if (user.isPremium) document.getElementById('premiumBadge').classList.remove('hidden');
+            else document.getElementById('premiumBadge').classList.add('hidden');
+            if (typeof updateBitmojiCoins === 'function') updateBitmojiCoins();
+            if (typeof updateStoreCoins === 'function') updateStoreCoins();
+        }
         let joinCount = parseInt(localStorage.getItem('globalJoinCount') || '0'); document.getElementById('joinCount').innerText = joinCount;
         function confetti() { for (let i=0;i<40;i++){ let c=document.createElement('div'); c.classList.add('confetti'); c.style.left=Math.random()*100+'%'; c.style.animationDelay=Math.random()*2+'s'; document.body.appendChild(c); setTimeout(()=>c.remove(),4000); } }
-        function saveProfile() { user.name = document.getElementById('inp-name').value; user.email = document.getElementById('inp-email').value; user.age = parseInt(document.getElementById('inp-age').value); user.weight = parseFloat(document.getElementById('inp-weight').value); user.height = parseFloat(document.getElementById('inp-height').value); user.goal = document.getElementById('inp-goal').value; user.gender = document.getElementById('inp-gender').value; if (!user.name) return alert("Fill all fields"); saveState(); joinCount++; localStorage.setItem('globalJoinCount', joinCount); confetti(); document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; updateUI(); loadSteps(); startLiveUpdates(); if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; } addFeedItemManually(`${user.name} joined the challenge!`, true); if (user.friends.length === 0) { user.friends = ["Alex", "Sarah", "Mike"]; user.chats["Alex"] = [{ from: "Alex", text: "Hey! Keep going!", time: new Date().toLocaleTimeString() }]; user.chats["Sarah"] = [{ from: "Sarah", text: "You got this!", time: new Date().toLocaleTimeString() }]; user.chats["Mike"] = [{ from: "Mike", text: "Let's finish strong!", time: new Date().toLocaleTimeString() }]; user.lastActivity["Alex"] = Date.now() - 3*24*60*60*1000; user.lastActivity["Sarah"] = Date.now() - 1*24*60*60*1000; user.lastActivity["Mike"] = Date.now() - 0.5*24*60*60*1000; saveState(); } }
+        function saveProfile() {
+            user.name = document.getElementById('inp-name').value;
+            user.email = document.getElementById('inp-email').value;
+            user.age = parseInt(document.getElementById('inp-age').value);
+            user.weight = parseFloat(document.getElementById('inp-weight').value);
+            user.height = parseFloat(document.getElementById('inp-height').value);
+            user.goal = document.getElementById('inp-goal').value;
+            user.gender = document.getElementById('inp-gender').value;
+            if (!user.name) return alert("Fill all fields");
+            saveState();
+            joinCount++; localStorage.setItem('globalJoinCount', joinCount);
+            confetti();
+            document.getElementById('heroSection').style.display = 'none';
+            document.getElementById('onboarding').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            updateUI(); loadStepsForToday(); startLiveUpdates();
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; }
+            addFeedItemManually(`${user.name} joined the challenge!`, true);
+            if (user.friends.length === 0) {
+                user.friends = ["Mike", "Sarah"];
+                user.chats["Mike"] = [];
+                user.chats["Sarah"] = [];
+                user.lastActivity["Mike"] = Date.now();
+                user.lastActivity["Sarah"] = Date.now();
+                user.chatMemory["Mike"] = [];
+                user.chatMemory["Sarah"] = [];
+                saveState();
+            }
+        }
         function addFeedItemManually(message, isUser = false) { const feed = document.getElementById('feedContainer'); if (!feed) return; const time = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); const newItem = document.createElement('div'); newItem.classList.add('feed-item'); newItem.innerHTML = `<span class="feed-time">${time}</span> <span>${isUser ? user.name+': ' : ''}${message}</span>`; feed.prepend(newItem); if (feed.children.length > 8) feed.removeChild(feed.lastChild); }
-        function startLiveUpdates() { setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000); setInterval(refreshQuote, 10000); refreshQuote(); setInterval(() => { const acts = ["completed a task","leveled up","opened a crate","earned 200 XP","hit streak"]; const names = ["Alex","Sarah","Mike","Emma","Leo"]; addFeedItemManually(`${names[Math.floor(Math.random()*names.length)]} ${acts[Math.floor(Math.random()*acts.length)]}`); }, 15000); updateOnlineCounts(); setInterval(updateOnlineCounts, 20000); checkWeeklyReview(); cleanupExpiredMessages(); setInterval(cleanupExpiredMessages, 3600000); }
+        function startLiveUpdates() {
+            setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000);
+            setInterval(refreshQuote, 10000);
+            refreshQuote();
+            setInterval(() => { const acts = ["completed a task","leveled up","opened a crate","earned 200 XP","hit streak"]; const names = ["Alex","Sarah","Mike","Emma","Leo"]; addFeedItemManually(`${names[Math.floor(Math.random()*names.length)]} ${acts[Math.floor(Math.random()*acts.length)]}`); }, 15000);
+            updateOnlineCounts(); setInterval(updateOnlineCounts, 20000);
+            checkWeeklyReview(); cleanupExpiredMessages(); setInterval(cleanupExpiredMessages, 3600000);
+        }
         function refreshQuote() { let q=["The only bad workout is the one that didn't happen.","Small progress is still progress.","You are stronger than you think.","Discipline > Motivation"]; document.getElementById('quoteBox').innerText='✨ "'+q[Math.floor(Math.random()*q.length)]+'"'; }
         function updateOnlineCounts() { document.getElementById('onlineCount').innerText = Math.floor(Math.random()*200)+100; document.getElementById('premiumOnline').innerText = Math.floor(Math.random()*50)+20; }
+        function getTodayStr() { return new Date().toISOString().split('T')[0]; }
 
-        // TASKS (with demo)
-        const taskDemos = {"bench press":"🧠 How to Bench Press:\n1. Lie on bench with eyes under bar.\n2. Grip bar slightly wider than shoulders.\n3. Unrack, lower to mid-chest, elbows at 45°.\n4. Drive feet into floor, press explosively up.\n5. Keep shoulders pinned back.","squat":"🧠 How to Squat:\n1. Stand with feet shoulder-width, bar on upper back.\n2. Brace core, sit back like into a chair.\n3. Descend until hips below knees.\n4. Drive through heels to stand.\n5. Keep chest up.","deadlift":"🧠 Deadlift Setup:\n1. Bar over mid-foot, shins touch bar.\n2. Hinge at hips, grab bar outside knees.\n3. Flatten back, pull slack out of bar.\n4. Drag bar up legs, stand tall.\n5. Hinge hips back to lower.","pull up":"🧠 Pull Up Form:\n1. Grip bar slightly wider than shoulders.\n2. Engage lats, pull elbows down.\n3. Pull chin above bar.\n4. Lower controlled, don't drop.\n5. If can't do one, use band or negatives.","push up":"🧠 Perfect Push Up:\n1. Hands slightly wider than shoulders.\n2. Body straight from head to heels.\n3. Lower chest to floor, elbows at 45°.\n4. Push through palms to return.\n5. Keep core tight.","zumba":"💃 Zumba Tips:\n1. Keep knees soft, bounce lightly.\n2. Follow the rhythm – don't overthink steps.\n3. Use your hips, not just feet.\n4. Hydrate before and after.\n5. Have fun and let loose!","surya namaskar":"🧘 Surya Namaskar (Sun Salutation):\n1. Stand tall, hands in prayer.\n2. Reach arms up, backbend.\n3. Forward fold.\n4. Step back into plank, lower to cobra.\n5. Upward dog, downward dog, step forward, fold, arms up, hands down.\nRepeat 6-12 rounds.","plank":"📏 Plank Form:\n1. Shoulders over wrists.\n2. Engage abs, squeeze glutes.\n3. Body in straight line, don't sag hips.\n4. Hold 20-60 seconds.\n5. Breathe throughout.","eat":"🍽️ Healthy Eating:\n1. Include protein in every meal.\n2. Fill half plate with veggies.\n3. Choose whole grains over refined.\n4. Stay hydrated – water first.\n5. Eat slowly, savor each bite.","drink water":"💧 Hydration Tips:\n1. Aim for 2-3L water daily.\n2. Start morning with a glass.\n3. Carry a bottle with time markers.\n4. Drink before meals.\n5. Add lemon or mint for flavor.","sleep":"😴 Better Sleep:\n1. Same bedtime every night.\n2. No screens 1 hour before.\n3. Keep room cool and dark.\n4. Avoid caffeine after 2 PM.\n5. Wind down with reading or stretching.","walk":"🚶 Walking for Health:\n1. Aim for 10,000 steps daily.\n2. Swing arms naturally.\n3. Land mid-foot, roll through step.\n4. Maintain good posture.\n5. Brisk pace = slight breathlessness."};
-        function getTaskDemo(taskText) { const lower = taskText.toLowerCase(); for (let [key, demo] of Object.entries(taskDemos)) if (lower.includes(key)) return demo; return "🧠 Read the task carefully and follow instructions."; }
-        function showTaskDemo(taskText) { const demo = getTaskDemo(taskText); const panel = document.getElementById('taskDemoPanel'); document.getElementById('taskDemoTitle').innerHTML = `📘 How to: ${taskText.substring(0, 50)}`; document.getElementById('taskDemoContent').innerHTML = demo.replace(/\n/g, '<br>'); panel.style.display = 'block'; }
-        function openTasks() { let today = getTodayStr(); if (user.completedDays.includes(today)) return alert("Already completed today!"); closeAllModals(); document.getElementById('modal-tasks').classList.remove('hidden'); let currentDay = user.completedDays.length + 1; document.getElementById('tasks-modal-title').innerText = `Day ${currentDay} Tasks`; document.getElementById('task-date-display').innerText = new Date().toDateString(); let tasksForDay = getTasksForDay(user.goal, currentDay); user.tasks = tasksForDay.map(task => ({ task: task, points: 50, done: false })); saveState(); renderTasksEditable(); document.getElementById('finish-day-btn').disabled = true; document.getElementById('finish-day-btn').innerText = 'Complete tasks to claim rewards'; document.getElementById('tasks-status-message').innerText = "⚠️ Complete all 5 tasks to finish the day."; document.getElementById('taskDemoPanel').style.display = 'none'; }
-        function renderTasksEditable() { const container = document.getElementById('task-list-container'); container.innerHTML = ''; user.tasks.forEach((t, idx) => { const div = document.createElement('div'); div.className = 'task-item'; div.onclick = (e) => { if (e.target.classList.contains('task-check') || e.target.classList.contains('task-bitmoji-demo')) return; showTaskDemo(t.task); }; div.innerHTML = `<div style="flex:1; display: flex; align-items: center; gap: 10px;"><span style="${t.done ? 'text-decoration:line-through;opacity:0.5' : ''}">${t.task}</span><span class="task-points">+${t.points}</span><span class="task-bitmoji-demo" data-task="${t.task}" style="cursor:pointer; font-size:1.2rem;">🧑‍🎤</span></div><div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTaskEditable(${idx})"></div>`; container.appendChild(div); }); document.querySelectorAll('.task-bitmoji-demo').forEach(el => { el.addEventListener('click', (e) => { e.stopPropagation(); const taskText = el.getAttribute('data-task'); const emojiAction = getTaskEmoji(taskText); el.innerHTML = emojiAction; setTimeout(() => { el.innerHTML = '🧑‍🎤'; }, 2000); addFeedItemManually(`🧑‍🎤 Bitmoji demonstrates: ${emojiAction}`, true); showTaskDemo(taskText); }); }); const allDone = user.tasks.every(t => t.done); document.getElementById('finish-day-btn').disabled = !allDone; if (allDone) document.getElementById('tasks-status-message').innerText = "✅ All tasks complete! Ready to claim."; }
-        function toggleTaskEditable(idx) { user.tasks[idx].done = !user.tasks[idx].done; renderTasksEditable(); saveState(); }
-        function finishDay() { if (!user.tasks.every(t=>t.done)) return; let xpGain = user.tasks.reduce((s,t)=>s+t.points,0); if (user.isPremium && user.xpMultiplier) xpGain = Math.floor(xpGain * user.xpMultiplier); user.xp += xpGain; let bonus = 20 + (user.isPremium ? (user.dailyBonusCoins||0) : 0); user.coins += bonus; user.streak++; while (user.xp >= user.level*100) { user.level++; user.coins+=50; confetti(); } let today = getTodayStr(); if (!user.completedDays.includes(today)) user.completedDays.push(today); user.tasks = []; let weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())); if (!user.weeklyChallenge || new Date(user.weeklyChallenge?.weekStart).toDateString() !== weekStart.toDateString()) { user.weeklyChallenge = { weekStart: weekStart.toISOString(), daysCompleted: 0, claimed: false }; } user.weeklyChallenge.daysCompleted++; if (user.weeklyChallenge.daysCompleted >= 5 && !user.weeklyChallenge.claimed) { user.weeklyChallenge.claimed = true; user.coins += 200; alert("Weekly challenge completed! +200 coins!"); } saveState(); closeAllModals(); addFeedItemManually(`Completed day! +${xpGain} XP`, true); alert(`Day completed! +${xpGain} XP, +${bonus} Coins`); }
-        function getTaskEmoji(taskText) { const lower = taskText.toLowerCase(); if (lower.includes('bench')) return '🏋️‍♂️ Bench press'; if (lower.includes('squat')) return '🦵 Squats'; if (lower.includes('curl')) return '💪 Bicep curl'; if (lower.includes('zumba')) return '💃 Zumba'; if (lower.includes('surya')) return '🧘 Surya Namaskar'; if (lower.includes('plank')) return '📏 Plank'; if (lower.includes('eat')) return '🍽️ Eating healthy'; if (lower.includes('drink')) return '💧 Stay hydrated'; if (lower.includes('sleep')) return '😴 Sleep well'; if (lower.includes('walk')) return '🚶 Walking'; return '🎯 ' + taskText.split(' ')[0]; }
+        // ======================= TASKS WITH BITMOJI DEMO =======================
+        function getTaskDemoText(taskText) {
+            const lower = taskText.toLowerCase();
+            if (lower.includes('bench')) return "🏋️‍♂️ Bitmoji demonstrates: Bench press – keep back flat, lower bar to chest, press up explosively.";
+            if (lower.includes('squat')) return "🦵 Bitmoji demonstrates: Squat – feet shoulder-width, keep chest up, go below parallel, drive through heels.";
+            if (lower.includes('deadlift')) return "🏋️ Bitmoji demonstrates: Deadlift – hinge at hips, keep back straight, pull bar close to body.";
+            if (lower.includes('pull')) return "💪 Bitmoji demonstrates: Pull up – grip bar wide, engage lats, pull chin above bar.";
+            if (lower.includes('push up')) return "💪 Bitmoji demonstrates: Push up – hands under shoulders, lower chest to floor, push up.";
+            if (lower.includes('zumba')) return "💃 Bitmoji demonstrates: Zumba – follow the rhythm, move hips, have fun!";
+            if (lower.includes('surya')) return "🧘 Bitmoji demonstrates: Surya Namaskar – flow through 12 poses, breathe deeply.";
+            if (lower.includes('plank')) return "📏 Bitmoji demonstrates: Plank – straight line from head to heels, engage core.";
+            if (lower.includes('eat')) return "🍽️ Bitmoji demonstrates: Healthy eating – include protein, veggies, whole grains.";
+            if (lower.includes('drink')) return "💧 Bitmoji demonstrates: Stay hydrated – drink water throughout the day.";
+            if (lower.includes('sleep')) return "😴 Bitmoji demonstrates: Good sleep – 7-9 hours, no screens before bed.";
+            if (lower.includes('walk')) return "🚶 Bitmoji demonstrates: Walking – maintain good posture, brisk pace.";
+            return `🧑‍🎤 Bitmoji performs: ${taskText}. Follow the steps to succeed!`;
+        }
+        function updateBitmojiDemo(taskText) {
+            const avatarDiv = document.getElementById('bitmojiDemoAvatar');
+            const textDiv = document.getElementById('bitmojiDemoText');
+            if (user.equipped && user.equipped.body) {
+                avatarDiv.style.background = `url(${user.equipped.body}) center/cover no-repeat`;
+                avatarDiv.style.backgroundSize = 'contain';
+                avatarDiv.innerHTML = '';
+            } else {
+                avatarDiv.innerHTML = user.gender === 'Male' ? '👨' : (user.gender === 'Female' ? '👩' : '🧑');
+            }
+            textDiv.innerHTML = getTaskDemoText(taskText);
+            avatarDiv.style.transform = 'scale(1.1)';
+            setTimeout(() => { avatarDiv.style.transform = 'scale(1)'; }, 300);
+        }
+        function openTasks() {
+            let today = getTodayStr();
+            if (user.completedDays.includes(today)) return alert("Already completed today!");
+            closeAllModals();
+            document.getElementById('modal-tasks').classList.remove('hidden');
+            let currentDay = user.completedDays.length + 1;
+            document.getElementById('tasks-modal-title').innerText = `Day ${currentDay} Tasks`;
+            document.getElementById('task-date-display').innerText = new Date().toDateString();
+            let tasksForDay = getTasksForDay(user.goal, currentDay);
+            user.tasks = tasksForDay.map(task => ({ task: task, points: 50, done: false }));
+            saveState();
+            renderTasksEditable();
+            document.getElementById('finish-day-btn').disabled = true;
+            document.getElementById('finish-day-btn').innerText = 'Complete tasks to claim rewards';
+            document.getElementById('tasks-status-message').innerText = "⚠️ Complete all 5 tasks to finish the day.";
+            const avatarDiv = document.getElementById('bitmojiDemoAvatar');
+            if (user.equipped && user.equipped.body) {
+                avatarDiv.style.background = `url(${user.equipped.body}) center/cover no-repeat`;
+                avatarDiv.style.backgroundSize = 'contain';
+                avatarDiv.innerHTML = '';
+            } else {
+                avatarDiv.innerHTML = user.gender === 'Male' ? '👨' : (user.gender === 'Female' ? '👩' : '🧑');
+            }
+            document.getElementById('bitmojiDemoText').innerHTML = "Click any task to see your bitmoji demonstrate it";
+        }
+        function renderTasksEditable() {
+            const container = document.getElementById('task-list-container');
+            container.innerHTML = '';
+            user.tasks.forEach((t, idx) => {
+                const div = document.createElement('div');
+                div.className = 'task-item';
+                div.onclick = (e) => {
+                    if (e.target.classList.contains('task-check')) return;
+                    updateBitmojiDemo(t.task);
+                };
+                div.innerHTML = `
+                    <div style="flex:1; display: flex; align-items: center; gap: 10px;">
+                        <span style="${t.done ? 'text-decoration:line-through;opacity:0.5' : ''}">${t.task}</span>
+                        <span class="task-points">+${t.points}</span>
+                    </div>
+                    <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTaskEditable(${idx})"></div>
+                `;
+                container.appendChild(div);
+            });
+            const allDone = user.tasks.every(t => t.done);
+            document.getElementById('finish-day-btn').disabled = !allDone;
+            if (allDone) document.getElementById('tasks-status-message').innerText = "✅ All tasks complete! Ready to claim.";
+        }
+        function toggleTaskEditable(idx) {
+            user.tasks[idx].done = !user.tasks[idx].done;
+            renderTasksEditable();
+            saveState();
+        }
+        function finishDay() {
+            if (!user.tasks.every(t=>t.done)) return;
+            let xpGain = user.tasks.reduce((s,t)=>s+t.points,0);
+            if (user.isPremium && user.xpMultiplier) xpGain = Math.floor(xpGain * user.xpMultiplier);
+            user.xp += xpGain;
+            let bonus = 20 + (user.isPremium ? (user.dailyBonusCoins||0) : 0);
+            user.coins += bonus;
+            user.streak++;
+            while (user.xp >= user.level*100) { user.level++; user.coins+=50; confetti(); }
+            let today = getTodayStr();
+            if (!user.completedDays.includes(today)) user.completedDays.push(today);
+            user.tasks = [];
+            let weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay()));
+            if (!user.weeklyChallenge || new Date(user.weeklyChallenge?.weekStart).toDateString() !== weekStart.toDateString()) { user.weeklyChallenge = { weekStart: weekStart.toISOString(), daysCompleted: 0, claimed: false }; }
+            user.weeklyChallenge.daysCompleted++;
+            if (user.weeklyChallenge.daysCompleted >= 5 && !user.weeklyChallenge.claimed) { user.weeklyChallenge.claimed = true; user.coins += 200; alert("Weekly challenge completed! +200 coins!"); }
+            saveState(); closeAllModals(); addFeedItemManually(`Completed day! +${xpGain} XP`, true); alert(`Day completed! +${xpGain} XP, +${bonus} Coins`);
+        }
 
-        // AI COACH
-        let aiMemory = [];
-        function askAI() { let q = document.getElementById('ai-input').value.trim(); if (!q) return; const outputDiv = document.getElementById('ai-output'); outputDiv.innerHTML = "🤔 Let me think..."; setTimeout(() => { let reply = generateSmartReply(q, user.goal); aiMemory.push({ role: "user", content: q }, { role: "assistant", content: reply }); if (aiMemory.length > 16) aiMemory = aiMemory.slice(-16); outputDiv.innerHTML = `<strong>You:</strong> ${q}<br><br><strong>AI Coach:</strong> ${reply}`; document.getElementById('ai-input').value = ''; }, 500); }
-        function generateSmartReply(question, goal) { const lowerQ = question.toLowerCase(); const goalAdvice = { weightGain: { diet: "Eat 300-500 cal surplus, nutrient-dense foods, protein shake.", workout: "Compound lifts, progressive overload, train each group 2x/week.", motivation: "Muscle is built on rest days. Track strength gains weekly.", sleep: "7-9 hours for muscle repair.", stress: "High cortisol blocks growth. Try meditation." }, weightLoss: { diet: "300-500 cal deficit, high protein, half plate veggies.", workout: "Strength 3x/week + cardio 150-300 min/week.", motivation: "Focus on non-scale victories.", sleep: "7-8 hours to regulate hunger hormones.", stress: "Pause before stress eating; walk 5 minutes." }, yogaZumba: { diet: "Light before practice: banana/yogurt. Stay hydrated.", workout: "Consistency over intensity. Mix flows with static holds.", motivation: "Movement is celebration. 15 minutes counts.", sleep: "Yoga nidra improves sleep.", stress: "Pranayama breathing: inhale 4, hold 7, exhale 8." }, healthyLifestyle: { diet: "Half veggies, quarter protein, quarter grains. Cook at home.", workout: "30 min daily of enjoyable activity.", motivation: "Small daily habits create lasting change.", sleep: "Consistent schedule, relaxing routine.", stress: "Gratitude, walks, social connections." } }; const current = goalAdvice[goal] || goalAdvice.healthyLifestyle; if (lowerQ.includes('diet')||lowerQ.includes('food')) return current.diet; if (lowerQ.includes('workout')||lowerQ.includes('exercise')) return current.workout; if (lowerQ.includes('motivation')||lowerQ.includes('give up')) return current.motivation; if (lowerQ.includes('sleep')) return current.sleep; if (lowerQ.includes('stress')) return current.stress; if (lowerQ.includes('hello')) return `Hello ${user.name}! Ask me about diet, workouts, motivation, sleep, or stress.`; return `That's a great question. Could you tell me more? (diet, workout, motivation, sleep, stress)`; }
+        // ======================= HUMAN-LIKE AI COACH (no API) =======================
+        function askAI() {
+            const input = document.getElementById('ai-input');
+            const question = input.value.trim();
+            if (!question) return;
+            const outputDiv = document.getElementById('ai-output');
+            outputDiv.innerHTML = "🤔 Let me think...";
+            setTimeout(() => {
+                const reply = generateHumanReply(question, user.goal);
+                outputDiv.innerHTML = `<strong>You:</strong> ${question}<br><br><strong>AI Coach:</strong> ${reply}`;
+                input.value = '';
+            }, 500);
+        }
+        function generateHumanReply(question, goal) {
+            const lowerQ = question.toLowerCase();
+            const goalPhrases = {
+                weightGain: {
+                    diet: ["Eat big to get big! Add an extra 500 calories daily – think nuts, avocados, and protein shakes.", "Fuel those muscles! Carbs and protein post-workout are your best friends.", "Don't skip meals – 5-6 smaller meals a day keeps your metabolism firing for growth."],
+                    workout: ["Compound lifts are king! Squat, bench, deadlift – go heavy with good form.", "Progressive overload means adding weight or reps each week. Your muscles will thank you.", "Rest days are when you grow. Don't skip sleep!"],
+                    motivation: ["You're building a masterpiece. Every rep adds a brick.", "The scale might not move daily, but your strength will. Trust the process.", "One more set, one more rep – that's where the magic happens."]
+                },
+                weightLoss: {
+                    diet: ["Calorie deficit is key, but don't starve yourself. High protein keeps you full.", "Fill half your plate with veggies – low calories, high volume.", "Drink water before meals – it helps control portions."],
+                    workout: ["Mix strength training with cardio. HIIT is a time-efficient fat burner.", "Walk 8-10k steps daily. It's low impact and adds up fast.", "Consistency over intensity – show up even when you don't feel like it."],
+                    motivation: ["You didn't come this far to only come this far. Keep pushing!", "Plateaus are normal – change something small and trust the process.", "Non-scale victories matter: looser clothes, more energy, better sleep."]
+                },
+                yogaZumba: {
+                    diet: ["Eat light before practice – banana or yogurt. Stay hydrated!", "Post-workout: carbs + protein to refuel. A smoothie works great.", "Listen to your body – eat when hungry, stop when full."],
+                    workout: ["Flow like water – consistency over intensity. Even 15 minutes counts.", "Breathe through every movement. The breath is your anchor.", "Enjoy the rhythm! Zumba is about having fun while moving."],
+                    motivation: ["Movement is a celebration of what your body can do. Show up for yourself.", "Some days you flow, some days you glow. Both are progress.", "Your only competition is who you were yesterday."]
+                },
+                healthyLifestyle: {
+                    diet: ["Balance is key – half veggies, quarter protein, quarter whole grains.", "Cook at home more often. You control what goes in.", "Limit added sugars, not happiness. A treat now and then is fine."],
+                    workout: ["Find activities you love – walking, cycling, dancing. Consistency beats intensity.", "30 minutes a day is all it takes. Break it into 10-minute chunks if needed.", "Movement is medicine. Make it non-negotiable."],
+                    motivation: ["Small daily habits create massive change over time. Be patient.", "Don't aim for perfection; aim for progress. One good meal at a time.", "You're worth the effort. Every healthy choice is an act of self-love."]
+                }
+            };
+            const phrases = goalPhrases[goal] || goalPhrases.healthyLifestyle;
+            if (lowerQ.includes('diet') || lowerQ.includes('food') || lowerQ.includes('eat') || lowerQ.includes('meal')) {
+                return phrases.diet[Math.floor(Math.random() * phrases.diet.length)];
+            } else if (lowerQ.includes('workout') || lowerQ.includes('exercise') || lowerQ.includes('gym') || lowerQ.includes('train')) {
+                return phrases.workout[Math.floor(Math.random() * phrases.workout.length)];
+            } else if (lowerQ.includes('motivation') || lowerQ.includes('give up') || lowerQ.includes('lazy') || lowerQ.includes('tired')) {
+                return phrases.motivation[Math.floor(Math.random() * phrases.motivation.length)];
+            } else if (lowerQ.includes('sleep')) {
+                return "Sleep 7-9 hours. It's when your body repairs and your mind recharges. No screens an hour before bed!";
+            } else if (lowerQ.includes('stress')) {
+                return "Take a deep breath. Inhale for 4, hold for 7, exhale for 8. Repeat 5 times. You've got this.";
+            } else if (lowerQ.includes('hello') || lowerQ.includes('hi')) {
+                return `Hey ${user.name || 'there'}! I'm your coach for ${goal.replace(/([A-Z])/g, ' $1')}. Ask me anything – diet, workouts, motivation, sleep, stress. I'm here for you!`;
+            } else {
+                return `Great question! As your ${goal.replace(/([A-Z])/g, ' $1')} coach, I'd say focus on small, consistent actions. Want me to give you a tip on diet, workout, or motivation?`;
+            }
+        }
 
-        // INBOX (full)
+        // ======================= HUMAN-LIKE INBOX AI (Mike & Sarah) =======================
+        // Store conversation memory per friend
+        async function getAIReply(friendName, userMessage) {
+            await new Promise(resolve => setTimeout(resolve, 800)); // simulate typing
+            if (!user.chatMemory[friendName]) user.chatMemory[friendName] = [];
+            user.chatMemory[friendName].push(userMessage);
+            if (user.chatMemory[friendName].length > 5) user.chatMemory[friendName].shift();
+            const lower = userMessage.toLowerCase();
+            const lastMsg = user.chatMemory[friendName].slice(-2)[0] || "";
+            if (friendName === "Mike") {
+                // Mike – energetic, gym bro
+                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) {
+                    return "Yo! What's up? Ready to crush some weights today? 💪";
+                } else if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) {
+                    return "Let's go! Hit those compound lifts first – bench, squat, deadlift. Then accessories. You got this!";
+                } else if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) {
+                    return "Eat big to get big, bro! Chicken, rice, eggs, peanut butter. And don't skip your protein shake post-workout.";
+                } else if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) {
+                    return "Bro, you're a beast! Remember why you started. One rep at a time. Let's go!";
+                } else if (lower.includes('sleep')) {
+                    return "Sleep is when the gains happen, man. 8 hours minimum. No excuses!";
+                } else if (lower.includes('thank')) {
+                    return "Anytime, brother! Keep grinding! 💪";
+                } else {
+                    const replies = ["That's awesome! Keep pushing!", "I feel you, man. Just show up – that's half the battle.", "You got this! Let me know if you need a workout plan.", "Stay hard! No days off."];
+                    return replies[Math.floor(Math.random() * replies.length)];
+                }
+            } else { // Sarah – calm, mindful, supportive
+                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) {
+                    return "Hello! How's your energy today? Remember to breathe and be kind to yourself. 🧘";
+                } else if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) {
+                    return "Movement is medicine. Listen to your body – some days a gentle flow, other days you can go harder. What feels right today?";
+                } else if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) {
+                    return "Nourish your body with whole foods. A colourful plate = a happy plate. And stay hydrated!";
+                } else if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) {
+                    return "You're doing amazing. Progress isn't linear. Take a moment to appreciate how far you've come. 🌸";
+                } else if (lower.includes('sleep')) {
+                    return "Rest is sacred. Create a bedtime ritual – no screens, some gentle stretching, and gratitude. Sweet dreams.";
+                } else if (lower.includes('thank')) {
+                    return "You're so welcome. I'm cheering for you! 💕";
+                } else {
+                    const replies = ["That sounds meaningful. Tell me more?", "I hear you. How can I support you today?", "You've got this. One step at a time.", "Sending you positive energy! ✨"];
+                    return replies[Math.floor(Math.random() * replies.length)];
+                }
+            }
+        }
+
+        // ======================= INBOX (only Mike and Sarah) =======================
         let currentChatFriend = null, typingTimeout = null;
+        async function sendChatMessage() {
+            if (!currentChatFriend) return;
+            const input = document.getElementById('chatMessageInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = [];
+            user.chats[currentChatFriend].push({ from: user.name, text: msg, time: new Date().toLocaleTimeString(), seen: false });
+            saveState();
+            input.value = '';
+            renderFullChat(currentChatFriend);
+            addFeedItemManually(`Sent message to ${currentChatFriend}`, true);
+            // Show typing indicator
+            const container = document.getElementById('chatMessagesContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+            const reply = await getAIReply(currentChatFriend, msg);
+            typingDiv.remove();
+            user.chats[currentChatFriend].push({ from: currentChatFriend, text: reply, time: new Date().toLocaleTimeString(), seen: false });
+            saveState();
+            renderFullChat(currentChatFriend);
+            addFeedItemManually(`${currentChatFriend} replied`, false);
+        }
         function showInbox() { closeAllModals(); document.getElementById('modal-inbox').classList.remove('hidden'); renderChatList(); }
-        function renderChatList() { const searchTerm = document.getElementById('inboxSearch')?.value.toLowerCase() || ''; let friendList = user.friends.map(fname => { const mockCompleted = (fname.length * 7) % 100; const mockStreak = (fname.length * 3) % 30; const lastActive = user.lastActivity[fname] || Date.now(); const daysSinceActive = (Date.now() - lastActive) / (1000*3600*24); const lastMessage = user.chats[fname]?.slice(-1)[0]?.text || "Say hello!"; const lastTime = user.chats[fname]?.slice(-1)[0]?.time || ""; return { name: fname, completedDays: mockCompleted, streak: mockStreak, lastActive, isOnline: daysSinceActive < 0.1, goal: user.goal, avatar: fname === "Alex" ? "😎" : (fname === "Sarah" ? "👩‍🦰" : "🧔"), lastMessage, lastTime, status: `Day ${mockCompleted} ${mockStreak > 0 ? '🔥' : ''}` }; }); if (searchTerm) friendList = friendList.filter(f => f.name.toLowerCase().includes(searchTerm)); const container = document.getElementById('chatListContainer'); if (friendList.length === 0) { container.innerHTML = '<div class="no-results">✨ No users found</div>'; return; } container.innerHTML = friendList.map(f => { const percent = (f.completedDays / 100) * 100; const circumference = 2 * Math.PI * 18; const dash = (percent / 100) * circumference; return `<div class="chat-item" onclick="openFullChat('${f.name}')"><div class="chat-avatar"><div style="width:55px;height:55px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${f.avatar}</div>${f.isOnline ? '<span class="online-dot"></span>' : ''}</div><div class="chat-info"><div class="chat-name"><span>${f.name}</span><span>${f.lastTime}</span></div><div class="chat-status">${f.status}</div><div class="chat-preview">${f.lastMessage.substring(0,40)}${f.lastMessage.length>40?'…':''}</div></div><div class="progress-ring-small"><svg width="40" height="40"><circle class="bg-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none"></circle><circle class="fill-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference - dash}"></circle></svg></div></div>`; }).join(''); }
-        function openFullChat(friendName) { currentChatFriend = friendName; document.getElementById('modal-inbox').classList.add('hidden'); const chatModal = document.getElementById('modal-chat'); chatModal.classList.remove('hidden'); renderFullChat(friendName); startTypingSimulation(); }
-        function renderFullChat(friendName) { const friendData = { name: friendName, goal: user.goal, completedDays: (friendName.length * 7) % 100, streak: (friendName.length * 3) % 30 }; document.getElementById('chatProfileHeader').innerHTML = `<div class="chat-profile-avatar">${friendName === "Alex" ? "😎" : (friendName === "Sarah" ? "👩‍🦰" : "🧔")}</div><div class="chat-profile-info"><div class="chat-profile-name">${friendName}</div><div class="chat-profile-goal">Day ${friendData.completedDays} · ${friendData.goal.replace(/([A-Z])/g, ' $1')}</div></div>`; const messages = user.chats[friendName] || []; const messagesHtml = messages.map(msg => `<div class="message ${msg.from === user.name ? 'sent' : 'received'}">${msg.text}<div class="time">${msg.time} ${msg.from === user.name ? (msg.seen ? '✓✓' : '✓') : ''}</div></div>`).join(''); document.getElementById('chatMessagesContainer').innerHTML = messagesHtml; document.getElementById('chatMessagesContainer').scrollTop = document.getElementById('chatMessagesContainer').scrollHeight; if (messages.some(m => m.from !== user.name && !m.seen)) { setTimeout(() => { user.chats[friendName] = user.chats[friendName].map(m => { if (m.from !== user.name && !m.seen) m.seen = true; return m; }); saveState(); renderFullChat(friendName); }, 2000); } }
-        function sendChatMessage() { if (!currentChatFriend) return; const input = document.getElementById('chatMessageInput'); const msg = input.value.trim(); if (!msg) return; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: msg, time: new Date().toLocaleTimeString(), seen: false }); saveState(); input.value = ''; renderFullChat(currentChatFriend); addFeedItemManually(`Sent message to ${currentChatFriend}`, true); simulateReply(currentChatFriend); }
-        function simulateReply(friendName) { setTimeout(() => { if (currentChatFriend === friendName) { const replies = ["Nice! Keep going 💪", "You're crushing it!", "Let's finish strong!", "I'm with you!"]; const reply = replies[Math.floor(Math.random() * replies.length)]; if (!user.chats[friendName]) user.chats[friendName] = []; user.chats[friendName].push({ from: friendName, text: reply, time: new Date().toLocaleTimeString(), seen: false }); saveState(); renderFullChat(friendName); addFeedItemManually(`${friendName} replied`, false); } }, 3000); }
-        function startTypingSimulation() { const input = document.getElementById('chatMessageInput'); const container = document.getElementById('chatMessagesContainer'); let typingDiv = null; input.addEventListener('input', () => { if (typingDiv) return; typingDiv = document.createElement('div'); typingDiv.className = 'typing-indicator'; typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>'; container.appendChild(typingDiv); container.scrollTop = container.scrollHeight; clearTimeout(typingTimeout); typingTimeout = setTimeout(() => { if (typingDiv) typingDiv.remove(); typingDiv = null; }, 1500); }); }
-        function sendProgressCard() { if (!currentChatFriend) return; const stats = `Day ${user.completedDays.length} | 🔥 ${user.streak} streak | 🪙 ${user.coins} coins | 👟 ${stepCount} steps`; const card = `📊 Progress Card:\n${stats}\n🎯 ${Math.round((user.completedDays.length/100)*100)}% complete!`; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: card, time: new Date().toLocaleTimeString(), seen: false }); saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Shared progress card with ${currentChatFriend}`, true); alert("Progress card sent!"); }
-        function sendSnapPhoto() { if (!currentChatFriend) return; const fakePhotoMsg = "📸 Snap: [Photo of today's workout] (disappears in 24h)"; if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = []; user.chats[currentChatFriend].push({ from: user.name, text: fakePhotoMsg, time: new Date().toLocaleTimeString(), expires: Date.now() + 24*3600*1000 }); saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Sent a snap to ${currentChatFriend}`, true); alert("Snap sent! It will disappear after 24 hours."); }
+        function renderChatList() {
+            const searchTerm = document.getElementById('inboxSearch')?.value.toLowerCase() || '';
+            let friendList = user.friends.map(fname => {
+                const mockCompleted = (fname.length * 7) % 100;
+                const mockStreak = (fname.length * 3) % 30;
+                const lastActive = user.lastActivity[fname] || Date.now();
+                const daysSinceActive = (Date.now() - lastActive) / (1000*3600*24);
+                const lastMessage = user.chats[fname]?.slice(-1)[0]?.text || "Say hello!";
+                const lastTime = user.chats[fname]?.slice(-1)[0]?.time || "";
+                return {
+                    name: fname,
+                    completedDays: mockCompleted,
+                    streak: mockStreak,
+                    lastActive,
+                    isOnline: daysSinceActive < 0.1,
+                    goal: user.goal,
+                    avatar: fname === "Mike" ? "🏋️" : (fname === "Sarah" ? "🧘‍♀️" : "👤"),
+                    lastMessage,
+                    lastTime,
+                    status: `Day ${mockCompleted} ${mockStreak > 0 ? '🔥' : ''}`
+                };
+            });
+            if (searchTerm) friendList = friendList.filter(f => f.name.toLowerCase().includes(searchTerm));
+            const container = document.getElementById('chatListContainer');
+            if (friendList.length === 0) { container.innerHTML = '<div class="no-results">✨ No users found</div>'; return; }
+            container.innerHTML = friendList.map(f => {
+                const percent = (f.completedDays / 100) * 100;
+                const circumference = 2 * Math.PI * 18;
+                const dash = (percent / 100) * circumference;
+                return `<div class="chat-item" onclick="openFullChat('${f.name}')"><div class="chat-avatar"><div style="width:55px;height:55px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${f.avatar}</div>${f.isOnline ? '<span class="online-dot"></span>' : ''}</div><div class="chat-info"><div class="chat-name"><span>${f.name}</span><span>${f.lastTime}</span></div><div class="chat-status">${f.status}</div><div class="chat-preview">${f.lastMessage.substring(0,40)}${f.lastMessage.length>40?'…':''}</div></div><div class="progress-ring-small"><svg width="40" height="40"><circle class="bg-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none"></circle><circle class="fill-circle" cx="20" cy="20" r="18" stroke-width="3" fill="none" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference - dash}"></circle></svg></div></div>`;
+            }).join('');
+        }
+        function openFullChat(friendName) {
+            currentChatFriend = friendName;
+            document.getElementById('modal-inbox').classList.add('hidden');
+            const chatModal = document.getElementById('modal-chat');
+            chatModal.classList.remove('hidden');
+            renderFullChat(friendName);
+        }
+        function renderFullChat(friendName) {
+            const friendData = { name: friendName, goal: user.goal, completedDays: (friendName.length * 7) % 100, streak: (friendName.length * 3) % 30 };
+            document.getElementById('chatProfileHeader').innerHTML = `<div class="chat-profile-avatar">${friendName === "Mike" ? "🏋️" : "🧘‍♀️"}</div><div class="chat-profile-info"><div class="chat-profile-name">${friendName}</div><div class="chat-profile-goal">Day ${friendData.completedDays} · ${friendData.goal.replace(/([A-Z])/g, ' $1')}</div></div>`;
+            const messages = user.chats[friendName] || [];
+            const messagesHtml = messages.map(msg => `<div class="message ${msg.from === user.name ? 'sent' : 'received'}">${msg.text}<div class="time">${msg.time} ${msg.from === user.name ? (msg.seen ? '✓✓' : '✓') : ''}</div></div>`).join('');
+            document.getElementById('chatMessagesContainer').innerHTML = messagesHtml;
+            document.getElementById('chatMessagesContainer').scrollTop = document.getElementById('chatMessagesContainer').scrollHeight;
+            if (messages.some(m => m.from !== user.name && !m.seen)) {
+                setTimeout(() => {
+                    user.chats[friendName] = user.chats[friendName].map(m => { if (m.from !== user.name && !m.seen) m.seen = true; return m; });
+                    saveState(); renderFullChat(friendName);
+                }, 2000);
+            }
+        }
+        function sendProgressCard() {
+            if (!currentChatFriend) return;
+            const stats = `Day ${user.completedDays.length} | 🔥 ${user.streak} streak | 🪙 ${user.coins} coins | 👟 ${steps} steps`;
+            const card = `📊 Progress Card:\n${stats}\n🎯 ${Math.round((user.completedDays.length/100)*100)}% complete!`;
+            if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = [];
+            user.chats[currentChatFriend].push({ from: user.name, text: card, time: new Date().toLocaleTimeString(), seen: false });
+            saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Shared progress card with ${currentChatFriend}`, true); alert("Progress card sent!");
+        }
+        function sendSnapPhoto() {
+            if (!currentChatFriend) return;
+            const fakePhotoMsg = "📸 Snap: [Photo of today's workout] (disappears in 24h)";
+            if (!user.chats[currentChatFriend]) user.chats[currentChatFriend] = [];
+            user.chats[currentChatFriend].push({ from: user.name, text: fakePhotoMsg, time: new Date().toLocaleTimeString(), expires: Date.now() + 24*3600*1000 });
+            saveState(); renderFullChat(currentChatFriend); addFeedItemManually(`Sent a snap to ${currentChatFriend}`, true); alert("Snap sent! It will disappear after 24 hours.");
+        }
         function closeChatModal() { document.getElementById('modal-chat').classList.add('hidden'); currentChatFriend = null; }
-        function searchUsers() { const query = document.getElementById('inboxSearch').value.toLowerCase(); const resultsDiv = document.getElementById('searchResults'); if (!query) { resultsDiv.style.display = 'none'; return; } const allUsers = JSON.parse(localStorage.getItem('allUsers')) || []; const filtered = allUsers.filter(u => u.name.toLowerCase().includes(query) && u.name !== user.name && !user.friends.includes(u.name)); if (filtered.length === 0) resultsDiv.innerHTML = '<div>No users found</div>'; else resultsDiv.innerHTML = filtered.map(u => `<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${u.name}</span><button class="btn-sec" onclick="addFriend('${u.name}')">Add</button></div>`).join(''); resultsDiv.style.display = 'block'; }
-        function addFriend(name) { if (!user.friends.includes(name)) { user.friends.push(name); user.chats[name] = []; user.lastActivity[name] = Date.now(); saveState(); renderChatList(); addFeedItemManually(`Added ${name} as a friend!`, true); alert(`Added ${name}`); } else alert(`${name} is already your friend.`); }
         function cleanupExpiredMessages() { for (let friend in user.chats) user.chats[friend] = user.chats[friend].filter(msg => !msg.expires || msg.expires > Date.now()); saveState(); }
         function checkWeeklyReview() { const now = new Date(); if (now.getDay() === 0) { const lastReview = localStorage.getItem('lastWeeklyReview'); if (lastReview !== getTodayStr()) { const summary = `📅 Weekly Review: Completed ${user.completedDays.length} days, earned ${user.coins} coins, streak ${user.streak}. Keep going!`; user.friends.forEach(friend => { if (!user.chats[friend]) user.chats[friend] = []; user.chats[friend].push({ from: "System", text: summary, time: new Date().toLocaleTimeString() }); }); localStorage.setItem('lastWeeklyReview', getTodayStr()); saveState(); } } }
 
-        // OTHER FEATURES
+        // ======================= OTHER FEATURES =======================
         function showLeaderboard() { toggleSidebar(); document.getElementById('modal-leaderboard').classList.remove('hidden'); let mock = [{name:"Alex", xp:2500, level:5},{name:"Sarah", xp:1800, level:4},{name:user.name, xp:user.xp+user.level*100, level:user.level},{name:"Mike", xp:500, level:2}].sort((a,b)=>b.xp-a.xp); let listDiv = document.getElementById('leaderboard-list'); listDiv.innerHTML = ''; mock.forEach((u,i) => { let div = document.createElement('div'); div.className='leaderboard-item'; if(i===0) div.classList.add('rank-1'); if(i===1) div.classList.add('rank-2'); if(i===2) div.classList.add('rank-3'); if(u.name === user.name) div.style.borderColor = "var(--primary)"; div.innerHTML = `<div style="font-weight:900; width:30px">#${i+1}</div><div style="flex:1"><b>${u.name}</b><br><span style="font-size:0.8rem">Lvl ${u.level}</span></div><div>${u.xp} XP</div>`; listDiv.appendChild(div); }); }
         function showProfile() { toggleSidebar(); document.getElementById('modal-profile').classList.remove('hidden'); document.getElementById('edit-name').value=user.name; document.getElementById('edit-email').value=user.email; document.getElementById('edit-age').value=user.age; document.getElementById('edit-weight').value=user.weight; document.getElementById('edit-height').value=user.height; document.getElementById('edit-goal').value=user.goal; document.getElementById('edit-gender').value=user.gender; }
         function updateProfile() { user.name=document.getElementById('edit-name').value; user.email=document.getElementById('edit-email').value; user.age=parseInt(document.getElementById('edit-age').value); user.weight=parseFloat(document.getElementById('edit-weight').value); user.height=parseFloat(document.getElementById('edit-height').value); user.goal=document.getElementById('edit-goal').value; user.gender=document.getElementById('edit-gender').value; saveState(); closeAllModals(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
         let calendarPage = 1; function changeCalendarPage(delta) { let newPage = calendarPage+delta; if(newPage>=1 && newPage<=3) { calendarPage=newPage; renderCalendar(); } }
         function openCalendar() { closeAllModals(); document.getElementById('modal-calendar').classList.remove('hidden'); renderCalendar(); }
-        function renderCalendar() { let grid = document.getElementById('calendar-grid'); grid.innerHTML = ''; let start = (calendarPage-1)*33+1, end = Math.min(start+32,100); document.getElementById('calendar-page-indicator').innerText = `Page ${calendarPage}/3`; document.getElementById('calendar-streak').innerText = user.streak; document.getElementById('calendar-completed').innerText = user.completedDays.length; document.getElementById('calendar-progress-fill').style.width = (user.completedDays.length/100*100)+'%'; let todayDate = new Date().toISOString().split('T')[0]; for (let d=start; d<=end; d++) { let div = document.createElement('div'); div.className='day-cell'; div.innerText = d; let dayDate = new Date(); dayDate.setDate(dayDate.getDate() + (d - (user.completedDays.length + 1))); let dateStr = dayDate.toISOString().split('T')[0]; let isCompleted = user.completedDays.includes(dateStr); let isToday = (dateStr === todayDate); if (isCompleted) div.classList.add('day-completed'); else if (isToday) div.classList.add('day-today'); else div.classList.add('day-locked'); if (d === 1 && !isCompleted && !isToday) { div.classList.add('day-start'); div.classList.remove('day-locked'); } div.onclick = () => { if (isCompleted) alert(`Day ${d} completed!`); else if (isToday || d === 1) openTasks(); else alert(`Day ${d} locked.`); }; grid.appendChild(div); } }
+        function renderCalendar() {
+            let grid = document.getElementById('calendar-grid'); grid.innerHTML = '';
+            let start = (calendarPage-1)*33+1, end = Math.min(start+32,100);
+            document.getElementById('calendar-page-indicator').innerText = `Page ${calendarPage}/3`;
+            document.getElementById('calendar-streak').innerText = user.streak;
+            document.getElementById('calendar-completed').innerText = user.completedDays.length;
+            document.getElementById('calendar-progress-fill').style.width = (user.completedDays.length/100*100)+'%';
+            let todayDate = new Date().toISOString().split('T')[0];
+            const milestoneDays = [7,15,30,50,75,100];
+            for (let d=start; d<=end; d++) {
+                let div = document.createElement('div'); div.className='day-cell'; div.innerText = d;
+                let dayDate = new Date();
+                dayDate.setDate(dayDate.getDate() + (d - (user.completedDays.length + 1)));
+                let dateStr = dayDate.toISOString().split('T')[0];
+                let isCompleted = user.completedDays.includes(dateStr);
+                let isToday = (dateStr === todayDate);
+                let isMilestone = milestoneDays.includes(d);
+                if (isCompleted) div.classList.add('day-completed');
+                else if (isToday) div.classList.add('day-today');
+                else if (isMilestone && !isCompleted && !isToday) div.classList.add('day-milestone');
+                else div.classList.add('day-locked');
+                if (d === 1 && !isCompleted && !isToday) { div.classList.add('day-start'); div.classList.remove('day-locked'); }
+                div.onclick = () => {
+                    if (isCompleted) alert(`Day ${d} completed!`);
+                    else if (isToday || d === 1) openTasks();
+                    else if (isMilestone) alert(`🎉 Milestone Day ${d}!\nKeep going to unlock this day!`);
+                    else alert(`Day ${d} is locked. Complete previous days first.`);
+                };
+                grid.appendChild(div);
+            }
+        }
         function showPremium() { toggleSidebar(); document.getElementById('modal-premium').classList.remove('hidden'); document.getElementById('premiumStatus').innerHTML = user.isPremium ? '<span class="premium-active">⚜️ Premium Active</span>' : ''; if (user.starterPurchased) document.getElementById('starterBtn').disabled = true; }
         function initPayment(plan) { if (plan === 'starter' && user.starterPurchased) { alert("Starter Pack can only be purchased once!"); return; } let prices = { starter: 4900, monthly: 9900, quarterly: 29000 }; let rzp = new Razorpay({ key: "rzp_live_SJ5ukbKmD3GVp8", amount: prices[plan], currency: "INR", name: "100DayCore", handler: function() { activatePremium(plan); }, prefill: { name: user.name, email: user.email }, theme: { color: "#8A2BE2" } }); rzp.open(); }
         function activatePremium(plan) { if (plan === "starter") { user.starterPurchased = true; user.xpMultiplier = 1.3; user.dailyBonusCoins = 15; } else if (plan === "quarterly") { user.xpMultiplier = 1.5; user.dailyBonusCoins = 20; } else { user.xpMultiplier = 1.2; user.dailyBonusCoins = 10; } user.isPremium = true; user.premiumPlan = plan; saveState(); closeAllModals(); confetti(); addFeedItemManually(`${user.name} activated ${plan} premium! 🚀`, true); alert("Premium activated!"); }
-        function showBitmoji() { toggleSidebar(); document.getElementById('modal-bitmoji').classList.remove('hidden'); updateBitmojiPreview(); }
-        function updateBitmojiPreview() { const parts = ['base','shirt','jacket','pants','shoes','glasses']; parts.forEach(part => { let img = document.getElementById(`avatar-${part}`); if(img && user.equipped[part]) img.src = user.equipped[part]; else if(img && part !== 'base') img.src = ''; }); if(!user.equipped.base && user.gender === 'Male') document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👦'; else if(!user.equipped.base) document.getElementById('avatar-base').src = 'https://via.placeholder.com/100?text=👧'; }
-        function claimFreeReward() { user.coins+=50; user.crates=(user.crates||0)+1; saveState(); alert("+50 coins & 1 crate"); addFeedItemManually("Claimed daily reward!", true); showBitmoji(); }
-        function saveOutfit() { alert("Outfit saved!"); }
-        function showStore() { toggleSidebar(); document.getElementById('modal-store').classList.remove('hidden'); renderStore(); }
-        function renderStore() { document.getElementById('store-items').innerHTML = `<div class="store-card">🔥 XP Booster - 100 coins <button class="btn-sec" onclick="buyItem()">Buy</button></div>`; }
-        function buyItem() { if(user.coins>=100){ user.coins-=100; user.inventory.push('booster'); saveState(); alert("Bought!"); showStore(); } else alert("Not enough coins"); }
-        function openCrate() { if((user.crates||0)>0){ user.crates--; let reward=Math.floor(Math.random()*200)+50; user.coins+=reward; saveState(); alert(`You got ${reward} coins!`); addFeedItemManually("Opened a crate!", true); showStore(); } else alert("No crates"); }
         function showStats() { closeAllModals(); toggleSidebar(); renderStatsModal(); document.getElementById('modal-stats').classList.remove('hidden'); }
         function resetData() { if(confirm("Reset all data?")){ localStorage.clear(); location.reload(); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden')); document.getElementById('modal-chat').classList.add('hidden'); currentChatFriend = null; }
-        const categories = ['body','shirt','jacket','pants','shoes','glasses']; categories.forEach(cat => { let dropZone = document.getElementById(`drop-${cat}`); if(dropZone) { dropZone.addEventListener('dragover', (e) => e.preventDefault()); dropZone.addEventListener('drop', (e) => { e.preventDefault(); let file = e.dataTransfer.files[0]; if(file && file.type.startsWith('image/')) { let reader = new FileReader(); reader.onload = (ev) => { let imgData = ev.target.result; user.equipped[cat] = imgData; saveState(); updateBitmojiPreview(); }; reader.readAsDataURL(file); } }); } });
+        function updateGenderPreview() {
+            const gender = document.getElementById('inp-gender').value;
+            const avatarDiv = document.getElementById('liveAvatar');
+            if (gender === 'Male') avatarDiv.innerText = '👦';
+            else if (gender === 'Female') avatarDiv.innerText = '👧';
+            else avatarDiv.innerText = '🧑';
+        }
+        function showDiet() {
+            closeAllModals();
+            const modal = document.getElementById('modal-diet');
+            modal.classList.remove('hidden');
+            const contentDiv = document.getElementById('dietContent');
+            if (user.isPremium) {
+                let dietPlan = '';
+                switch(user.goal) {
+                    case 'weightGain':
+                        dietPlan = `<div class="rhyme-slogan">"Eat big to get big, train hard, don't wig!"</div>
+                                    <ul><li>🍗 Breakfast: 4 eggs + oatmeal + banana</li><li>🥩 Lunch: 200g chicken/rice/broccoli</li><li>🥜 Snack: Peanut butter sandwich + protein shake</li><li>🍚 Dinner: 250g beef/potatoes/veggies</li><li>💧 Drink 3L water daily</li></ul>`;
+                        break;
+                    case 'weightLoss':
+                        dietPlan = `<div class="rhyme-slogan">"Shred the fat, keep the muscle, that's the hustle!"</div>
+                                    <ul><li>🥑 Breakfast: Greek yogurt + berries</li><li>🥗 Lunch: Large salad with grilled chicken</li><li>🍎 Snack: Apple + almonds</li><li>🐟 Dinner: Salmon + asparagus + sweet potato</li><li>💧 Drink 2.5L water daily</li></ul>`;
+                        break;
+                    case 'yogaZumba':
+                        dietPlan = `<div class="rhyme-slogan">"Flow and glow, eat light, feel bright!"</div>
+                                    <ul><li>🍌 Breakfast: Smoothie bowl</li><li>🥙 Lunch: Veggie wrap with hummus</li><li>🥝 Snack: Fresh fruit</li><li>🍲 Dinner: Lentil soup + quinoa</li><li>💧 Herbal tea + 2L water</li></ul>`;
+                        break;
+                    default:
+                        dietPlan = `<div class="rhyme-slogan">"Balance is key, eat well to be free!"</div>
+                                    <ul><li>🌾 Breakfast: Whole grain toast + avocado</li><li>🥗 Lunch: Mixed greens + quinoa + tofu</li><li>🍫 Snack: Dark chocolate + walnuts</li><li>🍝 Dinner: Zucchini noodles + turkey meatballs</li><li>💧 Drink 2-3L water</li></ul>`;
+                }
+                contentDiv.innerHTML = dietPlan;
+            } else {
+                contentDiv.innerHTML = `
+                    <div style="position: relative;">
+                        <div class="diet-locked" style="filter: blur(8px); pointer-events: none;">
+                            <div class="rhyme-slogan">"Eat clean, get lean, with Premium you'll be the machine!"</div>
+                            <ul><li>🥗 Sample diet plan hidden</li><li>🍗 Unlock personalized meals</li><li>🥑 Get macros calculated for you</li></ul>
+                        </div>
+                        <div class="diet-overlay">
+                            <p style="text-align:center; margin-bottom:15px;">🔒 Premium Required</p>
+                            <button class="btn btn-accent" onclick="closeAllModals(); showPremium()">Upgrade to Premium</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        document.getElementById('inp-gender')?.addEventListener('change', updateGenderPreview);
         document.getElementById('inboxSearch')?.addEventListener('input', () => renderChatList());
         document.getElementById('shareProgressBtn')?.addEventListener('click', () => sendProgressCard());
 
         // Hero functions
         function startJourney() { showOnboardingForm(); }
-        function findPartners() {
-            const shareData = {
-                title: 'Progress Pulse Elite',
-                text: 'Join me on the 100-day fitness journey! Track steps, calories, tasks, and compete with friends.',
-                url: window.location.href,
-            };
-            if (navigator.share) {
-                navigator.share(shareData).catch(() => alert('Share cancelled or failed'));
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link copied! Share it with your friends.');
-            }
-        }
+        function findPartners() { const shareData = { title: 'Progress Pulse Elite', text: 'Join me on the 100-day fitness journey! Track steps, calories, tasks, and compete with friends.', url: window.location.href, }; if (navigator.share) { navigator.share(shareData).catch(() => alert('Share cancelled or failed')); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied! Share it with your friends.'); } }
         function showOnboardingForm() { document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'flex'; }
         function closeOnboardingForm() { document.getElementById('onboarding').style.display = 'none'; document.getElementById('heroSection').style.display = 'flex'; }
 
-        // Particles and theme toggle (only for hero)
+        // Particles and theme toggle
         const canvas = document.getElementById("particles");
         const ctx = canvas.getContext("2d");
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
         let particles = [];
-        for (let i = 0; i < 60; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 2,
-                dx: Math.random() - 0.5,
-                dy: Math.random() - 0.5
-            });
-        }
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(255,255,255,0.6)";
-                ctx.fill();
-                p.x += p.dx;
-                p.y += p.dy;
-                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-            });
-            requestAnimationFrame(animateParticles);
-        }
+        for (let i = 0; i < 60; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2, dx: Math.random() - 0.5, dy: Math.random() - 0.5 }); }
+        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.fill(); p.x += p.dx; p.y += p.dy; if (p.x < 0 || p.x > canvas.width) p.dx *= -1; if (p.y < 0 || p.y > canvas.height) p.dy *= -1; }); requestAnimationFrame(animateParticles); }
         animateParticles();
-        document.getElementById("themeToggle")?.addEventListener("change", (e) => {
-            document.body.classList.toggle("light-mode", e.target.checked);
-        });
+        document.getElementById("themeToggle")?.addEventListener("change", (e) => { document.body.classList.toggle("light-mode", e.target.checked); });
 
-        // Init
-        (function init() { if(user.name){ document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; updateUI(); loadSteps(); startLiveUpdates(); if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; } } else { document.getElementById('heroSection').style.display = 'flex'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'none'; } })();
+        window.showBitmoji = window.showBitmoji || function() { alert("Bitmoji module not loaded. Check bitmoji.js"); };
+        window.showStore = window.showStore || function() { alert("Store module not loaded. Check store.js"); };
+
+        (function init() { if(user.name){ document.getElementById('heroSection').style.display = 'none'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'block'; updateUI(); loadStepsForToday(); startLiveUpdates(); if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') { window.addEventListener('devicemotion', handleMotion); stepListenerActive = true; } } else { document.getElementById('heroSection').style.display = 'flex'; document.getElementById('onboarding').style.display = 'none'; document.getElementById('app-container').style.display = 'none'; } })();
     </script>
+
+    <script src="bitmoji.js"></script>
+    <script src="store.js"></script>
 </body>
 </html>
