@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
-        /* ========== ORIGINAL STYLES (unchanged) ========== */
+        /* ========== ENHANCED STYLES WITH MORE EFFECTS ========== */
         :root {
             --bg: #0f0f13;
             --card-bg: #1e1e24;
@@ -19,17 +19,21 @@
             --text-sec: #a0a0a0;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: 0 0 15px rgba(138,43,226,0.5);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background-color: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth; }
         .hidden { display: none !important; }
-        .btn { background: linear-gradient(45deg, var(--primary), #ff00ff); border: none; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-        .btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--primary); }
-        .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); }
-        .btn-accent { background: var(--accent); color: #000; }
+        /* Enhanced button styles */
+        .btn { background: linear-gradient(45deg, var(--primary), #ff00ff); border: none; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); text-transform: uppercase; letter-spacing: 1px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(138,43,226,0.3); }
+        .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 25px rgba(138,43,226,0.5); }
+        .btn:active { transform: translateY(1px); }
+        .btn-sec { background: var(--glass); border: 1px solid var(--glass-border); box-shadow: none; }
+        .btn-sec:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+        .btn-accent { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
         .confetti { position: fixed; width: 10px; height: 10px; background-color: var(--gold); opacity: 0.7; top: -10px; border-radius: 2px; animation: fall 4s linear infinite; z-index: 9999; }
         @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); } 100% { box-shadow: 0 0 5px var(--accent); } }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 5px var(--accent); } 50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary); } 100% { box-shadow: 0 0 5px var(--accent); } }
         @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes coinShine { 0% { filter: drop-shadow(0 0 2px var(--gold)); } 50% { filter: drop-shadow(0 0 8px var(--gold)); } 100% { filter: drop-shadow(0 0 2px var(--gold)); } }
         @keyframes bgMove { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
@@ -109,11 +113,17 @@
             position: relative;
             z-index: 2;
         }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; }
-        input, select { width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--glass-border); border-radius: 15px; color: white; font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
-        .live-avatar { display: flex; justify-content: center; margin-bottom: 20px; font-size: 4rem; background: var(--glass); border-radius: 50%; width: 100px; height: 100px; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border: 2px solid var(--primary); transition: transform 0.3s; }
+        @keyframes cardFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        .input-group { margin-bottom: 20px; position: relative; }
+        label { display: block; margin-bottom: 8px; color: var(--text-sec); font-size: 0.9rem; transition: color 0.2s; }
+        input, select { width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--glass-border); border-radius: 15px; color: white; font-size: 1rem; outline: none; transition: all 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); transform: scale(1.01); }
+        .live-avatar { display: flex; justify-content: center; margin-bottom: 20px; font-size: 4rem; background: var(--glass); border-radius: 50%; width: 100px; height: 100px; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; border: 2px solid var(--primary); transition: all 0.3s; cursor: pointer; }
+        .live-avatar:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
         .live-counter { text-align: center; margin-bottom: 20px; font-size: 0.9rem; color: var(--accent); animation: pulseText 2s infinite; }
         @keyframes pulseText { 0% { opacity: 0.7; } 50% { opacity: 1; text-shadow: 0 0 5px var(--accent); } 100% { opacity: 0.7; } }
         .typing::after { content: '|'; animation: blink 1s infinite; }
@@ -121,44 +131,54 @@
         .vibe-phrase { text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--gold); font-style: italic; }
         #app-container { position: relative; min-height: 100vh; padding: 20px; display: none; background: var(--bg); }
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .burger-menu { font-size: 2rem; cursor: pointer; color: var(--accent); transition: transform 0.2s; }
+        .burger-menu { font-size: 2rem; cursor: pointer; color: var(--accent); transition: all 0.2s; }
+        .burger-menu:hover { transform: rotate(90deg) scale(1.1); text-shadow: 0 0 10px var(--accent); }
         .calendar-btn { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; font-size: 0.9rem; }
+        .calendar-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
         .live-clock { background: var(--glass); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); font-family: monospace; font-size: 0.9rem; }
         .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .level-box { background: var(--card-bg); padding: 20px; border-radius: 25px; border: 1px solid var(--glass-border); position: relative; backdrop-filter: blur(5px); text-align: center; }
+        .level-box, .streak-box { background: var(--card-bg); border-radius: 25px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); transition: all 0.3s; }
+        .level-box:hover, .streak-box:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .level-box { padding: 20px; position: relative; text-align: center; }
         .level-badge { font-size: 3rem; font-weight: 900; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .level-date { font-size: 0.8rem; color: var(--text-sec); margin-top: 5px; }
         .premium-badge { position: absolute; top: 10px; right: 10px; background: var(--gold); color: #000; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; animation: coinShine 2s infinite; }
-        .streak-box { display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--card-bg); border-radius: 25px; border: 1px solid var(--glass-border); padding: 15px; }
+        .streak-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
         .streak-count { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
         .coins-in-streak { font-size: 1.2rem; color: var(--accent); margin-top: 5px; animation: coinShine 2s infinite; }
-        .xp-container { margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); }
+        .xp-container { margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); transition: transform 0.2s; }
+        .xp-container:hover { transform: translateY(-3px); }
         .xp-text { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-sec); }
-        .progress-bar { height: 16px; background: var(--bg); border-radius: 20px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); animation: glow 3s infinite; }
+        .progress-bar { height: 16px; background: var(--bg); border-radius: 20px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); animation: glowPulse 3s infinite; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); background-size: 200% 100%; animation: gradientShift 3s infinite; width: 0%; transition: width 0.5s ease; border-radius: 20px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #000; font-weight: bold; font-size: 0.8rem; }
-        .daily-action { background: linear-gradient(135deg, #2a2a35, #1a1a20); padding: 30px; border-radius: 25px; text-align: center; margin-bottom: 30px; border: 2px solid var(--primary); cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); }
-        .daily-action:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); transform: scale(1.02); }
+        .daily-action { background: linear-gradient(135deg, #2a2a35, #1a1a20); padding: 30px; border-radius: 25px; text-align: center; margin-bottom: 30px; border: 2px solid var(--primary); cursor: pointer; transition: all 0.3s; backdrop-filter: blur(5px); }
+        .daily-action:hover { box-shadow: 0 0 30px rgba(138, 43, 226, 0.5); transform: scale(1.02); border-color: var(--accent); }
         .daily-title { font-size: 1.5rem; margin-bottom: 10px; font-weight: 700; }
-        .ai-section { background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); }
+        .ai-section { background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--glass-border); backdrop-filter: blur(5px); transition: all 0.2s; }
+        .ai-section:hover { transform: translateY(-3px); }
         .ai-input-area { display: flex; gap: 10px; margin-top: 15px; }
         .ai-response { margin-top: 15px; padding: 15px; background: var(--bg); border-radius: 15px; font-style: italic; color: var(--text-sec); min-height: 80px; max-height: 200px; overflow-y: auto; font-size: 0.9rem; }
-        .quote-box { margin-top: 10px; padding: 10px; background: var(--glass); border-radius: 10px; font-size: 0.9rem; text-align: center; color: var(--accent); cursor: pointer; }
+        .quote-box { margin-top: 10px; padding: 10px; background: var(--glass); border-radius: 10px; font-size: 0.9rem; text-align: center; color: var(--accent); cursor: pointer; transition: all 0.2s; }
+        .quote-box:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
         .sidebar { position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px; height: 100%; background: rgba(21,21,26,0.95); backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s ease; padding: 30px; border-right: 1px solid var(--glass-border); overflow-y: auto; }
         .sidebar.active { left: 0; }
-        .close-sidebar { font-size: 2rem; cursor: pointer; margin-bottom: 30px; display: block; }
-        .menu-item { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: color 0.2s, transform 0.2s; }
-        .menu-item:hover { color: var(--primary); transform: translateX(5px); }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 30px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
-        .close-modal:hover { color: var(--danger); }
-        /* Calendar styles */
+        .close-sidebar { font-size: 2rem; cursor: pointer; margin-bottom: 30px; display: block; transition: all 0.2s; }
+        .close-sidebar:hover { transform: rotate(90deg); color: var(--danger); }
+        .menu-item { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.2s; }
+        .menu-item:hover { color: var(--primary); transform: translateX(8px); background: rgba(255,255,255,0.03); letter-spacing: 0.5px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; animation: fadeInModal 0.2s ease; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 30px; padding: 30px; max-height: 90vh; overflow-y: auto; position: relative; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); animation: slideUpModal 0.3s ease; }
+        @keyframes slideUpModal { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; transition: all 0.2s; }
+        .close-modal:hover { color: var(--danger); transform: scale(1.1) rotate(90deg); }
+        /* Calendar, tasks, inbox styles (unchanged) */
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .calendar-progress { background: var(--bg); border-radius: 20px; height: 8px; width: 100%; margin: 10px 0 20px; }
         .calendar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); border-radius: 20px; transition: width 0.3s; }
         .calendar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
         .day-cell { aspect-ratio: 1; display: flex; justify-content: center; align-items: center; border-radius: 12px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; background: var(--glass); border: 1px solid var(--glass-border); box-shadow: 0 4px 8px rgba(0,0,0,0.3); position: relative; }
-        .day-cell:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.5); }
+        .day-cell:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 8px 16px rgba(0,0,0,0.5); }
         .day-completed { background: linear-gradient(145deg, #00cc66, #009944); color: #000; border-color: #00cc66; }
         .day-completed::after { content: "✓"; font-size: 1rem; position: absolute; top: 2px; right: 5px; color: #000; font-weight: bold; }
         .day-locked { background: linear-gradient(145deg, #ff4444, #aa0000); color: white; border-color: #ff4444; opacity: 0.9; }
@@ -174,71 +194,61 @@
             box-shadow: 0 0 12px rgba(255,102,0,0.6);
         }
         .day-milestone::after { content: "🏆"; font-size: 0.9rem; position: absolute; top: 2px; right: 5px; }
-        .task-item { background: var(--bg); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; cursor: pointer; }
-        .task-check { width: 25px; height: 25px; border: 2px solid var(--text-sec); border-radius: 50%; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+        .task-item { background: var(--bg); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; cursor: pointer; }
+        .task-item:hover { transform: translateX(8px); background: rgba(255,255,255,0.05); }
+        .task-check { width: 25px; height: 25px; border: 2px solid var(--text-sec); border-radius: 50%; cursor: pointer; transition: all 0.2s; }
+        .task-check:active { transform: scale(0.9); }
         .task-check.checked { background: var(--accent); border-color: var(--accent); }
         .task-points { background: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-        .bitmoji-demo-block {
-            background: var(--glass);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            min-height: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .bitmoji-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            border: 2px solid var(--primary);
-        }
+        .bitmoji-demo-block { background: var(--glass); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; border: 1px solid var(--glass-border); min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s; }
+        .bitmoji-demo-block:hover { transform: scale(1.01); border-color: var(--accent); }
+        .bitmoji-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 10px; border: 2px solid var(--primary); transition: all 0.2s; }
         .bitmoji-demo-text { font-size: 0.9rem; color: var(--text-sec); }
-        .avatar-preview { width: 100px; height: 100px; background: var(--glass); border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border: 2px solid var(--primary); flex-direction: column; line-height: 1.2; transition: box-shadow 0.3s; position: relative; }
+        .avatar-preview { width: 100px; height: 100px; background: var(--glass); border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border: 2px solid var(--primary); flex-direction: column; line-height: 1.2; transition: all 0.3s; position: relative; }
         .avatar-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-        .upload-zone { border: 2px dashed var(--primary); border-radius: 15px; padding: 15px; text-align: center; transition: 0.2s; cursor: pointer; }
+        .upload-zone { border: 2px dashed var(--primary); border-radius: 15px; padding: 15px; text-align: center; transition: all 0.2s; cursor: pointer; }
+        .upload-zone:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); transform: scale(1.01); }
         .store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .store-card { background: var(--bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); transition: transform 0.2s; }
-        .leaderboard-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--bg); margin-bottom: 10px; border-radius: 15px; }
+        .store-card { background: var(--bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); transition: all 0.2s; }
+        .store-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .leaderboard-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--bg); margin-bottom: 10px; border-radius: 15px; transition: all 0.2s; }
+        .leaderboard-item:hover { transform: translateX(5px); background: rgba(255,255,255,0.05); }
         .rank-1 { border: 2px solid var(--gold); }
         .rank-2 { border: 2px solid silver; }
         .rank-3 { border: 2px solid #cd7f32; }
-        .plan-card { background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
+        .plan-card { background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; text-align: center; transition: all 0.2s; }
+        .plan-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .plan-price { font-size: 2rem; font-weight: 900; color: var(--accent); }
         .features-list { text-align: left; margin: 15px 0; padding-left: 20px; color: var(--text-sec); }
-        .step-circle { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .step-circle { background: var(--card-bg); border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 15px; transition: all 0.2s; }
+        .step-circle:hover { transform: scale(1.02); }
         .step-number-large { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
         .gauge-container { display: flex; justify-content: space-around; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
-        .gauge { position: relative; width: 100px; height: 100px; text-align: center; }
+        .gauge { position: relative; width: 100px; height: 100px; text-align: center; transition: all 0.2s; }
+        .gauge:hover { transform: scale(1.05); }
         .gauge svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .gauge circle { fill: none; stroke-width: 8; stroke-linecap: round; }
         .gauge .bg-circle { stroke: var(--glass-border); }
         .gauge .fill-circle { stroke: var(--accent); transition: stroke-dasharray 0.5s; }
         .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: bold; color: var(--accent); }
         .gauge-label { font-size: 0.7rem; margin-top: 5px; color: var(--text-sec); }
-        .food-item { background: var(--bg); border-radius: 15px; padding: 8px 12px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; }
-        .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--glass-border); font-size: 0.9rem; }
-        .feed-time { color: var(--text-sec); font-size: 0.7rem; }
+        .food-item { background: var(--bg); border-radius: 15px; padding: 8px 12px; margin: 5px 0; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .food-item:hover { transform: translateX(5px); }
+        .feed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--glass-border); font-size: 0.9rem; transition: all 0.2s; }
+        .feed-item:hover { background: rgba(255,255,255,0.03); }
         .inbox-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .inbox-title { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .search-box { display: flex; gap: 10px; background: var(--glass); border-radius: 30px; padding: 8px 15px; border: 1px solid var(--glass-border); flex: 1; }
+        .search-box { display: flex; gap: 10px; background: var(--glass); border-radius: 30px; padding: 8px 15px; border: 1px solid var(--glass-border); flex: 1; transition: all 0.2s; }
+        .search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
         .search-box input { background: transparent; border: none; padding: 8px 0; color: white; width: 100%; outline: none; }
-        .filter-icon { background: var(--glass); border-radius: 30px; padding: 8px 15px; cursor: pointer; }
+        .filter-icon { background: var(--glass); border-radius: 30px; padding: 8px 15px; cursor: pointer; transition: all 0.2s; }
+        .filter-icon:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
         .chat-list { display: flex; flex-direction: column; gap: 12px; max-height: 60vh; overflow-y: auto; }
         .chat-item { display: flex; align-items: center; gap: 12px; background: var(--glass); border-radius: 20px; padding: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
         .chat-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); border-color: var(--glass-border); }
         .chat-avatar { position: relative; width: 55px; height: 55px; }
-        .online-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #4CAF50; border-radius: 50%; border: 2px solid var(--card-bg); }
+        .online-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #4CAF50; border-radius: 50%; border: 2px solid var(--card-bg); animation: pulseDot 1.5s infinite; }
+        @keyframes pulseDot { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
         .chat-info { flex: 1; }
         .chat-name { font-weight: 700; display: flex; justify-content: space-between; }
         .chat-status { font-size: 0.7rem; color: var(--accent); margin: 3px 0; }
@@ -251,34 +261,44 @@
         .chat-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 3000; display: flex; flex-direction: column; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .chat-header { padding: 15px; background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
-        .back-btn { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: white; }
+        .back-btn { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: white; transition: all 0.2s; }
+        .back-btn:hover { transform: translateX(-5px); }
         .chat-profile { display: flex; align-items: center; gap: 12px; flex: 1; }
         .chat-profile-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
         .chat-profile-info { line-height: 1.2; }
         .chat-profile-name { font-weight: bold; }
         .chat-profile-goal { font-size: 0.7rem; color: var(--accent); }
         .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
-        .message { max-width: 75%; padding: 10px 14px; border-radius: 22px; font-size: 0.9rem; word-wrap: break-word; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message { max-width: 75%; padding: 10px 14px; border-radius: 22px; font-size: 0.9rem; word-wrap: break-word; animation: fadeInMsg 0.2s ease; }
+        @keyframes fadeInMsg { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message.sent { align-self: flex-end; background: #2a7a3e; color: white; border-bottom-right-radius: 5px; }
         .message.received { align-self: flex-start; background: var(--glass); color: var(--text); border-bottom-left-radius: 5px; }
         .message .time { font-size: 0.6rem; opacity: 0.7; margin-top: 4px; text-align: right; }
         .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: var(--glass); border-radius: 20px; width: fit-content; margin-top: 5px; }
-        .typing-dot { width: 6px; height: 6px; background: var(--text-sec); border-radius: 50%; animation: typing 1.4s infinite; }
+        .typing-dot { width: 6px; height: 6px; background: var(--text-sec); border-radius: 50%; animation: typingAnim 1.4s infinite; }
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+        @keyframes typingAnim { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
         .chat-input-area { display: flex; gap: 10px; padding: 12px; background: var(--glass); border-top: 1px solid var(--glass-border); }
-        .chat-input-area input { flex: 1; background: var(--bg); border: none; border-radius: 30px; padding: 12px 18px; color: white; outline: none; }
-        .chat-input-area button { background: var(--primary); border: none; border-radius: 30px; padding: 0 20px; color: white; cursor: pointer; transition: 0.2s; }
-        .no-results { text-align: center; padding: 40px; color: var(--text-sec); animation: fadeIn 0.3s; }
+        .chat-input-area input { flex: 1; background: var(--bg); border: none; border-radius: 30px; padding: 12px 18px; color: white; outline: none; transition: all 0.2s; }
+        .chat-input-area input:focus { box-shadow: 0 0 8px var(--accent); }
+        .chat-input-area button { background: var(--primary); border: none; border-radius: 30px; padding: 0 20px; color: white; cursor: pointer; transition: all 0.2s; }
+        .chat-input-area button:hover { background: #9b4dff; transform: scale(1.02); }
+        .no-results { text-align: center; padding: 40px; color: var(--text-sec); animation: fadeInMsg 0.3s; }
         .https-warning { background: rgba(255,68,68,0.9); color: white; padding: 10px; text-align: center; font-size: 0.8rem; position: fixed; bottom: 0; left: 0; right: 0; z-index: 5000; backdrop-filter: blur(10px); }
+        /* Fabulous Profile Modal */
+        .profile-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .profile-badge-section { margin-top: 20px; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .badge-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+        .badge-item { background: var(--glass); border-radius: 40px; padding: 6px 12px; font-size: 0.8rem; border: 1px solid var(--gold); color: var(--gold); transition: all 0.2s; }
+        .badge-item:hover { transform: scale(1.05); background: rgba(255,215,0,0.1); }
         .diet-locked { position: relative; filter: blur(8px); pointer-events: none; user-select: none; }
         .diet-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10; border-radius: 30px; }
         .rhyme-slogan { font-size: 1.2rem; color: var(--gold); text-align: center; margin-bottom: 15px; font-style: italic; }
         .stats-enhanced { text-align: center; }
         .stats-grid { display: flex; flex-direction: column; gap: 20px; }
-        .stats-card { background: var(--glass); border-radius: 20px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); }
+        .stats-card { background: var(--glass); border-radius: 20px; padding: 20px; text-align: center; border: 1px solid var(--glass-border); transition: all 0.2s; }
+        .stats-card:hover { transform: scale(1.02); border-color: var(--accent); }
         .stats-icon { font-size: 2.5rem; margin-bottom: 10px; }
         .stats-value { font-size: 2rem; font-weight: 800; color: var(--accent); }
         .stats-label { font-size: 0.8rem; color: var(--text-sec); }
@@ -306,7 +326,7 @@
         </div>
     </div>
 
-    <!-- ORIGINAL ONBOARDING -->
+    <!-- ORIGINAL ONBOARDING (gender avatar updates live) -->
     <div id="onboarding">
         <div class="onboarding-card">
             <div class="live-avatar" id="liveAvatar">👤</div>
@@ -380,7 +400,37 @@
     </div>
 
     <!-- MODALS -->
-    <div id="modal-profile" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>Edit Profile</h2><div class="input-group"><label>Name</label><input type="text" id="edit-name"></div><div class="input-group"><label>Email</label><input type="email" id="edit-email"></div><div class="input-group"><label>Age</label><input type="number" id="edit-age"></div><div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-weight" step="0.1"></div><div class="input-group"><label>Height (cm)</label><input type="number" id="edit-height"></div><div class="input-group"><label>Goal</label><select id="edit-goal"><option value="weightGain">Weight Gain</option><option value="weightLoss">Weight Loss</option><option value="yogaZumba">Yoga/Zumba</option><option value="healthyLifestyle">Healthy Lifestyle</option></select></div><div class="input-group"><label>Gender</label><select id="edit-gender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div><button class="btn" style="width:100%" onclick="updateProfile()">Save Changes</button></div></div>
+    <!-- FABULOUS PROFILE MODAL with badges -->
+    <div id="modal-profile" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <div class="profile-header">
+                <div class="avatar-preview" id="profileAvatar" style="width: 80px; height: 80px; font-size: 2.5rem;">👤</div>
+                <h2>Edit Profile</h2>
+            </div>
+            <div class="input-group"><label>Name</label><input type="text" id="edit-name" placeholder="Your name"></div>
+            <div class="input-group"><label>Email</label><input type="email" id="edit-email" placeholder="Email"></div>
+            <div class="input-group"><label>Age</label><input type="number" id="edit-age" placeholder="Age"></div>
+            <div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-weight" step="0.1" placeholder="Weight"></div>
+            <div class="input-group"><label>Height (cm)</label><input type="number" id="edit-height" placeholder="Height"></div>
+            <div class="input-group"><label>Goal</label><select id="edit-goal">
+                <option value="weightGain">Weight Gain</option>
+                <option value="weightLoss">Weight Loss</option>
+                <option value="yogaZumba">Yoga/Zumba</option>
+                <option value="healthyLifestyle">Healthy Lifestyle</option>
+            </select></div>
+            <div class="input-group"><label>Gender</label><select id="edit-gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select></div>
+            <div class="profile-badge-section">
+                <div style="font-weight: bold; margin-bottom: 10px;">🏅 Earned Badges</div>
+                <div id="profileBadgeList" class="badge-list">Loading...</div>
+            </div>
+            <button class="btn" style="width:100%; margin-top:20px;" onclick="updateProfile()">Save Changes</button>
+        </div>
+    </div>
 
     <div id="modal-calendar" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>100-Day Challenge</h2><div class="calendar-header"><span>🔥 Streak: <span id="calendar-streak">0</span> days</span><span>📅 <span id="calendar-completed">0</span>/100</span></div><div class="calendar-progress"><div class="calendar-progress-fill" id="calendar-progress-fill" style="width:0%"></div></div><div class="calendar-pagination" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;"><button class="btn btn-sec" id="calendar-prev" onclick="changeCalendarPage(-1)">◀ Prev</button><span id="calendar-page-indicator">Page 1/3</span><button class="btn btn-sec" id="calendar-next" onclick="changeCalendarPage(1)">Next ▶</button></div><div class="calendar-grid" id="calendar-grid"></div></div></div>
 
@@ -450,7 +500,7 @@
         </div>
     </div>
 
-    <!-- DIET MODAL -->
+    <!-- DIET MODAL (content loaded from diet.js) -->
     <div id="modal-diet" class="modal hidden">
         <div class="modal-content" style="position: relative;">
             <span class="close-modal" onclick="closeAllModals()">×</span>
@@ -462,7 +512,8 @@
     <div id="modal-food" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🍽️ Log Meal</h2><div class="input-group"><label>Food name (or auto-detect)</label><input type="text" id="food-name" placeholder="e.g., Pizza"></div><div class="input-group"><label>Or take a photo</label><input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="analyzeFoodImage(this)"></div><div id="imagePreview"></div><div class="input-group"><label>Calories (auto-filled)</label><input type="number" id="food-calories" placeholder="Calories"></div><button class="btn" onclick="addFoodEntry()">Add Meal</button><h3>Today's Meals</h3><div id="food-list-container"></div><div><strong>Total: <span id="total-food-calories">0</span> kcal</strong></div></div></div>
 
     <script>
-        // ======================= 28-DAY TASKS DATA (condensed) =======================
+        // ======================= CORE DATA & FUNCTIONS (unchanged except for badges & profile) =======================
+        // 28-DAY TASKS DATA (condensed)
         const goalTasksData = {
             weightGain: {1:["Bench press + incline press","Train triceps","Eat heavy breakfast","Drink 2.5–3L water","Eat post-workout meal"],2:["Lat pulldown + rows","Biceps curls","Add 2 bananas","Track workout weights","Sleep 7–8 hours"],3:["Squats + leg press","Train calves","Eat extra rice/roti","Push near failure","Drink milk"],4:["Shoulder press + chest","Triceps isolation","Add peanut butter","Control reps","Eat 5 meals"],5:["Back + rear delts","Biceps curls focus","Eat 4–6 eggs","Track strength","Drink water"],6:["Heavy squats","Hamstring curls","Increase food portion","Stretch after workout","Sleep well"],7:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8+ hours"],8:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Stay hydrated"],9:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],10:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],11:["Incline press focus","Triceps dips","Add peanut butter","Control tempo","Eat 5 meals"],12:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],13:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],14:["Eat surplus calories","Drink milk","Eat protein meals","Relax muscles","Sleep 8 hours"],15:["Bench press + shoulders","Triceps workout","Add banana shake","Eat post-workout meal","Hydrate"],16:["Rows + pulldown","Biceps curls","Add eggs","Track progress","Sleep well"],17:["Squats + leg press","Calves training","Eat extra carbs","Push hard","Drink milk"],18:["Incline press","Triceps dips","Add peanut butter","Control reps","Eat 5 meals"],19:["Back + rear delts","Biceps curls","Eat protein meals","Track weights","Drink water"],20:["Heavy squats","Hamstring curls","Increase calories","Stretch","Sleep well"],21:["Eat surplus calories","Drink milk twice","Eat 5–6 meals","Check body weight","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","Add banana shake","Eat post-workout meal","Hydrate"],23:["Deadlift + rows","Biceps curls","Add healthy fats","Track reps","Sleep properly"],24:["Squats + lunges","Calf raises","Eat more carbs","Push intensity","Drink milk"],25:["Incline press","Triceps workout","Add peanut butter","Control tempo","Eat 5 meals"],26:["Lat pulldown + curls","Rear delts","Eat eggs","Track weights","Hydrate"],27:["Leg press heavy","Hamstring work","Increase calories","Stretch","Sleep well"],28:["Eat in calorie surplus","Drink milk twice","Eat 5–6 meals","Review progress","Sleep 8+ hours"]},
             weightLoss: {1:["Bench press + incline press","Triceps workout","15 min cardio","Eat high-protein meals","Drink 2–3L water"],2:["Lat pulldown + rows","Biceps curls","15 min cardio","Avoid junk food","Sleep 7–8 hours"],3:["Squats + leg press","Calf raises","20 min cardio","Reduce carb portion","Drink water"],4:["Shoulder press + chest","Triceps isolation","15 min cardio","Eat small portions","Stay consistent"],5:["Back + rear delts","Biceps workout","15 min cardio","Eat protein-rich meals","Hydrate"],6:["Squats + lunges","Hamstring curls","20 min cardio","Avoid sugary drinks","Sleep well"],7:["Walk 8–10k steps","Eat clean meals","Stay in calorie deficit","Drink water","Sleep 8 hours"],8:["Bench press progression","Shoulder raises","20 min cardio","Eat high protein","Hydrate"],9:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],10:["Squats + press","Calves","20 min cardio","Reduce carbs","Drink water"],11:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],12:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],13:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],14:["Walk 10k steps","Eat clean","Stay in deficit","Drink water","Rest well"],15:["Bench + shoulders","Triceps workout","20 min cardio","Eat high protein","Hydrate"],16:["Rows + pulldown","Biceps curls","15 min cardio","Avoid junk","Sleep well"],17:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],18:["Incline press","Triceps dips","15 min cardio","Eat small meals","Stay consistent"],19:["Back + rear delts","Biceps workout","15 min cardio","Eat protein","Hydrate"],20:["Heavy squats","Hamstrings","20 min cardio","Avoid sugar","Sleep well"],21:["Walk 10k steps","Eat clean meals","Stay in deficit","Drink water","Sleep 8 hours"],22:["Bench press progression","Shoulder raises","20 min cardio","Eat protein","Hydrate"],23:["Deadlift + rows","Biceps curls","15 min cardio","Avoid junk","Sleep well"],24:["Squats + lunges","Calves","20 min cardio","Reduce carbs","Drink water"],25:["Incline press","Triceps workout","15 min cardio","Eat small meals","Stay consistent"],26:["Lat pulldown + curls","Rear delts","15 min cardio","Eat protein","Hydrate"],27:["Leg press","Hamstrings","20 min cardio","Reduce carbs","Sleep well"],28:["Walk 10k steps","Eat clean","Review progress","Stay in deficit","Sleep properly"]},
@@ -583,6 +634,8 @@
             else document.getElementById('premiumBadge').classList.add('hidden');
             if (typeof updateBitmojiCoins === 'function') updateBitmojiCoins();
             if (typeof updateStoreCoins === 'function') updateStoreCoins();
+            // Update profile badges if modal is open
+            if (!document.getElementById('modal-profile').classList.contains('hidden')) updateProfileBadges();
         }
         let joinCount = parseInt(localStorage.getItem('globalJoinCount') || '0'); document.getElementById('joinCount').innerText = joinCount;
         function confetti() { for (let i=0;i<40;i++){ let c=document.createElement('div'); c.classList.add('confetti'); c.style.left=Math.random()*100+'%'; c.style.animationDelay=Math.random()*2+'s'; document.body.appendChild(c); setTimeout(()=>c.remove(),4000); } }
@@ -731,7 +784,7 @@
             saveState(); closeAllModals(); addFeedItemManually(`Completed day! +${xpGain} XP`, true); alert(`Day completed! +${xpGain} XP, +${bonus} Coins`);
         }
 
-        // ======================= HUMAN-LIKE AI COACH (no API) =======================
+        // ======================= HUMAN-LIKE AI COACH =======================
         function askAI() {
             const input = document.getElementById('ai-input');
             const question = input.value.trim();
@@ -787,49 +840,30 @@
         }
 
         // ======================= HUMAN-LIKE INBOX AI (Mike & Sarah) =======================
-        // Store conversation memory per friend
         async function getAIReply(friendName, userMessage) {
-            await new Promise(resolve => setTimeout(resolve, 800)); // simulate typing
+            await new Promise(resolve => setTimeout(resolve, 800));
             if (!user.chatMemory[friendName]) user.chatMemory[friendName] = [];
             user.chatMemory[friendName].push(userMessage);
             if (user.chatMemory[friendName].length > 5) user.chatMemory[friendName].shift();
             const lower = userMessage.toLowerCase();
-            const lastMsg = user.chatMemory[friendName].slice(-2)[0] || "";
             if (friendName === "Mike") {
-                // Mike – energetic, gym bro
-                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) {
-                    return "Yo! What's up? Ready to crush some weights today? 💪";
-                } else if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) {
-                    return "Let's go! Hit those compound lifts first – bench, squat, deadlift. Then accessories. You got this!";
-                } else if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) {
-                    return "Eat big to get big, bro! Chicken, rice, eggs, peanut butter. And don't skip your protein shake post-workout.";
-                } else if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) {
-                    return "Bro, you're a beast! Remember why you started. One rep at a time. Let's go!";
-                } else if (lower.includes('sleep')) {
-                    return "Sleep is when the gains happen, man. 8 hours minimum. No excuses!";
-                } else if (lower.includes('thank')) {
-                    return "Anytime, brother! Keep grinding! 💪";
-                } else {
-                    const replies = ["That's awesome! Keep pushing!", "I feel you, man. Just show up – that's half the battle.", "You got this! Let me know if you need a workout plan.", "Stay hard! No days off."];
-                    return replies[Math.floor(Math.random() * replies.length)];
-                }
-            } else { // Sarah – calm, mindful, supportive
-                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) {
-                    return "Hello! How's your energy today? Remember to breathe and be kind to yourself. 🧘";
-                } else if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) {
-                    return "Movement is medicine. Listen to your body – some days a gentle flow, other days you can go harder. What feels right today?";
-                } else if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) {
-                    return "Nourish your body with whole foods. A colourful plate = a happy plate. And stay hydrated!";
-                } else if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) {
-                    return "You're doing amazing. Progress isn't linear. Take a moment to appreciate how far you've come. 🌸";
-                } else if (lower.includes('sleep')) {
-                    return "Rest is sacred. Create a bedtime ritual – no screens, some gentle stretching, and gratitude. Sweet dreams.";
-                } else if (lower.includes('thank')) {
-                    return "You're so welcome. I'm cheering for you! 💕";
-                } else {
-                    const replies = ["That sounds meaningful. Tell me more?", "I hear you. How can I support you today?", "You've got this. One step at a time.", "Sending you positive energy! ✨"];
-                    return replies[Math.floor(Math.random() * replies.length)];
-                }
+                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) return "Yo! What's up? Ready to crush some weights today? 💪";
+                if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) return "Let's go! Hit those compound lifts first – bench, squat, deadlift. Then accessories. You got this!";
+                if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) return "Eat big to get big, bro! Chicken, rice, eggs, peanut butter. And don't skip your protein shake post-workout.";
+                if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) return "Bro, you're a beast! Remember why you started. One rep at a time. Let's go!";
+                if (lower.includes('sleep')) return "Sleep is when the gains happen, man. 8 hours minimum. No excuses!";
+                if (lower.includes('thank')) return "Anytime, brother! Keep grinding! 💪";
+                const replies = ["That's awesome! Keep pushing!", "I feel you, man. Just show up – that's half the battle.", "You got this! Let me know if you need a workout plan.", "Stay hard! No days off."];
+                return replies[Math.floor(Math.random() * replies.length)];
+            } else {
+                if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey')) return "Hello! How's your energy today? Remember to breathe and be kind to yourself. 🧘";
+                if (lower.includes('workout') || lower.includes('gym') || lower.includes('exercise')) return "Movement is medicine. Listen to your body – some days a gentle flow, other days you can go harder. What feels right today?";
+                if (lower.includes('diet') || lower.includes('food') || lower.includes('eat')) return "Nourish your body with whole foods. A colourful plate = a happy plate. And stay hydrated!";
+                if (lower.includes('motivation') || lower.includes('tired') || lower.includes('give up')) return "You're doing amazing. Progress isn't linear. Take a moment to appreciate how far you've come. 🌸";
+                if (lower.includes('sleep')) return "Rest is sacred. Create a bedtime ritual – no screens, some gentle stretching, and gratitude. Sweet dreams.";
+                if (lower.includes('thank')) return "You're so welcome. I'm cheering for you! 💕";
+                const replies = ["That sounds meaningful. Tell me more?", "I hear you. How can I support you today?", "You've got this. One step at a time.", "Sending you positive energy! ✨"];
+                return replies[Math.floor(Math.random() * replies.length)];
             }
         }
 
@@ -846,7 +880,6 @@
             input.value = '';
             renderFullChat(currentChatFriend);
             addFeedItemManually(`Sent message to ${currentChatFriend}`, true);
-            // Show typing indicator
             const container = document.getElementById('chatMessagesContainer');
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing-indicator';
@@ -935,8 +968,46 @@
 
         // ======================= OTHER FEATURES =======================
         function showLeaderboard() { toggleSidebar(); document.getElementById('modal-leaderboard').classList.remove('hidden'); let mock = [{name:"Alex", xp:2500, level:5},{name:"Sarah", xp:1800, level:4},{name:user.name, xp:user.xp+user.level*100, level:user.level},{name:"Mike", xp:500, level:2}].sort((a,b)=>b.xp-a.xp); let listDiv = document.getElementById('leaderboard-list'); listDiv.innerHTML = ''; mock.forEach((u,i) => { let div = document.createElement('div'); div.className='leaderboard-item'; if(i===0) div.classList.add('rank-1'); if(i===1) div.classList.add('rank-2'); if(i===2) div.classList.add('rank-3'); if(u.name === user.name) div.style.borderColor = "var(--primary)"; div.innerHTML = `<div style="font-weight:900; width:30px">#${i+1}</div><div style="flex:1"><b>${u.name}</b><br><span style="font-size:0.8rem">Lvl ${u.level}</span></div><div>${u.xp} XP</div>`; listDiv.appendChild(div); }); }
-        function showProfile() { toggleSidebar(); document.getElementById('modal-profile').classList.remove('hidden'); document.getElementById('edit-name').value=user.name; document.getElementById('edit-email').value=user.email; document.getElementById('edit-age').value=user.age; document.getElementById('edit-weight').value=user.weight; document.getElementById('edit-height').value=user.height; document.getElementById('edit-goal').value=user.goal; document.getElementById('edit-gender').value=user.gender; }
-        function updateProfile() { user.name=document.getElementById('edit-name').value; user.email=document.getElementById('edit-email').value; user.age=parseInt(document.getElementById('edit-age').value); user.weight=parseFloat(document.getElementById('edit-weight').value); user.height=parseFloat(document.getElementById('edit-height').value); user.goal=document.getElementById('edit-goal').value; user.gender=document.getElementById('edit-gender').value; saveState(); closeAllModals(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal(); }
+        function showProfile() {
+            toggleSidebar();
+            document.getElementById('modal-profile').classList.remove('hidden');
+            document.getElementById('edit-name').value = user.name;
+            document.getElementById('edit-email').value = user.email;
+            document.getElementById('edit-age').value = user.age;
+            document.getElementById('edit-weight').value = user.weight;
+            document.getElementById('edit-height').value = user.height;
+            document.getElementById('edit-goal').value = user.goal;
+            document.getElementById('edit-gender').value = user.gender;
+            // Set avatar preview
+            const avatarDiv = document.getElementById('profileAvatar');
+            if (user.gender === 'Male') avatarDiv.innerText = '👨';
+            else if (user.gender === 'Female') avatarDiv.innerText = '👩';
+            else avatarDiv.innerText = '🧑';
+            updateProfileBadges();
+        }
+        function updateProfileBadges() {
+            const badgeContainer = document.getElementById('profileBadgeList');
+            if (!badgeContainer) return;
+            const badges = [];
+            if (steps >= 10000) badges.push('10k Steps');
+            if (getFoodCaloriesForToday() >= 2000) badges.push('2k Calories');
+            if (user.completedDays.length >= 7) badges.push('1 Week Streak');
+            if (user.completedDays.length >= 30) badges.push('30 Day Warrior');
+            if (user.isPremium) badges.push('Premium Member');
+            if (user.starterPurchased) badges.push('Starter Pack Owner');
+            if (badges.length === 0) badgeContainer.innerHTML = '<div class="badge-item">No badges yet. Keep going!</div>';
+            else badgeContainer.innerHTML = badges.map(b => `<div class="badge-item">🏅 ${b}</div>`).join('');
+        }
+        function updateProfile() {
+            user.name = document.getElementById('edit-name').value;
+            user.email = document.getElementById('edit-email').value;
+            user.age = parseInt(document.getElementById('edit-age').value);
+            user.weight = parseFloat(document.getElementById('edit-weight').value);
+            user.height = parseFloat(document.getElementById('edit-height').value);
+            user.goal = document.getElementById('edit-goal').value;
+            user.gender = document.getElementById('edit-gender').value;
+            saveState(); closeAllModals(); if(!document.getElementById('modal-stats').classList.contains('hidden')) renderStatsModal();
+        }
         let calendarPage = 1; function changeCalendarPage(delta) { let newPage = calendarPage+delta; if(newPage>=1 && newPage<=3) { calendarPage=newPage; renderCalendar(); } }
         function openCalendar() { closeAllModals(); document.getElementById('modal-calendar').classList.remove('hidden'); renderCalendar(); }
         function renderCalendar() {
@@ -984,44 +1055,17 @@
             else if (gender === 'Female') avatarDiv.innerText = '👧';
             else avatarDiv.innerText = '🧑';
         }
+        // Diet feature (external diet.js will override this)
         function showDiet() {
             closeAllModals();
             const modal = document.getElementById('modal-diet');
             modal.classList.remove('hidden');
             const contentDiv = document.getElementById('dietContent');
-            if (user.isPremium) {
-                let dietPlan = '';
-                switch(user.goal) {
-                    case 'weightGain':
-                        dietPlan = `<div class="rhyme-slogan">"Eat big to get big, train hard, don't wig!"</div>
-                                    <ul><li>🍗 Breakfast: 4 eggs + oatmeal + banana</li><li>🥩 Lunch: 200g chicken/rice/broccoli</li><li>🥜 Snack: Peanut butter sandwich + protein shake</li><li>🍚 Dinner: 250g beef/potatoes/veggies</li><li>💧 Drink 3L water daily</li></ul>`;
-                        break;
-                    case 'weightLoss':
-                        dietPlan = `<div class="rhyme-slogan">"Shred the fat, keep the muscle, that's the hustle!"</div>
-                                    <ul><li>🥑 Breakfast: Greek yogurt + berries</li><li>🥗 Lunch: Large salad with grilled chicken</li><li>🍎 Snack: Apple + almonds</li><li>🐟 Dinner: Salmon + asparagus + sweet potato</li><li>💧 Drink 2.5L water daily</li></ul>`;
-                        break;
-                    case 'yogaZumba':
-                        dietPlan = `<div class="rhyme-slogan">"Flow and glow, eat light, feel bright!"</div>
-                                    <ul><li>🍌 Breakfast: Smoothie bowl</li><li>🥙 Lunch: Veggie wrap with hummus</li><li>🥝 Snack: Fresh fruit</li><li>🍲 Dinner: Lentil soup + quinoa</li><li>💧 Herbal tea + 2L water</li></ul>`;
-                        break;
-                    default:
-                        dietPlan = `<div class="rhyme-slogan">"Balance is key, eat well to be free!"</div>
-                                    <ul><li>🌾 Breakfast: Whole grain toast + avocado</li><li>🥗 Lunch: Mixed greens + quinoa + tofu</li><li>🍫 Snack: Dark chocolate + walnuts</li><li>🍝 Dinner: Zucchini noodles + turkey meatballs</li><li>💧 Drink 2-3L water</li></ul>`;
-                }
-                contentDiv.innerHTML = dietPlan;
+            // If diet.js is loaded, it will handle the content. Otherwise, show a message.
+            if (typeof window.loadDietContent === 'function') {
+                window.loadDietContent();
             } else {
-                contentDiv.innerHTML = `
-                    <div style="position: relative;">
-                        <div class="diet-locked" style="filter: blur(8px); pointer-events: none;">
-                            <div class="rhyme-slogan">"Eat clean, get lean, with Premium you'll be the machine!"</div>
-                            <ul><li>🥗 Sample diet plan hidden</li><li>🍗 Unlock personalized meals</li><li>🥑 Get macros calculated for you</li></ul>
-                        </div>
-                        <div class="diet-overlay">
-                            <p style="text-align:center; margin-bottom:15px;">🔒 Premium Required</p>
-                            <button class="btn btn-accent" onclick="closeAllModals(); showPremium()">Upgrade to Premium</button>
-                        </div>
-                    </div>
-                `;
+                contentDiv.innerHTML = '<p style="text-align:center">Diet module loading...</p>';
             }
         }
         document.getElementById('inp-gender')?.addEventListener('change', updateGenderPreview);
@@ -1054,5 +1098,6 @@
 
     <script src="bitmoji.js"></script>
     <script src="store.js"></script>
+    <script src="diet.js"></script>
 </body>
 </html>
