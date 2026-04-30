@@ -386,8 +386,8 @@
         <div class="menu-item" onclick="showBitmoji()">😎 Bitmoji</div>
         <div class="menu-item" onclick="showStore()">🛒 Store</div>
         <div class="menu-item" onclick="showPremium()">⚜️ Premium</div>
-        <!-- Diet tab now opens diet.html in new tab -->
-        <div class="menu-item" onclick="window.open('diet.html', '_blank')">🍽️ Diet</div>
+        <!-- Diet opens internal modal with premium lock -->
+        <div class="menu-item" onclick="showDiet()">🍽️ Diet</div>
         <div class="menu-item" style="margin-top:50px; color:var(--danger)" onclick="resetData()">❌ Reset Data</div>
     </div>
 
@@ -408,7 +408,15 @@
 
     <div id="modal-stats" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>📊 Your Fitness Pulse</h2><div class="stats-enhanced"><div class="step-circle"><div class="stats-icon">👟</div><div class="stats-value" id="stats-step-count">0</div><div class="stats-label">TODAY'S STEPS</div><button class="btn-sec" onclick="requestStepPermission()" style="margin-top:8px;">Enable Step Tracking</button></div><div class="gauge-container" id="gauge-container"></div><button class="btn" style="width:100%; margin: 20px 0;" onclick="openFoodLogModal()">🍽️ Log Meal with Camera</button></div></div></div>
 
-    <!-- Diet modal removed – now opening external diet.html -->
+    <!-- DIET MODAL (internal, with premium lock) -->
+    <div id="modal-diet" class="modal hidden">
+        <div class="modal-content" style="position: relative;">
+            <span class="close-modal" onclick="closeAllModals()">×</span>
+            <h2>🍽️ Personalized Diet Plan</h2>
+            <div id="dietContent" style="min-height: 200px;"></div>
+        </div>
+    </div>
+
     <div id="modal-food" class="modal hidden"><div class="modal-content"><span class="close-modal" onclick="closeAllModals()">×</span><h2>🍽️ Log Meal</h2><div class="input-group"><label>Food name (or auto-detect)</label><input type="text" id="food-name" placeholder="e.g., Pizza"></div><div class="input-group"><label>Or take a photo</label><input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="analyzeFoodImage(this)"></div><div id="imagePreview"></div><div class="input-group"><label>Calories (auto-filled)</label><input type="number" id="food-calories" placeholder="Calories"></div><button class="btn" onclick="addFoodEntry()">Add Meal</button><h3>Today's Meals</h3><div id="food-list-container"></div><div><strong>Total: <span id="total-food-calories">0</span> kcal</strong></div></div></div>
 
     <script>
@@ -711,7 +719,7 @@
         function refreshQuote() { let q=["The only bad workout is the one that didn't happen.","Small progress is still progress.","You are stronger than you think.","Discipline > Motivation"]; document.getElementById('quoteBox').innerText='✨ "'+q[Math.floor(Math.random()*q.length)]+'"'; }
         function updateOnlineCounts() { document.getElementById('onlineCount').innerText = Math.floor(Math.random()*200)+100; document.getElementById('premiumOnline').innerText = Math.floor(Math.random()*50)+20; }
 
-        // ======================= TASKS WITH BITMOJI DEMO (unchanged) =======================
+        // ======================= TASKS WITH BITMOJI DEMO =======================
         function getTaskDemoText(taskText) {
             const lower = taskText.toLowerCase();
             if (lower.includes('bench')) return "🏋️‍♂️ Bitmoji demonstrates: Bench press – keep back flat, lower bar to chest, press up explosively.";
@@ -814,7 +822,7 @@
             saveState(); closeAllModals(); addFeedItemManually(`Completed day! +${xpGain} XP`, true); alert(`Day completed! +${xpGain} XP, +${bonus} Coins`);
         }
 
-        // ======================= AI COACH (unchanged) =======================
+        // ======================= AI COACH =======================
         function askAI() {
             const input = document.getElementById('ai-input');
             const question = input.value.trim();
@@ -991,7 +999,36 @@
         function cleanupExpiredMessages() { for (let friend in user.chats) user.chats[friend] = user.chats[friend].filter(msg => !msg.expires || msg.expires > Date.now()); saveState(); }
         function checkWeeklyReview() { const now = new Date(); if (now.getDay() === 0) { const lastReview = localStorage.getItem('lastWeeklyReview'); if (lastReview !== getTodayStr()) { const summary = `📅 Weekly Review: Completed ${user.completedDays.length} days, earned ${user.coins} coins, streak ${user.streak}. Keep going!`; user.friends.forEach(friend => { if (!user.chats[friend]) user.chats[friend] = []; user.chats[friend].push({ from: "System", text: summary, time: new Date().toLocaleTimeString() }); }); localStorage.setItem('lastWeeklyReview', getTodayStr()); saveState(); } } }
 
-        // ======================= OTHER FEATURES (unchanged) =======================
+        // ======================= DIET MODAL FUNCTION =======================
+        function showDiet() {
+            closeAllModals();
+            const modal = document.getElementById('modal-diet');
+            modal.classList.remove('hidden');
+            const contentDiv = document.getElementById('dietContent');
+            const daysActive = user.completedDays ? user.completedDays.length : 0;
+            const isPremium = user.isPremium || false;
+            if (daysActive <= 3 || isPremium) {
+                let dietPlan = '';
+                switch(user.goal) {
+                    case 'weightGain':
+                        dietPlan = `<div class="rhyme-slogan">"Eat big to get big, train hard, don't wig!"</div><ul><li>🍗 Breakfast: 4 eggs + oatmeal + banana</li><li>🥩 Lunch: 200g chicken/rice/broccoli</li><li>🥜 Snack: Peanut butter sandwich + protein shake</li><li>🍚 Dinner: 250g beef/potatoes/veggies</li><li>💧 Drink 3L water daily</li></ul>`;
+                        break;
+                    case 'weightLoss':
+                        dietPlan = `<div class="rhyme-slogan">"Shred the fat, keep the muscle, that's the hustle!"</div><ul><li>🥑 Breakfast: Greek yogurt + berries</li><li>🥗 Lunch: Large salad with grilled chicken</li><li>🍎 Snack: Apple + almonds</li><li>🐟 Dinner: Salmon + asparagus + sweet potato</li><li>💧 Drink 2.5L water daily</li></ul>`;
+                        break;
+                    case 'yogaZumba':
+                        dietPlan = `<div class="rhyme-slogan">"Flow and glow, eat light, feel bright!"</div><ul><li>🍌 Breakfast: Smoothie bowl</li><li>🥙 Lunch: Veggie wrap with hummus</li><li>🥝 Snack: Fresh fruit</li><li>🍲 Dinner: Lentil soup + quinoa</li><li>💧 Herbal tea + 2L water</li></ul>`;
+                        break;
+                    default:
+                        dietPlan = `<div class="rhyme-slogan">"Balance is key, eat well to be free!"</div><ul><li>🌾 Breakfast: Whole grain toast + avocado</li><li>🥗 Lunch: Mixed greens + quinoa + tofu</li><li>🍫 Snack: Dark chocolate + walnuts</li><li>🍝 Dinner: Zucchini noodles + turkey meatballs</li><li>💧 Drink 2-3L water</li></ul>`;
+                }
+                contentDiv.innerHTML = dietPlan + `<div style="margin-top:15px; font-size:0.8rem; text-align:center; color:var(--gold);">✨ ${daysActive <= 3 ? 'Free trial active' : 'Premium unlocked'} ✨</div>`;
+            } else {
+                contentDiv.innerHTML = `<div style="position: relative;"><div class="diet-locked" style="filter: blur(8px); pointer-events: none;"><div class="rhyme-slogan">"Eat clean, get lean, with Premium you'll be the machine!"</div><ul><li>🥗 Sample diet plan hidden</li><li>🍗 Unlock personalized meals</li><li>🥑 Get macros calculated for you</li></ul></div><div class="diet-overlay"><p style="text-align:center; margin-bottom:15px;">🔒 Premium Required</p><button class="btn btn-accent" onclick="closeAllModals(); showPremium()">Upgrade to Premium</button></div></div>`;
+            }
+        }
+
+        // ======================= OTHER FEATURES =======================
         function showLeaderboard() { toggleSidebar(); document.getElementById('modal-leaderboard').classList.remove('hidden'); let mock = [{name:"Alex", xp:2500, level:5},{name:"Sarah", xp:1800, level:4},{name:user.name, xp:user.xp+user.level*100, level:user.level},{name:"Mike", xp:500, level:2}].sort((a,b)=>b.xp-a.xp); let listDiv = document.getElementById('leaderboard-list'); listDiv.innerHTML = ''; mock.forEach((u,i) => { let div = document.createElement('div'); div.className='leaderboard-item'; if(i===0) div.classList.add('rank-1'); if(i===1) div.classList.add('rank-2'); if(i===2) div.classList.add('rank-3'); if(u.name === user.name) div.style.borderColor = "var(--primary)"; div.innerHTML = `<div style="font-weight:900; width:30px">#${i+1}</div><div style="flex:1"><b>${u.name}</b><br><span style="font-size:0.8rem">Lvl ${u.level}</span></div><div>${u.xp} XP</div>`; listDiv.appendChild(div); }); }
         function showProfile() {
             toggleSidebar();
@@ -1079,7 +1116,6 @@
             else if (gender === 'Female') avatarDiv.innerText = '👧';
             else avatarDiv.innerText = '🧑';
         }
-        // Diet function removed – now handled by direct link to diet.html
         document.getElementById('inp-gender')?.addEventListener('change', updateGenderPreview);
         document.getElementById('inboxSearch')?.addEventListener('input', () => renderChatList());
         document.getElementById('shareProgressBtn')?.addEventListener('click', () => sendProgressCard());
